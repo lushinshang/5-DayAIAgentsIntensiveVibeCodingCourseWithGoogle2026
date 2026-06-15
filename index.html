@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5 天 AI Agent 密集 Vibe Coding 課程 with Google</title>
+<style>
+:root{
+  --bg:#f9f7f4;
+  --text:#1a1a1a;
+  --muted:#5a5a5a;
+  --accent:#a8554a;
+  --border:#e3ddd4;
+  --card:#ffffff;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:clamp(16px,1vw + 13px,17px);
+  line-height:1.68;
+  letter-spacing:0;
+}
+.page{max-width:1120px;margin:0 auto;padding:0 20px;}
+header.hero{padding:64px 0 40px;}
+.hero-inner{max-width:720px;margin:0 auto;}
+.eyebrow{font-size:0.92rem;color:var(--accent);font-weight:700;letter-spacing:0.04em;margin:0 0 10px;}
+h1{
+  font-size:clamp(2.1rem,5vw,3.4rem);
+  line-height:1.25;
+  text-wrap:balance;
+  margin:0 0 12px;
+}
+.subtitle{font-size:clamp(1.05rem,2vw,1.3rem);color:var(--muted);margin:0 0 20px;text-wrap:balance;}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;font-size:0.92rem;color:var(--muted);margin:0 0 28px;}
+.meta-row span{
+  background:var(--card);border:1px solid var(--border);border-radius:999px;
+  padding:5px 14px;
+}
+.lead{
+  font-size:1.15rem;
+  line-height:1.7;
+  border-left:3px solid var(--accent);
+  padding-left:18px;
+  color:#333;
+}
+nav.toc{
+  position:sticky;top:0;z-index:50;
+  background:rgba(249,247,244,0.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--border);
+}
+nav.toc .page{display:flex;gap:18px;overflow-x:auto;padding:12px 20px;scrollbar-width:thin;}
+nav.toc a{
+  white-space:nowrap;font-size:0.92rem;color:var(--muted);text-decoration:none;
+  padding:6px 2px;border-bottom:2px solid transparent;
+}
+nav.toc a:hover{color:var(--accent);border-bottom-color:var(--accent);}
+main{padding:8px 0 80px;}
+article{max-width:720px;margin:0 auto;}
+section{padding:36px 0;border-bottom:1px solid var(--border);}
+section:last-of-type{border-bottom:none;}
+h2{font-size:clamp(1.55rem,4vw,2.2rem);line-height:1.35;text-wrap:balance;margin:0 0 20px;}
+h3{font-size:clamp(1.2rem,3vw,1.5rem);margin:32px 0 14px;}
+h4{font-size:1.05rem;margin:24px 0 10px;color:#333;}
+p{margin:0 0 18px;}
+ul,ol{margin:0 0 18px;padding-left:1.4em;}
+li{margin-bottom:8px;}
+strong{font-weight:700;}
+
+/* Day 導覽卡片 */
+.day-nav{padding:36px 0 8px;}
+.day-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:16px;margin-top:24px;
+}
+.day-card{
+  display:block;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:22px 18px;text-decoration:none;color:var(--text);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.day-card.is-live{border-color:var(--accent);}
+.day-card.is-live:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.08);}
+.day-card .day-num{font-size:0.85rem;color:var(--accent);font-weight:700;letter-spacing:0.05em;}
+.day-card.is-soon .day-num{color:var(--muted);}
+.day-card h4{margin:8px 0 6px;font-size:1.05rem;}
+.day-card p{margin:0;font-size:0.88rem;color:var(--muted);}
+.day-card.is-soon{
+  cursor:default;opacity:0.55;filter:grayscale(0.4);
+  pointer-events:none;
+}
+.badge-soon{
+  display:inline-block;margin-top:10px;font-size:0.78rem;color:var(--muted);
+  border:1px solid var(--border);border-radius:999px;padding:2px 10px;
+  background:#f3f0eb;
+}
+
+.stat-box{
+  margin:28px 0;padding:24px;background:var(--card);
+  border:1px solid var(--border);border-radius:12px;
+}
+.stat-box h4{margin:0 0 16px;font-size:1.1rem;color:var(--muted);}
+.faq dt{font-weight:700;margin:24px 0 8px;font-size:1.02rem;}
+.faq dd{margin:0 0 4px;color:#333;}
+footer.notes{padding:40px 0 80px;}
+footer.notes p{font-size:0.85rem;color:var(--muted);line-height:1.7;word-break:break-all;}
+footer.notes a{color:var(--accent);}
+@media (max-width:640px){
+  header.hero{padding:40px 0 28px;}
+  section{padding:28px 0;}
+}
+</style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="page">
+    <a href="#days">課程進度</a>
+    <a href="#about">課程介紹</a>
+    <a href="#how">運作方式</a>
+    <a href="#curriculum">課程內容</a>
+    <a href="#whats-new">本次新增</a>
+    <a href="#faq">常見問題</a>
+    <a href="#citation">引用資訊</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="page hero-inner">
+    <p class="eyebrow">Google × Kaggle · Featured Hackathon</p>
+    <h1>5 天 AI Agent 密集 Vibe Coding 課程 with Google</h1>
+    <p class="subtitle">5-Day AI Agents: Intensive Vibe Coding Course With Google</p>
+    <div class="meta-row">
+      <span>📅 2026/06/15 – 06/19</span>
+      <span>🏷️ 主辦：Google</span>
+      <span>💰 完全免費</span>
+      <span>🏆 Kaggle Featured Hackathon</span>
+    </div>
+    <p class="lead">去年 11 月我們推出了第一屆「5-Day AI Agents Intensive Course with Google」，吸引超過 150 萬名學員參與。應廣大需求，這次課程正式回歸——內容全面更新、邀請全新講師陣容，並加入實作 capstone 專案，且完全免費開放報名。</p>
+  </div>
+</header>
+
+<main>
+  <article>
+
+    <section class="day-nav" id="days">
+      <h2>課程進度導覽</h2>
+      <p>本系列共 5 天，每天會整理對應的白皮書、podcast 重點與實作筆記。目前僅完成 Day 1，其餘天數將於課程進行期間持續更新。</p>
+      <div class="day-grid">
+        <a class="day-card is-live" href="./Day1/index.html">
+          <div class="day-num">DAY 1</div>
+          <h4>Agent 與 Vibe Coding 入門</h4>
+          <p>從聊天機器人進階到自主 agent，掌握以自然語言為核心的 vibe coding 工作流程。</p>
+        </a>
+        <div class="day-card is-soon">
+          <div class="day-num">DAY 2</div>
+          <h4>Agent 工具與互通性</h4>
+          <p>整合外部 API、程式碼執行與 agent 對 agent 通訊。</p>
+          <span class="badge-soon">即將推出</span>
+        </div>
+        <div class="day-card is-soon">
+          <div class="day-num">DAY 3</div>
+          <h4>Agent Skills</h4>
+          <p>打造具備長期記憶與狀態管理的個人化 agent。</p>
+          <span class="badge-soon">即將推出</span>
+        </div>
+        <div class="day-card is-soon">
+          <div class="day-num">DAY 4</div>
+          <h4>Agent 安全性與評估</h4>
+          <p>建立測試、護欄與品質評估機制，抵禦新型威脅向量。</p>
+          <span class="badge-soon">即將推出</span>
+        </div>
+        <div class="day-card is-soon">
+          <div class="day-num">DAY 5</div>
+          <h4>規格驅動的正式環境開發</h4>
+          <p>將本地 agent 升級為可治理、可擴展、可觀測的正式環境艦隊。</p>
+          <span class="badge-soon">即將推出</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <h2>這個課程在教什麼？</h2>
+      <p>這是一個為期 5 天的線上課程，由 Google 研究人員與工程師共同打造，從基礎概念深入到可上線的生產級系統，帶你完整學會如何打造強大的 AI agent。課程會聚焦於 <strong>vibe coding 工作流程</strong>——也就是讓自然語言成為主要的程式介面，並教你如何透過整合工具、API 與多 agent 系統，打造所謂的「10x agent」。</p>
+      <p>過程中你會建立具備記憶與情境感知能力的「skilled agent」，學習如何評估其品質與安全性，並把專案從原型一路推進到可擴展、可觀測的部署環境。每天的內容都會結合概念深度解析與實作練習、實務引導；課程最後會以一個 <strong>capstone 專案</strong>作為總結，讓你把學到的東西真正落地。</p>
+    </section>
+
+    <section id="how">
+      <h2>課程怎麼進行？</h2>
+      <p>活動期間，每位學員每天都會收到以下內容：</p>
+      <ul>
+        <li>📚 <strong>每日作業</strong>：包含白皮書、配套 podcast 與配套 codelab，可依自己的節奏完成。</li>
+        <li>💬 <strong>Discord 討論</strong>：Kaggle Discord 伺服器會開設專屬頻道，提供活動期間的深度討論空間，方便提出問題、釐清疑惑，並與其他學員及 Google 專家交流。</li>
+        <li>🎥 <strong>每日直播與 AMA</strong>：每天會在 Kaggle 的 YouTube 頻道進行直播，由作者與課程貢獻者深入講解當日主題並回答問題，過程中也會有一些有趣的互動環節。</li>
+        <li>💻 <strong>Capstone 專案</strong>：透過真實世界的專案提升技能並充實作品集。課程結束後可選擇參與評選，角逐 Kaggle 證書、徽章、周邊商品，以及在 Kaggle 與 Google 社群媒體上的曝光機會（此項目為選填）。</li>
+      </ul>
+    </section>
+
+    <section id="curriculum">
+      <h2>每日課程內容</h2>
+      <ul>
+        <li><strong>Day 1：Agent 與 Vibe Coding 入門</strong> — 從 AI 聊天機器人、文字補全進階到自主 agent，掌握以自然語言作為主要程式介面的 vibe coding 工作流程。</li>
+        <li><strong>Day 2：Agent 工具與互通性</strong> — 透過整合外部 API、程式碼執行與 agent 對 agent 通訊，將 agent 的能力擴展到近乎無限。</li>
+        <li><strong>Day 3：Agent Skills</strong> — 打造具備長期記憶與狀態管理的個人化 agent，掌握長情境與最佳 token 使用策略，並將技能整合進 agentic framework。</li>
+        <li><strong>Day 4：Vibe Coding Agent 安全性與評估</strong> — 透過嚴謹的測試、護欄機制與品質評估打造可靠的 agent，並針對新型威脅向量進行安全防護。</li>
+        <li><strong>Day 5：Vibe Coding 時代下的規格驅動正式環境開發</strong> — 將本地 agent 升級為受治理、可擴展、可觀測的正式環境艦隊，掌握雲端部署、除錯與可觀測性。</li>
+      </ul>
+    </section>
+
+    <section id="whats-new">
+      <h2>這次課程的新亮點</h2>
+      <ul>
+        <li><strong>Vibe Coding 工作流程</strong>：深入探討自然語言如何成為打造自主 agent 的全新「程式語言」。</li>
+        <li><strong>全新內容與講師陣容</strong>：邀請新領域專家，帶你了解如何打造「10x agent」「skilled agent」「quality agent」。</li>
+        <li><strong>從 Vibe 到 Live</strong>：全新聚焦於如何把本地 agent 升級為受治理、可擴展、可觀測的企業級艦隊，並以全新的 Kaggle capstone 專案作為總結。</li>
+      </ul>
+    </section>
+
+    <section id="faq">
+      <h2>常見問題</h2>
+      <dl class="faq">
+        <dt>有先修要求嗎？適合什麼樣的人參加？</dt>
+        <dd>本課程適合任何對打造與理解 AI agent 有興趣的人。雖然沒有正式的先修門檻，但具備以下基礎會更有幫助：</dd>
+        <dd>
+          <ul>
+            <li><strong>Python 程式設計</strong>：課程包含實作練習，建議具備 Python 基礎。</li>
+            <li><strong>基礎 AI 概念</strong>：若還不熟悉，建議先從「5-Day AI Agent Intensive Course with Google」入門。</li>
+            <li><strong>Google AI Studio</strong>：熟悉 Google AI Studio 有助於實驗與部署 AI 模型（API 與 AI Studio 的可用地區請參考官方文件）。</li>
+          </ul>
+        </dd>
+
+        <dt>每天大概要花多少時間？</dt>
+        <dd>每日作業約需 1–2 小時完成，每日直播約 45–60 分鐘。</dd>
+
+        <dt>課程內容怎麼發布？</dt>
+        <dd>活動週期間，每天的課程內容會透過你註冊的 email、本頁的討論區，以及 Kaggle Discord 發布。</dd>
+
+        <dt>怎麼加入 Kaggle 的 Discord？</dt>
+        <dd>註冊一個 Discord 帳號，並加入 Kaggle Discord 伺服器即可。</dd>
+
+        <dt>Capstone 專案是什麼？</dt>
+        <dd>透過實作真實世界的 agent 專案來提升技能、充實作品集。提交內容須包含一篇 Kaggle 文章，記錄你打造的 agent，包括說明影片、建構理念簡述，以及程式碼連結。</dd>
+
+        <dt>Capstone 專案的時程？</dt>
+        <dd>專案公開上線：2026 年 6 月 19 日（週五）當天結束。提交截止：2026 年 7 月 6 日（週一）23:59 PT。</dd>
+
+        <dt>課程會頒發 Kaggle 證書、獎牌或積分嗎？</dt>
+        <dd>參與 capstone 專案即可在 Kaggle 個人檔案上獲得徽章與證書。優勝者另可獲得 Kaggle 限定周邊，並在 Kaggle 與 Google 社群媒體上獲得表揚。</dd>
+
+        <dt>直播會錄影嗎？</dt>
+        <dd>會。無法即時觀看直播的學員，事後將收到完整錄影檔。</dd>
+
+        <dt>課程費用是多少？</dt>
+        <dd>完全免費，只需要一個 Kaggle 帳號與一個 Google AI Studio 帳號。<strong>注意</strong>：設定 Kaggle 帳號時請務必完成手機號碼驗證，以便活動週能順利參與。</dd>
+
+        <dt>設定 Kaggle 帳號一定要驗證手機號碼嗎？</dt>
+        <dd>是的，這是必填項目。驗證步驟如下：</dd>
+        <dd>
+          <ol>
+            <li>點選 Kaggle 個人頁面右上角的頭像，選擇「Settings」。</li>
+            <li>在「Phone Verification」項目下，點選「Verify Phone」。</li>
+            <li>依照畫面指示完成驗證。</li>
+          </ol>
+        </dd>
+        <dd>輸入電話號碼時請記得加上國碼，國碼前不要加任何數字或符號。</dd>
+
+        <dt>哪些人可以使用課程資源？</dt>
+        <dd>直播與錄影內容對所有人開放，但部分工具（如 Gemini API、Kaggle notebook 等）以下對象將無法使用：</dd>
+        <dd>
+          <ul>
+            <li>受制裁國家居民</li>
+            <li>未滿 18 歲者</li>
+          </ul>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="citation">
+      <h2>引用資訊</h2>
+      <div class="stat-box">
+        <h4>Citation</h4>
+        <p style="font-size:0.92rem;color:#333;">Brenda Flynn, Fran Hinkelmann, Polong Lin, Nikita Namjoshi, Anant Nawalgaria, Kinjal Parekh, Kanchana Patlolla, Jim Plotts, María Cruz, Tania Rodriguez Fuentes, Frank Guan, Melissa Nalubwama-Mukasa, Sara Wolley. <em>5-Day AI Agents: Intensive Vibe Coding Course With Google.</em> https://kaggle.com/competitions/5-day-ai-agents-intensive-vibecoding-course-with-google, 2026. Kaggle.</p>
+      </div>
+    </section>
+
+  </article>
+
+  <footer class="notes">
+    <div class="page">
+      <p>原始競賽頁面：<a href="https://www.kaggle.com/competitions/5-day-ai-agents-intensive-vibecoding-course-with-google/overview" target="_blank" rel="noopener">kaggle.com/competitions/5-day-ai-agents-intensive-vibecoding-course-with-google/overview</a></p>
+      <p>本頁為課程內容之繁體中文摘要與整理，實際規則與最新資訊請以 Kaggle 官方頁面為準。</p>
+    </div>
+  </footer>
+</main>
+
+</body>
+</html>
