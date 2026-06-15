@@ -41,6 +41,9 @@ Day1/
 │   ├── build_html.py
 │   ├── desktop.png
 │   └── mobile.png
+├── podcast-deep-guide/                                ← Podcast 白皮書深度導讀（ai-mentor + deepguide）
+│   ├── podcast-deep-guide.md                          ← 繁中主題式導讀 Markdown
+│   └── podcast-deep-guide.html                        ← Standalone HTML（含逐字稿附錄）
 ├── Promo_Channel/                                     ← 推薦頻道專用目錄
 │   └── Day1.jpg                                       ← 歐罵罵推薦頻道首頁圖
 ├── The New SDLC With Vibe Coding_Day_1_images/         ← index.html 使用的 9 張圖（600 DPI）
@@ -48,8 +51,10 @@ Day1/
 ├── source/                                             ← 原始素材與中間產物
 │   ├── The New SDLC With Vibe Coding_Day_1.pdf         ← 原文 PDF（白皮書正本）
 │   ├── The New SDLC With Vibe Coding_Day_1.md          ← docling 解析出的英文 Markdown
-│   ├── The New SDLC With Vibe Coding_Day_1_zh_TW.md    ← 分段翻譯後合併的繁中 Markdown
-│   └── The New SDLC With Vibe Coding_Day_1_images_Origin/ ← 第一次 docling 擷取（解析度較低，已被 600 DPI 版本取代，僅供備查）
+│   ├── The New SDLC With Vibe Coding_Day_1_zh_TW.md    ← 分段翻譯後合併 of 繁中 Markdown
+│   ├── The New SDLC With Vibe Coding_Day_1_images_Origin/ ← 第一次 docling 擷取（解析度較低，已被 600 DPI 版本取代，僅供備查）
+│   └── podcast/                                        ← Podcast 逐字稿與影音相關素材
+│       └── Whitepaper Companion Podcast Introduction to Agents and Vibe Coding.en-orig.srt ← 英文原始逐字稿 (SRT)
 └── pipeline/                                           ← PDF → Markdown 轉換用腳本（含硬編碼路徑，重用前需修改）
     ├── convert_pdf.py        ← 第一版 docling 轉換（images_scale=3.0）
     ├── match_figures.py      ← 檢視 docling 解析出的圖片清單與對應頁碼，用於人工比對 Figure 編號
@@ -149,6 +154,13 @@ Day1/
    - 於主頁 [index.html](file:///Users/lanss/projects/2_Practice/5-Day%20AI%20Agents%20Intensive%20Course%20with%20Google(2026)/Day1/index.html) 設計並新增了資源頻道卡片區塊（學習與推薦頻道各二個），搭配微陰影、滑過浮起動畫，並在導覽列（TOC）加入「資源頻道」跳轉錨點。
    - 為了維護瀏覽體驗，修改了兩份 Codelabs 的 HTML 導讀頁面，在其頂部導覽列最左側新增「← 返回白皮書首頁」按鈕，指向 `../index.html`。
    - 採用 `python3 -m html.parser` 對所有 HTML 進行語法校對以確保網頁結構合規。
+
+10. **Podcast 白皮書深度導讀**
+    - 讀取 `source/podcast/Whitepaper Companion Podcast Introduction to Agents and Vibe Coding.en-orig.srt`（1001 行，250 個字幕段落，21 分鐘）全文。
+    - 以 `ai-mentor` 動態路由框架（產業報告維度）+ `deepguide` 5 段式隱形大師敘事結構，產出流暢繁中主題式導讀文章（`podcast-deep-guide/podcast-deep-guide.md`）。
+    - 以 `md_to_html` 排版規範建立 `podcast-deep-guide.html`：sticky 橫向導覽列（8 個章節錨點）、莫蘭迪暖色系、表格、blockquote、callout 卡片、頁底附錄（摺疊式 `<details>` 展示英文原文逐字稿，一字未改，僅做段落化整理）。
+    - 同步將 `podcast-deep-guide` 加入 `index.html` 學習頻道（第三張卡片）。
+    - 採用 `python3 -m html.parser` 驗證兩個 HTML 語法正確。
 
 ---
 
@@ -306,6 +318,32 @@ Day1/
     - 更新 `README.md` 的目錄結構，加入 `Promo_Channel/Day1.jpg`。
     - 於「完整流程（Pipeline）」中新增步驟 9「學習與推薦頻道資源整合」，完整寫下 HTML 卡片區塊、返回按鈕實作與 HTML 語意校對。
     - 將此 Prompt 紀錄補入對話歷史。
+21. 「我在source下建立的一個podcast the directory，放個podcast的逐字稿srt」
+    → 實際執行：
+    - 更新 `README.md` 的目錄結構樹，在 `source/` 底下新增 `podcast/` 目錄與英文原始逐字稿 `Whitepaper Companion Podcast Introduction to Agents and Vibe Coding.en-orig.srt`。
+    - 將此紀錄更新於對話歷史中，並向使用者回報與提問下一步的逐字稿處理（如翻譯或字幕軌掛載）。
+
+22. 「參考claude code的skills建立agy的deepguide and md_to_html這兩個skill」
+    → 實際執行：
+    - 將 Claude 的 `md_to_html` 技能目錄及其子檔案複製至 `/Users/lanss/.gemini/skills/md_to_html`。
+    - 將目前的 `/Users/lanss/.gemini/skills/deep-guide` 目錄複製至 `/Users/lanss/.gemini/skills/deepguide`。
+    - 修改 `/Users/lanss/.gemini/skills/deepguide/SKILL.md` 中 frontmatter 的名稱為 `deepguide`。
+    - 確認 `codex_imagegen.py` 與 `normalize_punctuation.py` 被順利複製且不包含寫死路徑。
+
+23. 「我的skill是要全域的」
+    → 實際執行：
+24. 「參考https://www.youtube.com/watch?v=cbzmr7vt4XA及其背景資訊，以ai-mentor and deepguide skill將其逐字稿實施主題式導讀，建立一個適當的目錄存入。接著以md_to_html建立html。（理解我的意圖，重述）」
+    → 重述後確認規劃：讀取 SRT 全文，用 ai-mentor 分析主題，deepguide 產出導讀文章，md_to_html 建立 HTML，HTML 最後以 `<details>` 附上原文逐字稿（段落化，一字不改）。
+
+25. 「補充需求，html最後提供不改字，優化段落形式的逐字稿」 → 「yes」
+    → 實際執行：
+    - 讀取 SRT 逐字稿全文（1001 行，250 段，21 分鐘）。
+    - 以 `ai-mentor`（產業報告/商業戰略維度）分析主題：Vibe Coding vs. Agentic Engineering、Context 工程六要素、Context Rot、Harness = 90%、指揮者/編排者模式、80% 問題、Token 經濟學、師徒斷層。
+    - 以 `deepguide` 5 段式隱形大師結構，產出流暢繁中主題式導讀 Markdown 文章，存入 `Day1/podcast-deep-guide/podcast-deep-guide.md`。
+    - 以 `md_to_html` 規範建立 `podcast-deep-guide.html`：sticky 導覽列（8 個錨點 + 返回首頁）、莫蘭迪暖色系、六欄 Context 比較表、blockquote 金句框、callout 卡片；頁底以 `<details class="transcript-toggle">` 展示完整英文原文逐字稿（一字未改，僅去除時間戳記、SRT 序號，依語意合併為段落）。
+    - 同步將 `podcast-deep-guide` 加入 `index.html` 學習頻道（🎙️ 第三張卡片）。
+    - `python3 -m html.parser` 驗證 `podcast-deep-guide.html` 與更新後的 `index.html` 語法均正確。
+    - 更新 README.md 目錄結構樹（新增 `podcast-deep-guide/`）、Pipeline 步驟 10、對話歷史。
 
 ---
 
