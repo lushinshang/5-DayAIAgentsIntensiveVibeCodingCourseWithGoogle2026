@@ -8,6 +8,13 @@
 嵌入 Podcast → 圖片壓縮」的流程，產出可直接在瀏覽器開啟的繁體中文長文網頁
 `index.html`，內含 9 張原文圖表（已壓縮）與一支白皮書同步 Podcast 影片播放器。
 
+另外，本目錄也補充整理了 2 份 Day 1 相關 Google Codelabs，皆採用
+「讀取官方網頁 → deep-guide 白話繁中導讀 Markdown → md-to-phtml
+轉為 standalone HTML → Playwright 桌機/手機截圖 QA」流程，分別存放於：
+
+- `google-antigravity-codelab-guide/`
+- `deploy-aistudio-to-cloud-run-guide/`
+
 **最終產出**：`index.html`（雙擊或本機伺服器開啟即可閱讀）。
 **Day 2 可參考**：下方「給 Day 2 的流程建議」一節，整理了本次流程中
 可重用的腳本、決策原則與常見坑點。
@@ -20,6 +27,22 @@
 Day1/
 ├── README.md                                          ← 本檔案
 ├── index.html                                          ← 最終輸出（繁中網頁）
+├── google-antigravity-codelab-guide/                   ← Google Antigravity codelab 白話導讀與 HTML
+│   ├── google-antigravity-codelab-guide.md
+│   ├── google-antigravity-codelab-guide.normalized.md
+│   ├── google-antigravity-codelab-guide.html
+│   ├── build_html.py
+│   ├── desktop.png
+│   └── mobile.png
+├── deploy-aistudio-to-cloud-run-guide/                 ← AI Studio → Cloud Run codelab 白話導讀與 HTML
+│   ├── deploy-aistudio-to-cloud-run-guide.md
+│   ├── deploy-aistudio-to-cloud-run-guide.normalized.md
+│   ├── deploy-aistudio-to-cloud-run-guide.html
+│   ├── build_html.py
+│   ├── desktop.png
+│   └── mobile.png
+├── Promo_Channel/                                     ← 推薦頻道專用目錄
+│   └── Day1.jpg                                       ← 歐罵罵推薦頻道首頁圖
 ├── The New SDLC With Vibe Coding_Day_1_images/         ← index.html 使用的 9 張圖（600 DPI）
 ├── Whitepaper Companion Podcast..._compressed.mp4      ← index.html 嵌入的 podcast 影片
 ├── source/                                             ← 原始素材與中間產物
@@ -91,6 +114,41 @@ Day1/
    抖色 → optipng/pillow 重壓縮）逐檔壓縮並覆蓋原檔，**解析度不變**，
    總大小降至約 11MB（各檔約 160KB–2.5MB）。壓縮後重新驗證
    `index.html` 語法並以 Playwright 截圖確認圖片清晰度。
+
+8. **補充 Google Codelabs 導讀**
+   使用者提供 2 個 Day 1 相關 codelab URL，要求以相同做法整理：
+   - `https://codelabs.developers.google.com/getting-started-google-antigravity`
+   - `https://codelabs.developers.google.com/deploy-from-aistudio-to-run`
+
+   執行流程：
+   - 以網頁讀取工具取得官方 codelab 全文與章節結構。
+   - 使用 `deep-guide` 風格改寫為白話易懂的繁體中文 Markdown，重點不是逐字翻譯，
+     而是整理「為什麼這些步驟重要、怎麼操作、實務上要注意什麼」。
+   - 在 `Day1/` 下建立獨立子目錄，避免混入白皮書主頁素材。
+   - 用 `md-to-phtml` 流程執行中文標點正規化：
+     `normalize_punctuation.py <article>.md -o <article>.normalized.md`
+   - 建立各自的 `build_html.py`，將正規化後 Markdown 轉為可直接開啟的
+     standalone HTML；包含文章 hero、sticky 橫向章節導覽、閱讀卡片、
+     code block、blockquote、桌機/手機響應式排版。
+   - 以 `python3 -m html.parser <output>.html` 驗證 HTML 語法。
+   - 用 Playwright 產生 `desktop.png` 與 `mobile.png` 截圖 QA。
+
+   QA 中發現並修正的問題：
+   - `google-antigravity-codelab-guide`：手機版來源網址太長造成卡片溢出，
+     在 article CSS 補上 `overflow-wrap: anywhere`，並讓 `pre` 維持
+     `overflow-wrap: normal`。
+   - `deploy-aistudio-to-cloud-run-guide`：中文標點正規化會把 Markdown ordered
+     list 的 `1.` 轉成 `1。`，導致轉換器沒有辨識清單；已修改 `build_html.py`
+     的 ordered-list regex，同時支援 `1.` 與 `1。`。
+
+    產出：
+    - `google-antigravity-codelab-guide/google-antigravity-codelab-guide.html`
+    - `deploy-aistudio-to-cloud-run-guide/deploy-aistudio-to-cloud-run-guide.html`
+
+9. **學習與推薦頻道資源整合**
+   - 於主頁 [index.html](file:///Users/lanss/projects/2_Practice/5-Day%20AI%20Agents%20Intensive%20Course%20with%20Google(2026)/Day1/index.html) 設計並新增了資源頻道卡片區塊（學習與推薦頻道各二個），搭配微陰影、滑過浮起動畫，並在導覽列（TOC）加入「資源頻道」跳轉錨點。
+   - 為了維護瀏覽體驗，修改了兩份 Codelabs 的 HTML 導讀頁面，在其頂部導覽列最左側新增「← 返回白皮書首頁」按鈕，指向 `../index.html`。
+   - 採用 `python3 -m html.parser` 對所有 HTML 進行語法校對以確保網頁結構合規。
 
 ---
 
@@ -199,6 +257,55 @@ Day1/
 11. 「幫我注記在readme.md，以後回來可以查查」
 
 12. 「從一開始到目前的prompt都記錄在readme.md，為了後面的四天可以當作參考」（本項）
+
+13. 「read https://codelabs.developers.google.com/getting-started-google-antigravity」
+    → 先讀取 Google Antigravity codelab，確認主題、章節與重點。
+
+14. 「這一個網頁總共有10步驟，是嗎」
+    → 回覆該 codelab 共有 10 個章節：
+    Introduction、Installation、Antigravity Interface、Slash Commands、
+    Scheduling Commands、MCP Servers、Artifacts、Antigravity IDE、Skills、
+    Conclusion。
+
+15. 「use deepduide將這個網頁的內容整理成md，要白話易懂，然後用md-to-phtml轉為html」
+    → 使用者隨即中斷此輪，未完成產出。
+
+16. 「use deepduide將這個網頁的內容整理成md，要白話易懂，然後用md-to-phtml轉為html，在Day1下建立一個適當的目錄，存入」
+    → 實際執行：
+    - 使用 `deep-guide` 將 Antigravity codelab 整理成白話繁中 Markdown。
+    - 使用 `md-to-phtml` 流程轉為 standalone HTML。
+    - 建立 `Day1/google-antigravity-codelab-guide/`。
+    - 產出 Markdown、normalized Markdown、HTML、`build_html.py`、桌機/手機截圖。
+    - 以 `python3 -m html.parser` 驗證，並用 Playwright 截圖 QA。
+
+17. 「還有一個也是一樣做法「https://codelabs.developers.google.com/deploy-from-aistudio-to-run」
+    也是在Day1下建立一個適當的目錄放入」
+    → 實際執行：
+    - 讀取「Deploy from AI Studio to Cloud Run」codelab。
+    - 整理成白話繁中 Markdown，主線是 AI Studio vibe coding 原型、
+      Cloud Run 部署、Unpublish 清理資源。
+    - 建立 `Day1/deploy-aistudio-to-cloud-run-guide/`。
+    - 產出 Markdown、normalized Markdown、HTML、`build_html.py`、桌機/手機截圖。
+    - 修正 ordered list 因中文標點正規化造成的解析問題。
+
+18. 「執行過程補充到Day1的readme.md」
+    → 將兩份 codelab 的產出目錄、處理流程、QA 修正事項與 prompt 紀錄補入本檔案。
+
+19. 「執行幾件事情：
+    1. index.html新增兩個學習頻道，連接到「deploy-aistudio-to-cloud-run-guide」和「google-antigravity-codelab-guide」的html，而這兩個地方的html也要新增一個返回上一頁的按鈕
+    2. 新增兩個推薦頻道，一個是歐罵罵，一個是阿魁。前者連到Promo_Channel的Day1.jpg，後者連到「https://meta-ghost.notion.site/Vibe-Coding-AI-3807b792315a8114a299c0bb609634c7?source=copy_link」
+    ok，先確認jpg的存在，然後依規劃執行」
+    → 實際執行：
+    - 確認 `Promo_Channel/Day1.jpg` 確實存在於 `Day1/Promo_Channel/Day1.jpg`。
+    - 修改兩份 Codelabs HTML 頁面，在其頂部 `<nav>` 導覽列最左側新增「← 返回白皮書首頁」連結。
+    - 修改 `index.html`，於 `<style>` 中加入 `.channels-section` 的卡片式樣式，並於 `<nav class="toc">` 加入「資源頻道」跳轉連結。同時在 Podcast 區塊下方、`<main>` 之前插入全新的 `#channels` 區塊，提供雙欄（行動裝置為單欄）卡片設計，滑過時有微陰影與浮起特效。
+    - 採用 `python3 -m html.parser` 驗證三個修改後的 HTML 檔案皆語意正確。
+
+20. 「繼續更新readme.md」
+    → 實際執行：
+    - 更新 `README.md` 的目錄結構，加入 `Promo_Channel/Day1.jpg`。
+    - 於「完整流程（Pipeline）」中新增步驟 9「學習與推薦頻道資源整合」，完整寫下 HTML 卡片區塊、返回按鈕實作與 HTML 語意校對。
+    - 將此 Prompt 紀錄補入對話歷史。
 
 ---
 

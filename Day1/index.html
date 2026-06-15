@@ -121,6 +121,69 @@ footer.notes a{color:var(--accent);}
   header.hero{padding:40px 0 28px;}
   section{padding:28px 0;}
 }
+.channels-section {
+  padding: 32px 0 8px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.channels-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.channels-inner h3 {
+  margin: 0 0 16px;
+  font-size: 1.25rem;
+  color: var(--text);
+  border-left: 3px solid var(--accent);
+  padding-left: 10px;
+}
+.channel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 640px) {
+  .channel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.channel-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.channel-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+  border-color: var(--accent);
+}
+.channel-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  padding-top: 2px;
+}
+.channel-info h4 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.channel-info p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
 </style>
 </head>
 <body>
@@ -129,6 +192,7 @@ footer.notes a{color:var(--accent);}
   <div class="page">
     <a href="../index.html">← 返回課程首頁</a>
     <a href="#podcast">同步 Podcast</a>
+    <a href="#channels">資源頻道</a>
     <a href="#preface">前言</a>
     <a href="#intent-shift">從語法到意圖</a>
     <a href="#new-sdlc">新一代 SDLC</a>
@@ -158,6 +222,49 @@ footer.notes a{color:var(--accent);}
     <video controls preload="metadata">
       <source src="Whitepaper%20Companion%20Podcast%20Introduction%20to%20Agents%20and%20Vibe%20Coding_compressed.mp4" type="video/mp4">
     </video>
+  </div>
+</section>
+
+<section id="channels" class="channels-section">
+  <div class="page channels-inner">
+    <div class="channel-group">
+      <h3>學習頻道</h3>
+      <div class="channel-grid">
+        <a href="google-antigravity-codelab-guide/google-antigravity-codelab-guide.html" class="channel-card">
+          <div class="channel-icon">🤖</div>
+          <div class="channel-info">
+            <h4>Google Antigravity 入門導讀</h4>
+            <p>探索 AI Agent 開發框架、MCP 伺服器與 IDE 整合實務。</p>
+          </div>
+        </a>
+        <a href="deploy-aistudio-to-cloud-run-guide/deploy-aistudio-to-cloud-run-guide.html" class="channel-card">
+          <div class="channel-icon">☁️</div>
+          <div class="channel-info">
+            <h4>AI Studio 部署至 Cloud Run 導讀</h4>
+            <p>掌握從 AI Studio 快速原型設計到 Cloud Run 容器化部署的完整步驟。</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="channel-group">
+      <h3>推薦頻道</h3>
+      <div class="channel-grid">
+        <a href="Promo_Channel/Day1.jpg" target="_blank" class="channel-card">
+          <div class="channel-icon">📢</div>
+          <div class="channel-info">
+            <h4>歐罵罵</h4>
+            <p>查看歐罵罵推薦頻道精彩內容與 Day 1 導覽圖。</p>
+          </div>
+        </a>
+        <a href="https://meta-ghost.notion.site/Vibe-Coding-AI-3807b792315a8114a299c0bb609634c7?source=copy_link" target="_blank" class="channel-card">
+          <div class="channel-icon">📝</div>
+          <div class="channel-info">
+            <h4>阿魁</h4>
+            <p>阿魁的 Vibe Coding AI 學習筆記，深入剖析 AI 協作開發心法。</p>
+          </div>
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
