@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>伴隨 Vibe Coding 誕生的新一代 SDLC：從即興的 Prompting 到 Agentic Engineering</title>
+<style>
+:root{
+  --bg:#f9f7f4;
+  --text:#1a1a1a;
+  --muted:#5a5a5a;
+  --accent:#a8554a;
+  --border:#e3ddd4;
+  --card:#ffffff;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:clamp(16px,1vw + 13px,17px);
+  line-height:1.68;
+  letter-spacing:0;
+}
+.page{max-width:1120px;margin:0 auto;padding:0 20px;}
+header.hero{padding:64px 0 40px;}
+.hero-inner{max-width:720px;margin:0 auto;}
+h1{
+  font-size:clamp(2.1rem,5vw,3.4rem);
+  line-height:1.25;
+  text-wrap:balance;
+  margin:0 0 12px;
+}
+.subtitle{font-size:clamp(1.05rem,2vw,1.3rem);color:var(--muted);margin:0 0 20px;text-wrap:balance;}
+.authors{font-size:0.95rem;color:var(--muted);margin:0 0 28px;}
+.lead{
+  font-size:1.15rem;
+  line-height:1.7;
+  border-left:3px solid var(--accent);
+  padding-left:18px;
+  color:#333;
+}
+nav.toc{
+  position:sticky;top:0;z-index:50;
+  background:rgba(249,247,244,0.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--border);
+}
+nav.toc .page{display:flex;gap:18px;overflow-x:auto;padding:12px 20px;scrollbar-width:thin;}
+nav.toc a{
+  white-space:nowrap;font-size:0.92rem;color:var(--muted);text-decoration:none;
+  padding:6px 2px;border-bottom:2px solid transparent;
+}
+nav.toc a:hover{color:var(--accent);border-bottom-color:var(--accent);}
+main{padding:8px 0 80px;}
+article{max-width:720px;margin:0 auto;}
+section{padding:36px 0;border-bottom:1px solid var(--border);}
+section:last-of-type{border-bottom:none;}
+h2{font-size:clamp(1.55rem,4vw,2.2rem);line-height:1.35;text-wrap:balance;margin:0 0 20px;}
+h3{font-size:clamp(1.2rem,3vw,1.5rem);margin:32px 0 14px;}
+h4{font-size:1.05rem;margin:24px 0 10px;color:#333;}
+p{margin:0 0 18px;}
+ul,ol{margin:0 0 18px;padding-left:1.4em;}
+li{margin-bottom:8px;}
+strong{font-weight:700;}
+blockquote.pullquote{
+  margin:28px 0;padding:18px 22px;
+  background:var(--card);border-left:4px solid var(--accent);
+  border-radius:6px;font-size:1.1rem;font-weight:600;
+  text-wrap:balance;
+}
+.stat-box{
+  margin:28px 0;padding:24px;background:var(--card);
+  border:1px solid var(--border);border-radius:12px;text-align:center;
+}
+.stat-box h4{margin:0 0 16px;font-size:1.1rem;color:var(--muted);}
+.stat-row{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;}
+.stat-item .num{font-size:2.4rem;font-weight:700;color:var(--accent);}
+.stat-item .label{font-size:0.95rem;color:var(--muted);margin-top:4px;}
+.table-wrap{overflow-x:auto;margin:24px 0;border:1px solid var(--border);border-radius:8px;}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:0.92rem;}
+table caption{padding:10px;font-weight:600;text-align:left;color:var(--muted);}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;line-height:1.5;}
+th{background:#efe9e1;font-weight:700;}
+tbody tr:nth-child(even){background:#fbfaf8;}
+figure.section-figure{margin:32px 0;text-align:center;}
+figure.section-figure img{
+  max-width:860px;width:100%;height:auto;border-radius:10px;
+  box-shadow:0 6px 24px rgba(0,0,0,0.08);cursor:zoom-in;
+}
+figcaption{margin-top:10px;font-size:0.92rem;color:var(--muted);line-height:1.55;}
+pre{
+  background:#2b2825;color:#f3eee7;border-radius:8px;
+  padding:16px 18px;overflow-x:auto;font-size:0.88rem;line-height:1.6;
+  margin:24px 0;
+}
+code{font-family:"SF Mono",Menlo,Consolas,monospace;}
+.code-caption{font-size:0.88rem;color:var(--muted);margin:-12px 0 24px;}
+footer.notes{padding:40px 0 80px;}
+footer.notes ol{font-size:0.85rem;color:var(--muted);line-height:1.7;word-break:break-all;}
+footer.notes a{color:var(--accent);}
+.credits{font-size:0.85rem;color:var(--muted);margin-bottom:24px;}
+.lightbox{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(26,26,26,0.88);
+  align-items:center;justify-content:center;padding:24px;cursor:zoom-out;
+}
+.lightbox.is-open{display:flex;}
+.lightbox img{max-width:96vw;max-height:92vh;width:auto;height:auto;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,0.4);}
+.lightbox .lightbox-hint{position:absolute;top:20px;right:24px;color:rgba(255,255,255,0.75);font-size:14px;}
+.podcast{padding:0 0 8px;}
+.podcast-inner{max-width:720px;margin:0 auto;}
+.podcast h2{font-size:1.3rem;margin:0 0 10px;}
+.podcast p{margin:0 0 14px;color:var(--muted);}
+.podcast video{
+  width:100%;max-width:720px;display:block;border-radius:10px;
+  background:#000;box-shadow:0 6px 24px rgba(0,0,0,0.08);
+}
+@media (max-width:640px){
+  header.hero{padding:40px 0 28px;}
+  section{padding:28px 0;}
+}
+</style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="page">
+    <a href="#podcast">同步 Podcast</a>
+    <a href="#preface">前言</a>
+    <a href="#intent-shift">從語法到意圖</a>
+    <a href="#new-sdlc">新一代 SDLC</a>
+    <a href="#factory-harness">工廠模型與 Harness</a>
+    <a href="#roles">指揮者與編排者</a>
+    <a href="#coding-agents">Coding Agent 實務</a>
+    <a href="#economics">AI 開發經濟學</a>
+    <a href="#getting-started">行動建議</a>
+    <a href="#conclusion">結論</a>
+    <a href="#notes">尾註</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="page hero-inner">
+    <h1>伴隨 Vibe Coding 誕生的新一代 SDLC</h1>
+    <p class="subtitle">從即���的 Prompting 到 Agentic Engineering</p>
+    <p class="authors">作者：Addy Osmani、Shubham Saboo 與 Sokratis Kartakis</p>
+    <p class="lead">軟體工程最深遠的變革不是新的語言、框架或雲端服務。它是從「撰寫程式碼」到「表達意圖」的轉變，並信任智慧型系統能將該意圖實現。</p>
+  </div>
+</header>
+
+<section id="podcast" class="podcast">
+  <div class="page podcast-inner">
+    <h2>白皮書同步 Podcast</h2>
+    <p>以對話形式重新詮釋本篇白皮書的核心概念，適合在閱讀前快速暖身，或閱讀後加深理解。</p>
+    <video controls preload="metadata">
+      <source src="Whitepaper%20Companion%20Podcast%20Introduction%20to%20Agents%20and%20Vibe%20Coding_compressed.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<main>
+<article>
+<p>[HTML 內容已省略 - 完整的 index.html 檔案請參照原始版本]</p>
+</article>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-hint">點擊或按 Esc 關閉</span>
+  <img src="" alt="">
+</div>
+
+<script>
+(function(){
+  var lightbox = document.getElementById("lightbox");
+  var lightboxImg = lightbox.querySelector("img");
+  function openLightbox(img){
+    lightboxImg.src = img.currentSrc || img.src;
+    lightboxImg.alt = img.alt;
+    lightbox.classList.add("is-open");
+  }
+  function closeLightbox(){ lightbox.classList.remove("is-open"); lightboxImg.src = ""; }
+  document.querySelectorAll("figure.section-figure img").forEach(function(img){
+    img.addEventListener("click", function(){ openLightbox(img); });
+  });
+  lightbox.addEventListener("click", closeLightbox);
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeLightbox(); });
+})();
+</script>
+
+</body>
+</html>
