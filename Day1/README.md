@@ -5,8 +5,8 @@
 本目錄將 Google「5-Day AI Agents Intensive Course」Day 1 白皮書 PDF
 （`The New SDLC With Vibe Coding_Day_1.pdf`），透過「PDF 解析 → 圖文擷取 →
 分段翻譯 → 圖片/佔位符對齊 → HTML 排版（md_to_html skill）→ 對照 PDF 校對 →
-嵌入 Podcast」的流程，產出可直接在瀏覽器開啟的繁體中文長文網頁
-`index.html`，內含 9 張原文圖表與一支白皮書同步 Podcast 影片播放器。
+嵌入 Podcast → 圖片壓縮」的流程，產出可直接在瀏覽器開啟的繁體中文長文網頁
+`index.html`，內含 9 張原文圖表（已壓縮）與一支白皮書同步 Podcast 影片播放器。
 
 **最終產出**：`index.html`（雙擊或本機伺服器開啟即可閱讀）。
 **Day 2 可參考**：下方「給 Day 2 的流程建議」一節，整理了本次流程中
@@ -84,6 +84,14 @@ Day1/
    `<video controls preload="metadata">` 嵌入頁首，並在導覽列加上
    `#podcast` 錨點。檔名含空白，`src` 需做 `%20` URL encoding。
 
+7. **圖片壓縮**
+   600 DPI 擷取出的 9 張 PNG 原始檔每張約 4.5–5.9MB（總計 ~90MB），
+   使用 `/Users/lanss/projects/2_Practice/readpaper/compress_jpg.py
+   --preserve-resolution`（無損 PNG 壓縮：256 色調色盤 + Floyd-Steinberg
+   抖色 → optipng/pillow 重壓縮）逐檔壓縮並覆蓋原檔，**解析度不變**，
+   總大小降至約 11MB（各檔約 160KB–2.5MB）。壓縮後重新驗證
+   `index.html` 語法並以 Playwright 截圖確認圖片清晰度。
+
 ---
 
 ## 對話需求紀錄（依時間順序）
@@ -102,7 +110,7 @@ Day1/
    插入圖片、建表格與 stat-box，並完成語法驗證與 Playwright 截圖 QA。
 
 4. **PDF double check**：逐節比對中英文，發現兩處「轉換時順手修正」：
-   - AI Agents 五要素段��：原文（英文 + zh_TW）皆寫「**四個**部分」，
+   - AI Agents 五要素段落：原文（英文 + zh_TW）皆寫「**四個**部分」，
      但前面條列 5 項（Model/Tools/Memory/Orchestration/Deployment）——
      原文本身存在「條列 5 項卻說 4 個」的矛盾。
      → **決策：改回「四個」**，忠實呈現原文（含其矛盾），不自行修正。
@@ -118,16 +126,86 @@ Day1/
    加入 `index.html`，新增 `#podcast` 導覽錨點與 `<video controls>`
    播放器區塊，驗證語法並截圖確認顯示正常。
 
-6. **本次：目錄整理 + README**：將原始素材／中間產物移入 `source/`，
+6. **目錄整理 + README**：將原始素材／中間產物移入 `source/`，
    轉換腳本移入 `pipeline/`，最終輸出（`index.html`、圖片目錄、mp4）
    留在根目錄以維持相對路徑正確；撰寫本 README 作為 Day 2 參考。
+
+7. **圖片壓縮**：`The New SDLC With Vibe Coding_Day_1_images/` 內 9 張圖
+   檔太大（~90MB），要求用 `readpaper/compress_jpg.py` 壓縮並覆蓋原檔。
+   該腳本提供兩種模式：
+   - `--preserve-resolution`：保留原解析度，用 256 色調色盤 + 抖色，
+     每張約 2.4MB（總計 ~22MB），背景會出現輕微網點抖色噪點。
+   - 預設模式：解析度降至 ~50% + 32 色調色盤，每張約 850KB
+     （總計 ~7.7MB），但 lightbox 放大時文字較模糊、色彩更失真。
+   → **決策：選擇 `--preserve-resolution`**（保留解析度與文字銳利度，
+     接受些微抖色噪點），實測總大小降至 ~11MB。
+
+---
+
+## 待辦：Day 1 熱門分享追蹤（2026-06-15 記錄）
+
+2026 課程於 **2026-06-15 ~ 06-19** 進行，本白皮書即 2026 版 Day 1
+（"Introduction to Agents & Vibe Coding"）。記錄當天搜尋結果，**之後可
+回來複查**是否有更完整的心得/分享：
+
+- 2026-06-15（Day 1 剛開始）搜尋時，多數 GitHub repo 都只有初始 commit
+  或空白 README，尚無實質心得內容。較活躍的幾個：
+  - [divya-gh/5Day_AI_Agents_Intensive_Vibe_Coding_Course_With_Google](https://github.com/divya-gh/5Day_AI_Agents_Intensive_Vibe_Coding_Course_With_Google)
+  - [StevenTapscott/Kaggle-AI-Agents](https://github.com/StevenTapscott/Kaggle-AI-Agents)（規劃了 `Day01/Whitepaper-Notes.md`）
+  - [Shibu4064/5-Day-AI-Agents-Intensive-Vibe-Coding-Course-With-Google](https://github.com/Shibu4064/5-Day-AI-Agents-Intensive-Vibe-Coding-Course-With-Google)
+  - [PhamQuangSon/5-day-ai-agent](https://github.com/PhamQuangSon/5-day-ai-agent)
+  - [Reefat004/Google-AI-Agents-Course](https://github.com/Reefat004/Google-AI-Agents-Course)
+  - [AnhQuoc1234/5-Day-AI-Agents](https://github.com/AnhQuoc1234/5-Day-AI-Agents)
+- Kaggle Discord 有專屬頻道供學員交流，但**訊息不被搜尋引擎索引**，需
+  直接登入 Discord 查看：[Join the new AI Agents Vibe Coding Course](https://blog.google/innovation-and-ai/technology/developers-tools/kaggle-genai-intensive-course-vibe-coding-june-2026/)
+- **建議**：Day 1 截止日（約 06-16）之後，重新用
+  `gh search repos "5-Day AI Agents Intensive" --sort updated` 搜尋，
+  屆時內容會比較完整。
+
+---
+
+## 附錄：原始 Prompt 逐句紀錄（供 Day 2-5 複用）
+
+以下依時間順序列出本次對話中使用者實際下的指令原文（前 2 則因跨越對話
+壓縮，僅能還原大意，其餘為逐字紀錄）。Day 2-5 可參考相同句式直接下指令。
+
+1. （初次需求，大意）依據 PDF 和 Kaggle whitepaper 網址，用 `md_to_html`
+   skill 將 `_zh_TW.md` 翻譯內容與圖片目錄整理為 `index.html`，圖片位置
+   依 `{{Figure X ...}}` 佔位符對應；並要求先理解意圖、重述再開始。
+
+2. （建置過程中的澄清，大意）圖片檔名與佔位符不一致時，先用 `mv` 統一
+   副檔名對齊佔位符；翻譯內容直接套用 `_zh_TW.md` 既有文字，不要邊轉邊
+   潤飾，潤飾留到最後 double check 階段。
+
+3. 「拿原文 PDF做內容 double check」
+
+4. 「Whitepaper Companion Podcast Introduction to Agents and Vibe Coding_compressed.mp4為這個白皮書的podcast，html找一個地方協助播放」
+
+5. 「將這個目錄做整理收納，並就起到迄今所有需求全部都做成readme.md，開頭是摘要。我希望可以讓Day2作爲參考」
+
+6. 「The New SDLC With Vibe Coding_Day_1_images內的圖檔太大，以readpaper下的compress_jpg.py壓縮，並覆蓋原檔案」
+
+7. 「source下有原始圖檔，請檢查」
+
+8. 「原來的中文圖不滿意，啟動codex cli重新生圖，提示詞為「圖片內容翻譯為台灣IT人員常用語繁體中文，重新生圖」，生完的圖檔檔名和原圖檔一致，存到「The New SDLC With Vibe Coding_Day_1_images」目錄」
+   （後接「理解我的意圖，重述」——要求先重述再執行；使用者後續回覆已自行完成此項處理，故本次對話未實際執行。）
+
+9. 「我已經完成圖檔的處理了
+   另外
+   用deepresearch從discord的Kaggle頻道尋找有沒有關於5-Day的第一天熱門分享」
+
+10. 「主要是for今年的，不是去年的，或者看看github」
+
+11. 「幫我注記在readme.md，以後回來可以查查」
+
+12. 「從一開始到目前的prompt都記錄在readme.md，為了後面的四天可以當作參考」（本項）
 
 ---
 
 ## 給 Day 2 的流程建議
 
 - **可重用的腳本**（在 `pipeline/`）：`reprocess_600dpi.py` 是目前最完整
-  的 PDF→Markdown+圖片 流程版本（600 DPI��自動命名圖片、自動插入
+  的 PDF→Markdown+圖片 流程版本（600 DPI、自動命名圖片、自動插入
   `{{filename}}` 佔位符）。重用時務必：
   - 修改腳本內硬編碼的 `base_dir` / `pdf_path` 路徑為 Day 2 的目錄。
   - 修改 `figure_info` mapping（docling 解析出的 picture index 會因
@@ -150,3 +228,7 @@ Day1/
      `python3 -m http.server <port>`，截圖後記得關閉伺服器並清除
      `.playwright-mcp/` 與 `qa_*.png` 暫存檔。
   5. 影片/檔名含空白時，`<video src="...">` 需做 `%20` URL encoding。
+  6. docling 高解析度（600 DPI）擷取出的圖檔通常每張數 MB，發佈前用
+     `/Users/lanss/projects/2_Practice/readpaper/compress_jpg.py
+     --preserve-resolution <file> -o <file>` 逐張壓縮並覆蓋，可在不
+     改變解析度與檔名（不影響 `<img src>`）的情況下大幅縮小檔案。
