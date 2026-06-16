@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>當你的 Prompt 變成技術債：從 Vibe Coding 逃向 Agentic Engineering</title>
+<meta name="description" content="Kaggle × Google 5-Day AI Agents Intensive Course Day 1 深度導讀。從 Vibe Coding 到 Agentic Engineering，Agent = Model + Harness，Context Engineering 才是真正的核心技能。">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f9f7f4;
+  --text: #1a1a1a;
+  --text-light: #555;
+  --accent: #2d5be3;
+  --accent-soft: #e8eefb;
+  --warn: #c0392b;
+  --warn-soft: #fdf0ef;
+  --tip: #1a7a4a;
+  --tip-soft: #edfaf3;
+  --q-soft: #fdf8ed;
+  --border: #e0ddd8;
+  --nav-bg: rgba(249,247,244,0.95);
+  --font: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--nav-bg);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+.nav-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+  display: flex;
+  gap: 6px;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+nav a {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--text-light);
+  text-decoration: none;
+  border-radius: 20px;
+  transition: background 0.18s, color 0.18s;
+  flex-shrink: 0;
+}
+nav a:hover { background: var(--accent-soft); color: var(--accent); }
+
+/* ── PAGE WRAPPER ── */
+.page-wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 56px 0 40px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.hero-tag {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(1.9rem, 4.5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.22;
+  color: var(--text);
+  text-wrap: balance;
+  margin-bottom: 20px;
+}
+.hero-meta {
+  font-size: 14px;
+  color: var(--text-light);
+  border-left: 3px solid var(--border);
+  padding-left: 14px;
+  line-height: 1.6;
+}
+
+/* ── SUMMARY FIGURE ── */
+figure.summary-figure {
+  margin: 36px 0 48px;
+  padding: 0;
+}
+figure.summary-figure img {
+  width: 100%;
+  max-width: 640px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+  cursor: zoom-in;
+}
+@media (max-width: 640px) {
+  figure.summary-figure img {
+    aspect-ratio: 9 / 16;
+    max-width: 360px;
+  }
+}
+
+/* ── ARTICLE BODY ── */
+article {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+article h2 {
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 56px 0 20px;
+  color: var(--text);
+  text-wrap: balance;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+}
+
+article p { margin-bottom: 18px; }
+
+article strong { font-weight: 700; }
+
+article ul, article ol {
+  margin: 12px 0 20px 24px;
+}
+article li { margin-bottom: 8px; }
+
+article code {
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 0.88em;
+  background: #eeecea;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+article pre {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  padding: 20px 24px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 24px 0;
+}
+article pre code { background: none; padding: 0; color: inherit; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 40px 0;
+}
+
+/* ── AI-MENTOR CALLOUT BOXES ── */
+.callout {
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 24px 0;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.callout-label {
+  font-weight: 700;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 6px;
+  letter-spacing: 0.03em;
+}
+.callout-def {
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+}
+.callout-def .callout-label { color: var(--accent); }
+
+.callout-tip {
+  background: var(--tip-soft);
+  border-left: 4px solid var(--tip);
+}
+.callout-tip .callout-label { color: var(--tip); }
+
+.callout-warn {
+  background: var(--warn-soft);
+  border-left: 4px solid var(--warn);
+}
+.callout-warn .callout-label { color: var(--warn); }
+
+.callout-think {
+  background: var(--q-soft);
+  border-left: 4px solid #d4a017;
+}
+.callout-think .callout-label { color: #9a6f00; }
+
+/* ── SECTION FIGURES ── */
+figure.section-figure {
+  margin: 32px 0;
+}
+figure.section-figure img {
+  width: 100%;
+  max-width: 860px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09);
+  cursor: zoom-in;
+}
+figure.section-figure figcaption {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-light);
+  margin-top: 10px;
+  line-height: 1.54;
+}
+@media (max-width: 640px) {
+  figure.section-figure img {
+    aspect-ratio: 9 / 16;
+  }
+}
+
+/* ── FORMULA BLOCK ── */
+.formula-block {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 28px 0;
+  text-align: center;
+}
+.formula-main {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #89b4fa;
+  margin-bottom: 8px;
+}
+.formula-sub {
+  font-size: 14px;
+  color: #a6adc8;
+}
+
+/* ── FLOW STEPS ── */
+.flow-steps {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  background: var(--accent-soft);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.flow-step {
+  background: var(--accent);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.flow-arrow {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* ── RISK CARDS ── */
+.risk-cards {
+  display: grid;
+  gap: 14px;
+  margin: 24px 0;
+}
+.risk-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  border-left: 4px solid var(--warn);
+}
+.risk-card-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--warn);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.risk-card p { margin-bottom: 0; font-size: 15px; }
+
+/* ── IUS FRAMEWORK ── */
+.ius-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 24px 0;
+}
+.ius-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 16px;
+  text-align: center;
+}
+.ius-letter {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.ius-word { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+.ius-desc { font-size: 13px; color: var(--text-light); }
+
+/* ── CLOSING HIGHLIGHT ── */
+.closing-quote {
+  background: var(--text);
+  color: white;
+  border-radius: 14px;
+  padding: 36px 40px;
+  margin: 48px 0 32px;
+  text-align: center;
+}
+.closing-quote p {
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.45;
+  margin-bottom: 0;
+}
+.closing-quote em { color: #89b4fa; font-style: normal; }
+
+/* ── FOOTER ── */
+footer {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 0 0;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* ── LIGHTBOX ── */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(26,26,26,0.88);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+}
+.lightbox.is-open { display: flex; }
+.lightbox img {
+  max-width: 96vw;
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.4);
+}
+.lightbox .lightbox-hint {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+  font-family: var(--font);
+}
+
+/* ── TRANSCRIPT ── */
+.transcript-section {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 0 0;
+  border-top: 2px solid var(--border);
+}
+.transcript-section h2 {
+  font-size: 1.3rem;
+  color: var(--text-light);
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-wrap: balance;
+}
+.transcript-section .transcript-note {
+  font-size: 13px;
+  color: var(--text-light);
+  background: var(--accent-soft);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+details.transcript-toggle {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+details.transcript-toggle summary {
+  cursor: pointer;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 15px;
+  background: white;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+details.transcript-toggle summary::-webkit-details-marker { display: none; }
+details.transcript-toggle summary::after {
+  content: "▾";
+  font-size: 1.1rem;
+  transition: transform 0.25s;
+  color: var(--text-light);
+}
+details.transcript-toggle[open] summary::after { transform: rotate(-180deg); }
+.transcript-inner {
+  padding: 20px 22px;
+  border-top: 1px solid var(--border);
+  background: #fefcf9;
+}
+.transcript-body { font-size: 14px; line-height: 1.75; color: #3a3a3a; }
+.transcript-turn {
+  margin-bottom: 18px;
+}
+.transcript-turn p { margin: 4px 0 0; }
+.transcript-cont { margin-top: -10px; }
+.transcript-cont p { margin-top: 6px; }
+.spk-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 12px;
+  border: 1px solid;
+  letter-spacing: 0.03em;
+  margin-bottom: 4px;
+}
+.transcript-note-line {
+  font-style: italic;
+  color: var(--text-light);
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .page-wrap { padding: 0 16px 60px; }
+  .hero { padding: 36px 0 28px; }
+  .ius-grid { grid-template-columns: 1fr; }
+  .closing-quote { padding: 24px 20px; }
+  article h2 { margin-top: 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 導覽列 -->
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" style="color:var(--text-light);font-weight:600;padding-right:6px;border-right:1px solid var(--border);margin-right:4px;">← 返回 Day 1</a>
+    <a href="#sec-intro">技術債陷阱</a>
+    <a href="#sec-spectrum">工程哲學</a>
+    <a href="#sec-harness">Harness 公式</a>
+    <a href="#sec-context">Context Engineering</a>
+    <a href="#sec-lastmile">Last Mile</a>
+    <a href="#sec-risk">風險</a>
+    <a href="#sec-alphaevolve">Alpha Evolve</a>
+    <a href="#sec-longrunning">長跑 Agent</a>
+    <a href="#sec-ius">IUS 框架</a>
+    <a href="#sec-takeaway">核心帶走</a>
+    <a href="#transcript">原文逐字稿</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- Hero -->
+  <header class="hero">
+    <span class="hero-tag">Kaggle × Google · Day 1 深度導讀</span>
+    <h1>當你的 Prompt 變成技術債：從 Vibe Coding 逃向 Agentic Engineering</h1>
+    <div class="hero-meta">
+      來源：5-Day AI Agents Intensive Course — Day 1 直播逐字稿<br>
+      主題：The New SDLC with Vibe Coding · 結合 deep-guide 敘事框架與 ai-mentor-agents 教學框架
+    </div>
+  </header>
+
+  <!-- 摘要 Banner -->
+  <figure class="summary-figure">
+    <picture>
+      <source media="(max-width: 640px)" srcset="images/summary-mobile.png">
+      <img src="images/summary.png" alt="全文關鍵概念總覽：85% 開發者用 AI、Agent = Model + Harness、Context Engineering、IUS 框架">
+    </picture>
+  </figure>
+
+  <!-- 正文 -->
+  <article>
+
+    <!-- Section 1 -->
+    <h2 id="sec-intro">你以為在用 AI 加速，其實在用 AI 借貸</h2>
+
+    <p><strong>85%。</strong></p>
+
+    <p>這是 2026 年初，專業開發者每天使用 AI 編程工具的比例。再加上 41% 的新程式碼現在是 AI 直接生成的。這兩個數字並排放在一起，聽起來像是一則科技樂觀主義的廣告詞。但它們背後隱藏的問題，才是這堂課存在的真正理由。</p>
+
+    <p>大多數開發團隊都困在同一個地方：<strong>從「提示 AI」到「部署到生產環境」之間的那個峽谷</strong>。</p>
+
+    <p>你跑 prompt，AI 吐出程式碼，你貼上去跑看看，壞掉了，把錯誤訊息貼回去叫 AI 修，再跑，再壞，再修——這個迴圈不是在建設，而是在累積。每一次「感覺好像可以了」都是一張支票，遲早要兌現。而當帳單來的時候，你甚至不知道問題在哪裡，因為你從頭到尾都沒有真正理解那段程式碼在做什麼。</p>
+
+    <p>這種工作模式有個名字，叫做 <strong>Vibe Coding</strong>。</p>
+
+    <div class="callout callout-def">
+      <span class="callout-label">📌 概念定義</span>
+      <strong>Vibe Coding</strong> 是一種完全順著「感覺走」的 AI 輔助開發方式：描述需求、接受輸出、遇錯即貼、循環迭代。驗證標準是「跑起來了嗎」，而不是「行為正確嗎」。
+    </div>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">💡 台灣電商情境類比</span>
+      Vibe Coding 像是到夜市擺攤，生意好的時候什麼都快，但颱風天一來（流量暴增或需求驟變），你才發現攤車根本沒有固定好。Agentic Engineering 則是開正式餐廳：前期投入裝潢、衛生認證、SOP，但撐得過每一個週末。
+    </div>
+
+    <div class="callout callout-warn">
+      <span class="callout-label">⚠️ 最常見的誤解</span>
+      「我有在用 AI 寫程式，所以我在做 Agentic Engineering。」這是最危險的認知錯誤。用了什麼工具不重要，<strong>如何驗證輸出</strong>才是分水嶺。
+    </div>
+
+    <hr>
+
+    <!-- Section 2 -->
+    <h2 id="sec-spectrum">這不是光譜兩端，而是兩種截然不同的工程哲學</h2>
+
+    <p>「從 Vibe Coding 到 Agentic Engineering 是一條光譜」——這個說法本身就值得懷疑。光譜的比喻暗示你可以站在中間某個位置，舒適地「半嚴謹半隨意」地工作。但實際上，這兩者之間的差異不是程度問題，而是<strong>結構性</strong>問題。</p>
+
+    <p>Vibe Coding 的核心預設是：AI 的輸出大概是對的，有問題再說。</p>
+
+    <p>Agentic Engineering 的核心預設是：AI 的輸出必須被驗證，驗證機制必須是自動的、系統性的、可重現的。</p>
+
+    <p>具體來說，Agentic Engineering 要求你建立：</p>
+    <ul>
+      <li><strong>正式規格</strong>（formal specifications）：你必須能說清楚「正確」長什麼樣</li>
+      <li><strong>自動化測試套件</strong>（automated test suites）：機器驗，不是眼睛驗</li>
+      <li><strong>持續整合閘門</strong>（CI/CD gates）：每一次更動都要過關才能繼續</li>
+    </ul>
+
+    <p>這三樣東西加在一起，讓 AI 的輸出進入一個有邊界的沙盒，而不是直接落地到生產環境。</p>
+
+    <figure class="section-figure">
+      <picture>
+        <source media="(max-width: 640px)" srcset="images/vibe-vs-agentic-mobile.png">
+        <img src="images/vibe-vs-agentic.png" alt="Vibe Coding vs Agentic Engineering：核心預設與驗證方式的結構性差異">
+      </picture>
+      <figcaption>Vibe Coding vs Agentic Engineering：分水嶺不在工具，在驗證機制</figcaption>
+    </figure>
+
+    <div class="callout callout-think">
+      <span class="callout-label">🧪 思考驗證</span>
+      你上次部署的功能，你能說出「它正確的行為標準」是什麼嗎？如果不能，你現在是在哪個位置？
+    </div>
+
+    <hr>
+
+    <!-- Section 3 -->
+    <h2 id="sec-harness">公式背後藏著一個讓人不舒服的真相</h2>
+
+    <p>如果只能記住一個公式，記這個：</p>
+
+    <div class="formula-block">
+      <div class="formula-main">Agent = Model + Harness</div>
+      <div class="formula-sub">模型佔 10%　　Harness 佔 90%</div>
+    </div>
+
+    <p>這個數字讓很多人第一次聽到會愣住。大家花了那麼多時間選模型、比較參數、測試哪個 LLM 更聰明，結果模型只佔了整個 Agent 系統有效性的一成？</p>
+
+    <p>答案是肯定的。因為讓 Agent 在生產環境中可靠運作的，是 Harness——那個包裹在模型外面的<strong>系統骨架</strong>。</p>
+
+    <div class="callout callout-def">
+      <span class="callout-label">📌 概念定義</span>
+      <strong>Harness（圍套）</strong> 是 Agent 系統中除了模型之外的所有東西：沙盒環境（sandbox）、可呼叫的工具（tools）、任務協作邏輯（orchestration）、以及防止 Agent 做壞事的護欄（guardrails）。
+    </div>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">💡 外科手術室類比</span>
+      模型是外科醫師的判斷力，Harness 是整個手術室。再厲害的外科醫師，沒有無菌環境、手術器械、麻醉師、護理師，就什麼都做不了。你不會只評估醫師的智商來決定要不要動手術。
+    </div>
+
+    <figure class="section-figure">
+      <picture>
+        <source media="(max-width: 640px)" srcset="images/harness-mobile.png">
+        <img src="images/harness.png" alt="Agent = Model（10%）+ Harness（90%）：Harness 包含 Sandbox、Tools、Orchestration、Guardrails">
+      </picture>
+      <figcaption>Harness 的四個組成：Sandbox、Tools、Orchestration、Guardrails</figcaption>
+    </figure>
+
+    <div class="callout callout-warn">
+      <span class="callout-label">⚠️ 常見誤解</span>
+      「換一個更好的模型，Agent 就會更可靠。」這個思路是把 90% 的問題用 10% 的解法去解。在大多數 Agent 失敗的案例裡，問題出在 Harness 設計不良，而不是模型不夠聰明。
+    </div>
+
+    <hr>
+
+    <!-- Section 4 -->
+    <h2 id="sec-context">你以為在學 Prompt，其實在學 Context</h2>
+
+    <p>課程把 2026 年工程師最重要的技能定義為 <strong>Context Engineering</strong>，而不是 Prompt Engineering。</p>
+
+    <p>這兩個詞的差距，比看起來大得多。</p>
+
+    <p><strong>Prompt Engineering</strong> 問的是：「怎麼問 AI 才能得到好答案？」</p>
+
+    <p><strong>Context Engineering</strong> 問的是：「AI 需要知道什麼、以什麼形式知道、在什麼時機知道，才能在整個任務過程中持續做出好的判斷？」</p>
+
+    <p>前者是一次性的；後者是架構性的。</p>
+
+    <p>在 Harness 的設計裡，Context 分成兩大類：</p>
+    <ul>
+      <li><strong>靜態 Context</strong>（如 system instructions）：每次都帶著，貴但穩定</li>
+      <li><strong>動態 Context</strong>（如 Agent Skills 按需載入）：用到才帶，便宜且精準</li>
+    </ul>
+
+    <p>這個區別直接影響系統成本。一個設計不良的 Agent 會把整個 codebase 都塞進 context window；一個設計良好的 Agent 只帶當下任務需要的部分。</p>
+
+    <hr>
+
+    <!-- Section 5 -->
+    <h2 id="sec-lastmile">最後那 20%，才是真正的戰場</h2>
+
+    <p>課程裡有一個反覆出現的概念：<strong>Last Mile Problem</strong>。</p>
+
+    <p>AI 可以在幾秒鐘內完成一個功能的初稿——80% 的工作量消失了。但剩下的那 20%，才是讓系統能否在真實生產環境中運作的關鍵。那 20% 包括：邊緣案例處理、一致性、錯誤恢復、效能在壓力下的表現。</p>
+
+    <p>這 20% 不會因為你的模型更好而自動消失。</p>
+
+    <p>真正能跨越最後 20% 的，是一套完整的迴圈：</p>
+
+    <div class="flow-steps">
+      <span class="flow-step">Scaffold</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Build</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Observe</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Optimize</span>
+    </div>
+
+    <p>更具體地說：</p>
+    <ol>
+      <li><strong>能寫程式的 Agent</strong>：讓 AI 不只是呼叫 API，而是在沙盒裡自己產生工具、產生子 Agent</li>
+      <li><strong>自動驗證迴圈</strong>：子 Agent 評估主 Agent 的輸出，自動迭代</li>
+      <li><strong>Human-in-the-loop</strong>：設定條件，當信心不足時觸發人工審核</li>
+      <li><strong>黃金資料集的累積</strong>：把每一次人工審核的結果存起來，成為自我改善的訓練材料</li>
+    </ol>
+
+    <div class="callout callout-def">
+      <span class="callout-label">📌 概念定義</span>
+      <strong>Scaffold（鷹架）</strong> 是 Agent 系統啟動前預先建立的結構：執行環境、工具定義、任務邊界。它讓 Agent 知道「我在一個有規則的房間裡工作」，而不是「我可以做任何事」。
+    </div>
+
+    <div class="callout callout-think">
+      <span class="callout-label">🧪 思考驗證</span>
+      你的 Agent 系統有沒有辦法在沒有人工介入的情況下，自己發現自己做錯了？如果沒有，你現在跨越最後 20% 的方法是什麼？
+    </div>
+
+    <hr>
+
+    <!-- Section 6 -->
+    <h2 id="sec-risk">一個沒有人想正視的風險</h2>
+
+    <p>課程的 Q&amp;A 裡有一段討論，很少人會在 AI 樂觀主義的浪潮裡認真對待它。問題是：AI 驅動的 SDLC 有哪些長期風險？</p>
+
+    <p>給出的答案分三層，層層遞進，越往後越不舒服：</p>
+
+    <div class="risk-cards">
+      <div class="risk-card">
+        <div class="risk-card-label">風險一</div>
+        <p><strong>程式碼專業知識的侵蝕。</strong>當 AI 越來越成功地接管了寫 code、測試、修 bug 的工作，開發者對程式碼庫的深度理解會慢慢消失。你不再親手寫那些邏輯，你就不再真的懂它們。</p>
+      </div>
+      <div class="risk-card">
+        <div class="risk-card-label">風險二</div>
+        <p><strong>問責的消失。</strong>當問題發生時，誰負責？人寫的 bug，有人負責。AI 生成的 bug，而你沒辦法說清楚那段程式碼在做什麼，問責的鏈條就斷了。</p>
+      </div>
+      <div class="risk-card">
+        <div class="risk-card-label">風險三</div>
+        <p><strong>創新機會的流失。</strong>工程師的很多突破性想法，來自「深入摸索一個系統到底在做什麼」的過程中。如果你從來不需要深入，你也永遠不會在深入的過程中發現新的可能性。</p>
+      </div>
+    </div>
+
+    <div class="callout callout-warn">
+      <span class="callout-label">⚠️ 重要提醒</span>
+      這三個風險不是遙遠的未來式，而是已經在某些團隊發生的現在式。真正的防禦策略不是拒絕 AI，而是刻意設計「保留人類深度理解」的工作流程。
+    </div>
+
+    <hr>
+
+    <!-- Section 7 -->
+    <h2 id="sec-alphaevolve">自我進化的 Agent，以及你的想像力邊界</h2>
+
+    <p>課程裡提到一個叫做 <strong>Alpha Evolve</strong> 的系統，值得單獨拿出來說。</p>
+
+    <p>它不是一個普通的 Agent。它是一個「進化型演算法 Agent」：給定一個<strong>評估函數</strong>（evaluator function），它會自動尋找、測試、改進演算法，直到找到比人類已知最佳解更好的方案。</p>
+
+    <p>它在 Google 內部用於：</p>
+    <ul>
+      <li>數學問題（矩陣乘法的新優化，解決了數十年沒有突破的問題）</li>
+      <li>YouTube 的 TensorFlow → JAX 框架遷移（速度快了 6 到 8 倍）</li>
+      <li>硬體架構設計</li>
+      <li>分子模擬、DNA 定序</li>
+    </ul>
+
+    <p>這個系統告訴我們什麼？AI Agents 可以應用的範圍，上限是你願意定義「成功」的能力，而不是 AI 的能力。</p>
+
+    <p>你能不能寫出一個評估函數，說清楚「什麼叫做更好的結果」？如果可以，Alpha Evolve 就能幫你找到更好的解法。如果不能，那個瓶頸在你，不在 AI。</p>
+
+    <hr>
+
+    <!-- Section 8 -->
+    <h2 id="sec-longrunning">長跑 Agent 的真實瓶頸在哪裡</h2>
+
+    <p>Deep Research 是目前最廣為人知的長跑 Agent 成功案例之一；AI 編程 Agent 是另一個。這兩個用例為什麼成功？</p>
+
+    <p><strong>Deep Research</strong> 成功是因為：答案本身需要大量的背景脈絡鋪墊，長跑才能積累足夠的脈絡。</p>
+
+    <p><strong>AI 編程 Agent</strong> 成功是因為：可以在運行過程中不斷跑測試，每一個增量動作都能即時驗證。驗證機制把長跑的風險壓低了。</p>
+
+    <p>這裡有一個有趣的深層洞察：<strong>現有的工具都是為人類設計的，而不是為 Agent 設計的。</strong>API、外部服務、資料庫存取——它們假設使用者有一定的延遲容忍度，假設操作是序列性的，假設會有人在另一端等待回應。但 Agent 不等待，Agent 要並行，Agent 要毫秒級反應。</p>
+
+    <p>這意味著，隨著 Agent 能力越來越強，我們會看到一波「為 Agent 重新設計的工具」浪潮。這個方向，可能是接下來幾年最值得關注的工程機會之一。</p>
+
+    <hr>
+
+    <!-- Section 9 -->
+    <h2 id="sec-ius">IUS：一個比「做得到」更重要的問題</h2>
+
+    <p>最後談一個框架，簡單到讓人低估它，但實際上是課程裡最實用的思考工具。</p>
+
+    <div class="ius-grid">
+      <div class="ius-card">
+        <div class="ius-letter">I</div>
+        <div class="ius-word">Impressive</div>
+        <div class="ius-desc">令人驚豔的 demo，成功展示可能性</div>
+      </div>
+      <div class="ius-card">
+        <div class="ius-letter">U</div>
+        <div class="ius-word">Useful</div>
+        <div class="ius-desc">能普遍複製，對他人也有效</div>
+      </div>
+      <div class="ius-card">
+        <div class="ius-letter">S</div>
+        <div class="ius-word">Sustainable</div>
+        <div class="ius-desc">成本、安全、合規皆可長期維持</div>
+      </div>
+    </div>
+
+    <p>大多數人做 AI 應用，卡在 I 和 U 之間。你做出了一個漂亮的 demo，但 demo 依賴的那些條件，無法複製到別人的環境裡。</p>
+
+    <p>而從 U 到 S 更難。有些 AI 解決方案，效果比現有方法好，但成本是現有方法的三倍。這不叫「AI 的勝利」，這叫「AI 在燒錢」。</p>
+
+    <p>Sustainable 要求你問：這個解法，在成本、安全、法規、可擴展性上，能撐過五年嗎？</p>
+
+    <p>課程裡舉的例子很直白：如果你的解法比原來貴三倍，但公司不可能永遠補貼這個成本，那你做的只是一個暫時性的展示，不是一個真正的解法。</p>
+
+    <hr>
+
+    <!-- Section 10 -->
+    <h2 id="sec-takeaway">你真正要帶走的，不是技術，是判斷力</h2>
+
+    <p>整堂課的核心訊息，壓縮成一句話：</p>
+
+    <div class="closing-quote">
+      <p><em>實作的能力，已經不再是瓶頸。</em><br>規格的品質，才是新的瓶頸。</p>
+    </div>
+
+    <p>當 41% 的程式碼都是 AI 生成的，「你會不會寫程式」變成了一個越來越不重要的問題。真正重要的問題是：</p>
+
+    <ul>
+      <li>你能不能說清楚你想要什麼？（規格）</li>
+      <li>你能不能驗證你得到的是你想要的？（評估）</li>
+      <li>你能不能設計一個系統，讓 AI 在邊界內可靠地工作？（Harness）</li>
+    </ul>
+
+    <p>這三件事，沒有一件可以交給 AI 做。它們是人類在這個新 SDLC 裡的核心工作。</p>
+
+    <p>教育的未來不是「學更多工具」，而是「從大學就開始帶著整個產品出來」。證明你能把想法轉化成可用的系統，這個能力，比任何語法知識更難偽造，也更難替代。</p>
+
+    <div class="callout callout-think">
+      <span class="callout-label">🧪 最後一個思考驗證</span>
+      你上一個 AI 輔助的專案，它是 Impressive、Useful，還是 Sustainable？差了哪一步？那一步，你現在有辦法補上嗎？
+    </div>
+
+  </article>
+
+
+  <!-- 逐字稿 -->
+  <section class="transcript-section" id="transcript">
+    <h2>原文逐字稿（含講者識別）</h2>
+    <div class="transcript-note">
+      以下為 Day 1 直播原始英文逐字稿，<strong>原文一字未改</strong>，僅移除 SRT 時間戳記與序號，依語意合併。講者識別依逐字稿中的稱謂與 <code>&gt;&gt;</code> 切換符號推斷標注。
+    </div>
+    <details class="transcript-toggle">
+      <summary>展開 / 收合完整逐字稿（7 位講者）</summary>
+      <div class="transcript-inner">
+        <div class="transcript-body">
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>Welcome everyone and thanks for joining us for the Kaggle and Google 5 days AI agents intensive course. I'm Smitha Ken, senior developer relations engineer at Google Cloud and I'm co-hosting this week with Anand Navalgaria. Anand why don't you come on and introduce yourself.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Thanks great to have you here smitha and welcome everyone to your first live stream for the fourth iteration of this course. I'm very excited to have you and guide you through the rest of the week.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>Thanks, Anand. Really glad to be doing this with you, especially given how much has changed in the way that developers actually build software since the last iteration of this course. Quick ask before we get started, drop in the YouTube chat where you're joining from. We're always really curious to see the spread of everyone across all of these different time zones. and I already see quite a few people joining from across the world. So</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>awesome. Let's start off with a quick overview of this week. So throughout the week, you'll get white papers, companion podcasts, which were honestly one of the most popular formats last time because they were they made the most dense material easier to absorb. You'll also get hands-on code labs, daily live streams, and AMAs just like this one, and an optional capstone project at the end where you can compete for Kaggle certificates, badges, swag, and recognition across Kaggle and Google's social channels. So, if you have registered, the content will land directly in your inbox. If not, everything is on the Kaggle learner portal and it will be announced in Discord as well. Also before we move on, quick thanks to the people who put everything together. The Google researchers, the engineers who wrote the white papers, the speakers joining us this week and today, and the Discord moderators who have been answering questions non-stop, the mods have been a great resource during this week,</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>and the awesome Kaggle team as well.</p></div>
+<p class="transcript-note-line">[laughter]</p>
+<div class="transcript-turn transcript-cont"><p>Yeah, definitely. uh let's actually get into day one topics right so the reason this course exists and the reason we're running the fourth iteration of it is that the way software gets built has fundament fundamentally shifted so as of you know early 2026 85% of professional developers regularly use AI coding agents and roughly 41% of all of the new code is actually AI generated so that's just not that's not just a future trend that's actually the current baseline, right? So the gap between prompting a model and building something that you can actually deploy to production is where most teams are actually stuck right now. And that's what we're going to be working through this week. So here's how week this entire week is structured. Day one today, we're going to be covering introductions to agents and by coding. So we'll cover the shift from writing syntax to expressing intent, the spectrum from casual white coding to disciplined Asigantic engineering, and then you'll also get to V code your very first app using anti-gravity and AI studio. Anand, why don't you walk us through the white paper?</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Thanks, Mitha. So everyone hope you had a chance to uh go through the white paper uh for SDLC with bite coding and how it changed. So in today's white paper you would have looked at how we are at the most profound shift in computing history transitioning from translating syntax to expressing intent via natural language. We also explored the spectrum of development from casual wipe coding quote unquote where you prompt that prompt an AI and copy paste errors back to iterate all the way to disciplined agentic engineering as I like to call it where AI operates within structured deterministic boundaries. We also broke down context engineering which is the real skill of modern engineering. You will you also learned the difference between expensive static context like system instructions uh versus costefficient dynamic contracts uh context like agent skills loaded on demand. More on that in day three. Uh day three is all about agentic skills. Uh so this shift fundamentally alters the software de development life cycle as we knew it. In this new SDLC, the implementation phase collapses from weeks to potentially minutes, making requirement specification and verification the new human bottlenecks. Now, uh later on in the white paper, we looked at the factory model of software development. And as developers, our output is no longer just raw code. It is the system that produces that code. We also introduced a critical formula for the system which is agent is equal to model plus harness where um the model alone plays only around 10% of the equation and close to 90% is the harness which contains the sandboxes the tools the orchestration and the guardrails that makes the whole agentic coding system reliable. Finally, we discussed the developers changing role and we looked at how developers um find themselves moving between conductor mode directing real-time edits in the IDE and the orchestration mode which is uh involves them asynchronously delegating complex tasks to autonomous agent networks and swarms. We uh we also have some great code labs and a lot of uh uh exciting materials for the rest of the week. Uh Fran will be covering the code lab later, but off to you Smitha for our guest Q&A.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>Awesome. Uh thanks Anand. And also a quick tip for everyone, if you haven't already, listen to the podcast first and then read the white paper. the podcast does a good job of framing the why before you hit the technical detail and then the concepts actually stick better in that order. All right, let's head on into the Q&A. Uh let me bring up all of our expert speakers we have today. So we have Jamie from Cloud AI, we have Logan from Deep Mind, we have Saraki from Cloud AI and we have Sham from Cloud AI. So these are the folks shaping how this stuff actually ships at Google. So the answers you're going to get are grounded in what's being built right now and thank you all for making the time for this. Anand kick us off with the first few questions.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Thank you. Excited to have you all here. So our first question would be uh this question is for you Logan. So as development shifts to ersynchronous orchestration, how do you see computer science education and hiring standards evolve to prioritize highle architecture judgment using coding coding tools over syntactic coding mastery? Since um quite a few of our um uh participants are developers in the early stage of their careers or even some students, they would love to hear about this.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Logan · DeepMind / AI Studio</span><p>Yeah, it's a really interesting question. I think I mean there's a a huge amount of discourse happening right now about sort of like how computer science education is is going to change. I think the thing that gets me the thing that makes me very optimistic despite like what I assume is going to be like a very um reasonable amount of change of like how those programs adapt and things like that is that um computer science education has always been about how to think not how to like type keys into a keyboard. And I think like historically you sort of had I think about like as I reflect on my own computer science education there were sort of like two tracks. It was like you know all the you know architectural decisions the sort of like logic how algorithms work etc. And then you separately had the like applied version of that which is like what is the Python syntax that I need to know in order to like actually do something useful. Um it's interesting actually that you would like intersperse between the two things. In a lot of cases, you would learn algorithms and then you would try to apply them. Um, and I think there's obviously the applied form of this is going to continue to be super useful because um as as sort of like a way to express your thought. Um, and sort of the analogy to this is like we've obviously had calculators for a very long time and yet I think it's sort of universally or at least mostly universally agreed upon that like learning how to do math is still important to do because it sort of forces you to express the mathematical ideas in practice. Um, and so I think as we as we turn this corner where like now code can be written in large quantity by you know AI systems and you sort of don't need to do that yourself. Um the thing that I'm excited to see the change around is like actually people coming out of the educational institutions and infrastructure with not just like you know a college degree or some sort of like proof that they know something but actually like an entire system or a an entire business that they've built during that process. Um, and I think there's like a really interesting again like more um more akin to sort of like a a trade craft that I think people are going to like you know when you do trade you go and like do something and in actual practice I think seeing that for computer science I think would be really interesting where like you come out you have a business you have proof of work you can like validate for agency and all that. So I'm excited to see and obviously like all the technical detail still matters a lot.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Um sounds very exciting Logan. So uh how do you think uh from from a AI studio perspective? What tools do you think there are there a couple of tools or technology you think uh uh that you would recommend to the uh audience here?</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Logan · DeepMind / AI Studio</span><p>Yeah, I mean this is the direction that we're going. Like we're very much trying to like not only ride this wave, but like help make sure that students and people who are trying to build these types of businesses can make it happen. So I think we we've the I talk to the team about this all the time. We've sort of like we've done prompt to prototype. That's like pretty pretty reasonable. We've done prompt to production like you can, you know, send one prompt build or many prompts and then build a fully functional website and then deploy it and share it with the world. Um, and it's like very obvious that the next step is uh we say like prompt to profitable company because it's not just about like building a a company. It's actually about like how do you get people to actually use it and and find product market fit and get your first users and do that sort of so the total iteration of the experience. Um, and so we're working on lots of stuff in order to make that possible. Um, and actually like let everyone in the world have a business. I think it'll be the the optimistic version of this is it's very similar to what YouTube did with creators. Like prior to YouTube, you like couldn't it was really difficult. You had to like go convince a TV network somewhere or a radio network to like tell your story and it was like the the means of storytelling was controlled by a few and then YouTube came and everyone could tell their story. Um and I think software is going to be that same exact thing. You used to have to hire many many developers and you know have a big business and raise money and do all this stuff and I think now everyone's going to be able to to build software business which is really exciting.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Amazing. Thanks a lot Logan. That was uh and hopefully everybody uh is listening to that because we have a lot of cool stuff coming. Amazing. Uh on to our next question. Uh so talking about um building businesses from prompts. Uh Partha this question is for you. Um given the recent advancement in self-evolving AI for coding, how do you see uh the exciting advancements by DeepMind brought into cloud uh by technologies like Alpha Evolve? Uh how do you see it helping technological breakthroughs across the industry?</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#b4530915;color:#b45309;border-color:#b4530940">Partha · Google DeepMind</span><p>Yeah. Uh thank you for the question. Um Ananta um Alpha Evolve for those of you who haven't heard about that before is a evolutionary algorithmic agent. And what alpha ball does is it uh uh uses uh Gemini or any large language models and um it uses an evaluator function and it identifies optimized algorithms for uh any use case. And uh uh initially when alpha wall was introduced a year back, we showed how alpha wall could solve decadesl long math problems. So things like matrix multiply which were been optimized and alpha wall was able to come up with new optimizations. We've shown how alpha wall can be used in uh a whole bunch of different uh uh use cases within Google as well. For example, how we build large case scheduulers, how we even use it to design new hardware and so on. Uh and what is very interesting about these kind of self-evolving uh uh agents is when you're starting to use agentic wipe coding or agentic engineering as an called it, these become a tool in your arsenal to start optimizing the algorithm. So you don't need to really think about how do I get to better performance. You can use this as an additional skill that you can then optimize. And in the last year I've just been blown away by how we've used alpha evolve across a spectrum of use cases. We've used it in science uh things like DNA sequencing or molecular simulations. We've used it in in cloud and again cloud we've used it in financial retail bunch of different use cases and we've also used it in infrastructure. uh I have personally used alpha evolve in some work I've been doing around optimizing new computer architectures and so the uh opportunities really are uh incredibly profound and so think of this as you have an expert optimizing agent at your fingertips as you go through your VIP coding journey.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Find that super exciting how um everything from everything can be done just by the means of prompting. So you write your initial code with prompting uh as Logan mentioned uh prototypes even even production ready some some of the systems you put that in production to cloud and you can optimize it for technological breakthroughs and take it a level higher with another system like Alpha Evolve uh really exciting times to be living in. All right to our third</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>question uh Smith. Yes. Um so this question is towards you Jamie and Shubam. What architectural patterns and cloud products are proving most successful in helping autonomous agents uh cleanly cut across the final context heavy 20% milestone of a complex task with ideally minimal human intervention.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#c0392b15;color:#c0392b;border-color:#c0392b40">Jamie · Google Cloud AI</span><p>Okay, go ahead.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#0891b215;color:#0891b2;border-color:#0891b240">Sham · Google Cloud AI</span><p>I I would just take a step back here and go back to the first question that you asked Logan and just want to point out that we're living in a very exciting world where engineering power is pretty much abundant and unlimited. Everyone has that at their fingertips. You just go in and fire up AI Studio, fire up an agent, go and use Gemini. You have all of that at your hand at your fingertips. uh the things that are becoming really really important is understanding your core problem being able to communicate that to an LLM to an AI agent and be able to verify the output that it generates. Now mapping that mapping those skills to the scaffold build obser scaffold build observe and optimize loop for agents is what really helps you go from the 80% wipe coded part to 100% that 20% missing part Anan that you're talking about and the good thing about it is we have actually mapped those that journey here at Google for you uh and the day one white paper in the entire 5day course really owns in on that. So you start with building an agent in ADK. You can go and evaluate it on agent platform, deploy it on agent platform. You can have the traces coming out and that gets optimized. So what you're essentially building is the entire loop. And on top of that when context becomes heavy you have this concept of agent skills which helps you dynamically inject context when the agent needs it and not have it bloat the context. So that entire loop plus agent skills is what really helps you get to the 100% of or to cross that 20% gaps to make your agents work reliably in production.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#c0392b15;color:#c0392b;border-color:#c0392b40">Jamie · Google Cloud AI</span><p>Yeah, I think that's great. I think this is a great question. I think uh you know that last mile is really what is often the biggest challenge. Um if we're moving from prompt to prototype to prompt to production deployment of some of a website that you're sharing to like actually using something to run a business on. uh that last mile of quality and um uh ability to do the task really consistently, handle error cases is is often the the biggest challenge. And so I think having a full tool set to help you evaluate, have verification tests, have long-term memory across sessions, have the ability to optimize in production and learn automatically to improve the quality over time. Um, a lot of that is what becomes necessary to really close that last mile. I think a couple things I would add to that. You know, part of this is around architectural patterns and what's been successful recently. And I think two things I would call out are uh, you know, first using agents to to write code. And so instead of just an agent being something that is a set of LLM calls with a custom prompt and some context and maybe some tools available, moving to something where you're giving the agent a sandbox environment to write code, create its own tools on the fly, um create sub agents, um which evaluate the work of of the agent and evaluate the code that's being written. Um, I think that that pattern's showing much more success than than just having an agent be a set of LLM calls with custom context. Um, the second piece in there I think is is really around the verification loops both automated verification loops. So having a sub agent that evaluates the work and and iterates u but also having a human in the loop step. So set of conditions that flag for human in the loop verification or review. Um and then creating a data set from that verification that can allow self-improvement over time. Uh those are some of the things that I think we're seeing a lot of success with to kind of close that last mile.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>I think evaluation and a curation of golden data sets from that human loop is definitely something which we uh we need to focus a lot on as well. Thanks a lot Shubam and Jamie for for your view on this and smitha let's go on to the community questions. Uh thanks Sham really sorry thanks Anant really great signal in all of these answers I also want to add on to what Shoubam was talking about on agent skills so day three we'll be covering agent skills and we have an entire white paper which is coming out on agent skills I'll also be leaving a link in the description box to Google's skills repository as well let's actually move on to the community questions now uh so the first one we have from Debina car And this is directed at you Jamie. So what are the primary long-term risks and potential failure modes of using an AIdriven software development life cycle as opposed to its widely discussed benefits like you know cost reduction and increased productivity?</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#c0392b15;color:#c0392b;border-color:#c0392b40">Jamie · Google Cloud AI</span><p>Yeah, great question. I think I think first I would say I'm incredibly optimistic here. I think that um you know our ability to adapt as uh humans in general but also as you know technical innovators is is really high and so uh I think that how we do that is by thinking about the risks and you know planning for them and auditing them as we go. Uh but but I am very optimistic. I think some of the biggest risks of you know moving to an AIdriven SDLC I think are first the erosion of the human expertise specifically with that code base. So I I think we should assume the AI is going to be very successful at writing code at evaluating it, testing it over time, um responding to issues and fixing them and assuming a successful path with that what will happen to the developer or architect's expertise with the codebase you know m more and more of the codebase will be written and managed by the AI and so we'll have this sort of erosion of that human expertise with the codebase As that happens, um how much ability does the human have to actually properly orchestrate and direct the AI um and ensure that you know things are architected well for where we want to be going in the future, drive the improvements that are needed, you know, resolve issues when they come up, etc. Uh I think that sort of leads into the second big risk which is really around the accountability that happens when there are issues. you know if if we become less expert with the codebase the AI really is successfully driving the the codebase and resolving a lot of the issues how do we manage accountability when issues come up you know between which uh employee or uh architect or engineer is is responsible for for issues as they come up and then I think the third risk is you know with both of those things happening there could be lost opportunities for improvement I think a lot of the innovations that engineers have really come from a depth of understanding of what's happening in the codebase or in the product. And so if we're not careful, we may have um a a lost opportunity for further improvement. Obviously, uh the AI will come up with some of its own opportunities for that. Um but I think that the engineers ingenuity and and opportunity to come up with those may be lost if we're not careful. if we drift too far our understanding of the codebase. And so I think those are the risks. Um um if we if we're careful, we can plan for those and come up with ways that we ensure that we don't have that erosion of expertise or or drift and understanding over time.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Fantastic insight. Just one thing more which I want to add on to Jamie. Uh I also think if if we lose that technical expertise over time, the security gaps and risks that get exposed as well, which we'll be covering more in our day four, would also become even more pronounced than they are as of today. Uh just that's that kind of is something we should maintain good control of our knowledge of our code base for.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#c0392b15;color:#c0392b;border-color:#c0392b40">Jamie · Google Cloud AI</span><p>Yeah, totally good insight. I agree.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>Awesome. Okay, let's head on to the next community question from Kristoff. Um, can we combine the open knowledge format with a localized graph rag architecture to let agents map and iterate on full system designs at a semantic graph level before writing code and I think sham you'll be a great one to answer this.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#0891b215;color:#0891b2;border-color:#0891b240">Sham · Google Cloud AI</span><p>First of all, it's a great question. Um so we recently launched open knowledge format which is based on Kapathy's neat idea of LLM wiki. So the beauty about it is how simple it is. It's just a set of markdown files that links links each link to each other uh that you can have in in your system and each markdown file is representing a thing. Could be a service, could be a database, a contract, whatever. And the nodes link to each other. That's it. It's plain text that you can read and the agents can read as well and can edit it. Uh now think of these uh as index cards on aboard uh with strings connected to each other. These are like markdown files that are connected to each others representing some entities. And you're asking the problem that you're essentially talking about is can I combine it with CRA craft rack so agents can actually have the map of the entire system or the whole system the entire repository before it starts before it even starts writing a single line of code which is a pretty neat concept because uh what happens is when you fire up an agent in a big code base or a GitHub repository it usually jumps into straight writing the code without really looking get the entire context. Now you have open knowledge uh uh format combine that with graph rack. Graph rack uh what it does is follows those string between cards. So it actually understand how the connection works. It can answer if I change X what gets affected. So if I change this specific card this markdown file what gets affected and it can look at those connections. So I think uh it is definitely possible to combine graph with open knowledge format which could be a pretty neat concept to solve the contextual problem for very very big uh code bases and it could give the agent right context not just about what all exist but also about the connections between different files the connection among your code bases. This is more or less like mimicking how an AI architect or AI engineer would go about uh writing code. It's not about just changing one file. It is also an understanding of if I change X, how that would impact my entire code base. What breaking changes would that introduce? So I feel this is a very interesting concept that could be definitely explored uh and would be like super interesting.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Logan · DeepMind / AI Studio</span><p>Nice. So it almost seems like this is really a context engineering question like how do you give the agent a structure representation of the system that's you know denser than just kind of dumping the whole repository into the context window it seems.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#0891b215;color:#0891b2;border-color:#0891b240">Sham · Google Cloud AI</span><p>Yeah.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>Awesome. I love this. I think we have our first road map request to to add here from the week. This is great. Great. Uh okay moving on to the third community question from Adam. Um, so this is directed towards you Logan. So about the autonomous agents, what are reasonable use cases for longunning agents?</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Logan · DeepMind / AI Studio</span><p>Yeah, it's a good question. Um, I think maybe some of the historical context for this is I think if you look at like what was Google's first successful longunning agent, it was deep research. um deep research I think was the first thing that we sort of released into a consumer product and then ultimately it's actually available in the APIs as well where you can actually go off do sort of an autonomous research loop uh come back create a bunch of artifacts and provide them to a user um and so I think we learned a bunch of stuff about that I think the second one that's like more widely ubiquitous is around AI coding obviously there's something interesting about both of those use cases and I think why they've actually worked Well, I think in the context of um in the context of deep research, you're often times the answer to the question is not like a is not like a finite thing. It's like in some cases it is where you're traversing the internet and you're sort of trying to collate like a very specific answer. oftentimes there's like all of this like uh scaffolding contextual scaffolding that you need for the answer to be relevant and make sense in the context of autonomous coding agents which I think are the most maybe from a a token consumption these days like probably obviously the most predominant longunning agent um the thing that the the reason that those systems can work so well is because they're actually like continually testing and being verified um and this is the balance of of longrunning agents today is you don't want the agent to go off and do a bunch of work and basically waste your money and time and then ultimately it didn't do something productive. Um, and so in the case of of coding agents, you can sort of like continually run the code and make sure that the the incremental additions that are happening aren't breaking a bunch of stuff or sending you down the wrong path. In some cases, that does happen still and so the models get better over time. Um, and then again in the case of deep research sort of it's uh there's sort of a peace of mind knowing that like I'm I'm willing to let the model and agent run for a longer period of time so that it it sort of truly covers the fullness of the ecosystem. Um I think there's definitely other use cases that are successful. Those feel like the two most successful right now. Um, and I think the the interesting thing to think about, and I had this conversation with Jeff Dean a few weeks ago around sort of like as the models become longer running, you start to see a bunch of like really interesting new bottlenecks come up. Um, which I think is actually like cor like more correlated to the use cases than I think you would imagine. Um, and so if you're thinking about like what problems to be solving or um as as you build longunning agents like where to look to go and and find alpha um it can actually be in the tools. And if you look at if you've ever like looked at a long agent trace um some reasonable amount of the time that the model spends and this is going to be an increasing portion of the time is spent just like using external tools. It's not actually the model answering your question or thinking or whatever it is. It's actually the model using external tools. And the challenge is that these external tools were not actually built to be used in this capacity. They're oftentimes like different systems that were assuming there was like a human interacting. So some latency would make sense and like maybe a lack of parallelism would make sense, but that's actually not the case in agents now. Um, and so I think we'll see all of these like weird bottlenecks show up as we make agents run longer. Um, and I also think like as model capability improves, we'll see like a better diversity of like successful use cases. Um, but it really does feel like coding uh I'll be excited to see like something some use case like dethrone coding. I think maybe it's like starting to become uh like at Google IO we launched Gemini Spark which is sort of your always on 24 by7 like personal agent that can you can just throw tasks over the wall and it'll do. So maybe that use case over time just given the volume of people who are needing a personal assistant versus coding maybe that will dwarf it from a token consumption perspective but it feels like uh coding agents is uh by a long shot the biggest use case today.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Yeah I I I also feel like you know stuff which takes humans a long time to do are the best use cases for longunning agents. So research is definitely one of them. Uh we also have an episode of the agent factory where we go into three different use cases of longrunning agents which I'll be leaving in the description box below and we have a blog post released by Google cloud which shows you exactly how you can build a longunning agent example from ADK and that will be in the description box as well. Yes, thank you Smith. And uh talking about use case in ter longing agents, I fully agree. Um there's a lot possible coding is one deep research and deep resist max uh which is my my personal favorites as well. But there's also stuff like co-scientist where and and alpha evolve which are like super longunning agents and the longer you run them the better the quality. Um and and then also another thing uh which I think used to receive a lot of attention the last iterations we did this course but less so now is multimedia like uh Thomas Fister from our cloud research rece published his team published a paper around how you can make uh longer movies more than just say 20 or 30 seconds with uh an agentic longunning agent agentic system uh combining a lot of the best practices around evaluic engineering as well. So yeah, really looking forward to um what comes out.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#c0392b15;color:#c0392b;border-color:#c0392b40">Jamie · Google Cloud AI</span><p>I think another thing I'd add there is um if you think about a dynamic environment where inputs are changing, longunning agents can often be well suited. So for example um you know banks processing loans you may a typical loan process in a bank may take you know weeks to a month to approve and there's different inputs that the agent needs to go back to the employee to get more information. um and and process and and change the dynamic decisions based upon that. Um you know, insurance claims um uh a legal agent working on a court case. You know, the input information changes dynamically and you need to have that ability to have the agent be be long running to continually dynamically adapt to the different inputs. Jamie, I think this would actually be something interesting for the cloud team to map, which is like you sort of have the like length of how long the agent can run for um on the sort of xaxis and then over time as it can run for longer you actually see like all these additional like markets and different segments unlock because I feel like there's like a lot of things where like actually you know maybe for the example would be like one bank you know your favorite choose your favorite bank takes you know they they need 30 days but the other one maybe needs, you know, 60 days or something and so like it doesn't work now for the make that needs 60 days, but it does for the one that that can do it in 30 days. Um, so it'll be interesting to see and and track that over time.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Uh, Logan, I think, uh, cutting out, but I believe uh, uh, talking about different longrunning use cases across across different industries uh, uh, makes a lot of sense. Um so uh I believe uh so yeah as as as an industry uh as some there's some use cases which the longer you run the agent uh the better the output and you can see that in many industries shall we move on to the next question? Uh so we have a community question from Sayan um and he's asking could you share some realworld examples where wipe coding has been applied successfully and what challenges developers face when fa uh</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>when moving from chat bots to fully autonomous systems. Uh would you want to answer this? Sure. Uh so thanks for the question. It's actually a pretty u uh interesting question. I think it's actually two questions in one and uh I could probably spend a lot of time uh talking about</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#b4530915;color:#b45309;border-color:#b4530940">Partha · Google DeepMind</span><p>both of those. So so the first part is uh where are we using wipe coding? I I think Smitha mentioned earlier a good fraction of code the last time I think we talked about it was 75 80% of code at Google is developed uh using AI. But I think uh I have been particularly lucky to work on a whole bunch of applications and it's just been amazing on where you could use it. AI for coding of course but you can think about um AI for system development, AI for performance, AI for efficiency, AI for reliability, AI for operations. Uh you can think about AI for supply chain management, AI for productivity, AI for science. So I think the um applications for uh uh AI are just phenomenal and across the board you could apply it in various different ways. uh if I had to pick one example uh we recently wrote a blog post where we talked about how we've been using uh AI to automate uh migration from TensorFlow to Jax and as you can imagine these kind of migration problems are incredibly hard and they're very timeconuming and we were able to use an agentic approach to uh automate this in a way that got us on uh YouTube for example when they did their TensorFlow to check migration we were six to eight times faster and and you can imagine the amount of time that you can save by doing something of this sort and maybe Smith we can put a link to the blog post that we wrote about this later on as well. So that is all the various applications for AI but really I think you're just limited by your imagination and where you can use wipe coding and agentic engineering to try to do stuff. Now, in terms of some of the challenges, uh, we've already alluded to a few of those. Uh, Jamie mentioned some of the things around how we want to think about safety. And I usually think about the three hes, hate, harm, hallucinations. And so, you want to obviously make sure that you're grounding, you're thinking about bias in the data set, you're thinking about the safety aspects of how all of the AI works. And uh, Anand mentioned, and uh, we're going to have a whole section on evals, I believe, in one of the days here. and and thinking about security and verification and hate harm hallucination super critical. Uh the second uh observation I would make is uh uh similar to what uh maybe Logan talked about uh you really want to think about the uh entire workflow. So especially when you think about longunning agents, it's very easy to optimize one portion and and and I think of the uh uh old children's game of whack-a-ole where you kind of hit one thing and something else pops up and and so you have similar problems here where if you just optimize one for example if uh you're thinking about optimizing coding and you optimize coding by 10x uh testing becomes a problem and so you really want to think about what does AI infused workflow look like? what does the entire journey look like and how we can optimize for that and so that's a challenge and a lesson that we have learned in terms of how as you start having wipe coding and agentic architectures you want to think about the full workflow and not just optimize one portion where something else becomes a problem. The u third challenge I would uh um observe at least I have been observing is um thinking about again the life cycle of how we apply AI. I have this framework that I call IU us and I stands for impressive, U stands for useful, S stands for sustainable and what I usually talk about is oftentimes when you're using white coding agentic engineering the first demo that you come up with is impressive. So the I and uh and that's always where you start off with is you take a specific use case uh you build something really nice and that's always a good starting point but then you want to go beyond that to saying beyond that particular use case how can I make it commonly applicable so something worked for me but how can it work for everybody else who's using it and so you go from impressive to useful and then once you get useful you want to think about how does this scalable secure sustainable and that's the S part and when I say sustainable oftenimes I've seen people come up with an AI use case that's can be three times more expensive than the regular current way of doing that and it's of course AI but what you also want to do is to start thinking about how can you be sustainable about how you use AI as well and so that's the other lesson we are learning is as you navigate the white coding agentic uh engineering journey you want to think about are you in the impressive or the useful or sustainable stage and it is a journey and you go through all three but you do want to ultimately get to a sustainable scalable solution that helps everyone else and so on. And so that's something to look at. But but I I'll go back to something uh that Logan said. Ultimately, this is a new paradigm and we are all learning together and and I'm sure you're going to have a lot of lessons as well. So the most important thing is to be adaptive and be nimble about uh what we are learning and be aware that it's a new paradigm and that we're going to be learning things as we go along. But hopefully the three observations I said were useful to you folks as you think through your journey as well.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>I love that acronym I US. I feel like I could use that, you know, even when I'm picking up a skill or something. Is this impressive, you know, useful or sustainable? Um, and and sustainability is one of the reasons why uh for those of you who be facing kota kota restrictions um uh in the code lab throughout the week because we have limited uh kota for for free usage. So um this sustainability support that's awesome. Uh thank you to all the guest speakers for coming on here to answer all the questions. This was super helpful. Now all right we're going to start actually moving on to the code labs and uh today's code labs there's two code labs which are designed to actually get you handson with live coding from minute one. So Fran's actually going to walk us through both of them. Over to you, friend.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#9333ea15;color:#9333ea;border-color:#9333ea40">Fran Höckelman · Google Cloud Dev Tools</span><p>Thank you, Smitha. Um, hi everyone. Wow, what a good discussion. Um, welcome to the code labs for day one, day one of our code. I'm Fran Hkelman. I lead the AI dev tools team in Google Cloud Devil and I'm so excited to guide you through your first steps of agentic development. For day one, we have two practical code labs that will get you up and running. First, we'll introduce you to Google Anti-gravity, which will be your main tool for the whole week. And second, we'll look at Google AI Studio as another option for building apps, how to publish them, and how to share them with all your friends. Um, in your first code lab, you will install and configure anti-gravity. Could we share the screen? Yes. So, you'll install anti-gravity. It's um your central command center for managing your agents, your workspaces, and your code. And once you have it installed, I encourage you to work through the code lab. Click around and explore. It's a very visual way to partner with your agent. You'll see how to how they create implementation plans and guide you through the tasks. You'll see your your artifacts on the right here. Um, you can open the IDE if you want to try out different models. You do that right here where you set your prompt. And one thing I want everyone to look at is if you go to settings and then to models um then you can see your remaining token quota. And if you run out of Gemini tokens, um, you can always pick another model cloud or GPT models right in your prompt. That should get you about twice as far as what you've used so far. All right, so let's look at the code labs for day one. Let me share code labs. So as I said, um first code lab is about Google anti-gravity. The links to the code labs, those were shared with you in your welcome email. They're also in the discussion post. Um, so go to those links. You don't need to log in or anything for codelabs. As you work through your code labs, you can go back and forth. Um, there's no time limit or anything. There is a time right here. It's just showing you how long you sort of expected to complete it, but you can work on those infinite time. Um, there's there's no timer ticking or anything. Um, and then our second code lab, um, introduces Google AI Studio as another option to build labs. And you already heard Logan talk about AI Studio. Um, you'll learn the basics of how to wipe code an app by describing it in plain English or any other language. Um, I built this very silly Corgi app here in the impressive, useful, sustainable. It's maybe in the impressive part. It's definitely not in the useful part. [laughter] Um, but we'll show you how you can build any app and how you can publish it to the cloud with just a few clicks. I'm super excited to see what you're all building on day one. Um, once you have your VIP coded app deployed, please, please, please share it with us. Drop the link in the Discord server. like we're all here to learn from each other and I'm sure you'll do something way more impressive than my corgis jumping around here. Um, one last thing for the code labs there is you don't need to submit anything after you finish a code lab. Um, work through them. I really encourage you to carefully read between the steps. Don't just copy and paste the commands. um you learn the most if you actually read it to to understand it. All right, so that's all for the day one code labs. Have fun with the labs. Share your impressive apps and back to Smitha.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>Awesome. Thanks, Bran. Both those codelabs actually look amazing and they're super worth running end to end. And the AI studio to cloudr run one is particularly such a concrete example like going from idea to a deployed URL in minutes. That used to be a multi-day setup. Now you can do that in minutes. So now for arguably the most exciting part of the live stream, the pop quiz.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Off to you Anand. Yes, I would say it's the second or third most exciting after the Q&A. But uh for those of you who have been listening and uh and reading the white papers, we start off with our first question of the pop quiz. So your first question uh would be every AI agent is built from five parts. Which part is described as the reasoning engine that reads the context and decides what should happen next? Your options are A the memory, B the tools, C the model or D the orchestration. Think about it and your answer will be shown in three, two, one and C. C is the main brain, the reasoning agent that powers your AI agent, especially for AI coding agents. Moving on to the next question. Um, which of the following is a key differentiator of aentic enentic engineering compared to the casual vibe coding on the development spectrum? Your options are a minimal codebase understanding and selective review. B sole reliance on manual spot checking and user prompts or C a systematic process of testing CI/CD gating evaluation judges etc or D copy pasting raw error message back to the LLM to so that the LLM can resolve them your correct answer will be shown in three 2 one and it's C. Agentic engineering is a systematic verification through automated test suit CI/CD gating and evaluation checks. Moving on to our third question. According to our white paper or day one white paper, what becomes the primary new bottleneck in the compressed AIdriven software development life cycle? Your options are A designing the database schemas or B writing the boilerplate syntax to bootstrap the process, C running code in isolated sandboxes or D specification quality. Your correct answer will be shown in three, two, one and it's D. So whenever uh given the power that AI has being very uh like uh writing your specs with a lot of higher quality which you also see in day five becomes a big bottleneck to make sure you build the right things. Uh question four uh so in this equation what constitutes the missing hardness component? Um agent is equal to model plus harness as we saw earlier in the white paper um overview. What is that missing component? Your options are a the physical GPU infrastructure holding the LLM uh the custom trained weight matrix of the transformer model or whichever model diffusion model uh that you use C the surrounding scaffolding or D uh uh the functioning function of memory storing long-term user preferences. C is the correct answer because that's what the harness is. The model powers the harness and vice versa. Pretty important part. All right. To your last question. Our last question is what financial and operational tradeoff describes the investment of agentic engineering? Is it um is it option number um a low capex high opex b high capex low opex or c low capex low opex or d high capex high opex. So think about it and your correct answer will be shown in three two one and it's B. Agentic engineering uh leads to a higher initial investment be it in your training your own models your GPUs or setting up and using tokens but it leads to lower opex which is the actual developer life uh developer time and uh effort. All right brings us to the end of our pop quiz.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Ken</span><p>Awesome. Thank you Anand. And also quick wrap up before we sign off. Day two assignments will drop shortly. And tomorrow's topic, agent tools and interoperability, picks up right where today's left off. It goes deeper into MCP A2A and how agents actually plug into the outside world. So keep the discussion going on Discord. The mods are active and also get started on the code labs if you haven't already. Try to actually deploy something to Cloud Run. It's actually really satisfying to see your vcoded app live that you can share and also see every hope to see everyone tomorrow at the same time. Thank you for being here.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anand Navalgaria</span><p>Same time, same channel, different topic. See you everyone.</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>本文整合 Kaggle × Google 5-Day AI Agents Intensive Course Day 1 直播內容，結合 deep-guide 敘事框架與 ai-mentor-agents 教學框架撰寫。</p>
+  </footer>
+
+</div><!-- /page-wrap -->
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-hint">點擊或按 Esc 關閉</span>
+  <img src="" alt="">
+</div>
+
+<script>
+(function(){
+  var lightbox = document.getElementById("lightbox");
+  var lightboxImg = lightbox.querySelector("img");
+  function openLightbox(img){
+    lightboxImg.src = img.currentSrc || img.src;
+    lightboxImg.alt = img.alt;
+    lightbox.classList.add("is-open");
+  }
+  function closeLightbox(){
+    lightbox.classList.remove("is-open");
+    lightboxImg.src = "";
+  }
+  document.querySelectorAll("figure.summary-figure img, figure.section-figure img").forEach(function(img){
+    img.addEventListener("click", function(){ openLightbox(img); });
+  });
+  lightbox.addEventListener("click", closeLightbox);
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeLightbox();
+  });
+})();
+</script>
+
+</body>
+</html>

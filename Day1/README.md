@@ -26,42 +26,52 @@
 ```
 Day1/
 ├── README.md                                          ← 本檔案
-├── index.html                                          ← 最終輸出（繁中網頁）
-├── google-antigravity-codelab-guide/                   ← Google Antigravity codelab 白話導讀與 HTML
+├── index.html                                         ← 主入口網頁（白皮書繁中版 + 學習/推薦頻道）
+├── google-antigravity-codelab-guide/                  ← Google Antigravity codelab 白話導讀
 │   ├── google-antigravity-codelab-guide.md
 │   ├── google-antigravity-codelab-guide.normalized.md
 │   ├── google-antigravity-codelab-guide.html
 │   ├── build_html.py
 │   ├── desktop.png
 │   └── mobile.png
-├── deploy-aistudio-to-cloud-run-guide/                 ← AI Studio → Cloud Run codelab 白話導讀與 HTML
+├── deploy-aistudio-to-cloud-run-guide/                ← AI Studio → Cloud Run codelab 白話導讀
 │   ├── deploy-aistudio-to-cloud-run-guide.md
 │   ├── deploy-aistudio-to-cloud-run-guide.normalized.md
 │   ├── deploy-aistudio-to-cloud-run-guide.html
 │   ├── build_html.py
 │   ├── desktop.png
 │   └── mobile.png
-├── podcast-deep-guide/                                ← Podcast 白皮書深度導讀（ai-mentor + deepguide）
+├── podcast-deep-guide/                                ← Podcast 白皮書深度導讀
 │   ├── podcast-deep-guide.md                          ← 繁中主題式導讀 Markdown
-│   └── podcast-deep-guide.html                        ← Standalone HTML（含逐字稿附錄）
-├── Promo_Channel/                                     ← 推薦頻道專用目錄
+│   └── podcast-deep-guide.html                        ← Standalone HTML（含英文逐字稿附錄）
+├── day1-deep-guide/                                   ← Day 1 直播深度導讀（deep-guide + ai-mentor-agents）
+│   ├── index.html                                     ← Standalone HTML（含 7 位講者識別逐字稿）
+│   └── images/                                        ← Codex CLI 生成圖片（各 16:9 + 9:16 行動版）
+│       ├── summary.png / summary-mobile.png           ← 全文摘要手寫筆記 banner
+│       ├── vibe-vs-agentic.png / …-mobile.png         ← Vibe Coding vs Agentic Engineering 比較圖
+│       └── harness.png / harness-mobile.png           ← Agent = Model + Harness 公式圖
+├── Promo_Channel/                                     ← 推薦頻道素材
 │   └── Day1.jpg                                       ← 歐罵罵推薦頻道首頁圖
-├── The New SDLC With Vibe Coding_Day_1_images/         ← index.html 使用的 9 張圖（600 DPI）
-├── Whitepaper Companion Podcast..._compressed.mp4      ← index.html 嵌入的 podcast 影片
-├── source/                                             ← 原始素材與中間產物
-│   ├── The New SDLC With Vibe Coding_Day_1.pdf         ← 原文 PDF（白皮書正本）
-│   ├── The New SDLC With Vibe Coding_Day_1.md          ← docling 解析出的英文 Markdown
-│   ├── The New SDLC With Vibe Coding_Day_1_zh_TW.md    ← 分段翻譯後合併 of 繁中 Markdown
-│   ├── The New SDLC With Vibe Coding_Day_1_images_Origin/ ← 第一次 docling 擷取（解析度較低，已被 600 DPI 版本取代，僅供備查）
-│   └── podcast/                                        ← Podcast 逐字稿與影音相關素材
-│       └── Whitepaper Companion Podcast Introduction to Agents and Vibe Coding.en-orig.srt ← 英文原始逐字稿 (SRT)
-└── pipeline/                                           ← PDF → Markdown 轉換用腳本（含硬編碼路徑，重用前需修改）
-    ├── convert_pdf.py        ← 第一版 docling 轉換（images_scale=3.0）
-    ├── match_figures.py      ← 檢視 docling 解析出的圖片清單與對應頁碼，用於人工比對 Figure 編號
-    ├── reprocess_600dpi.py   ← 正式版：以 600 DPI（images_scale=5.0）重新擷取 9 張圖，並依 Figure 標題重新命名、插入 {{filename}} 佔位符
-    ├── post_process.py       ← （早期版本）依編號 mapping 重新整理 figure*.png 並插入 markdown 圖片參考，已被 reprocess_600dpi.py 取代
-    ├── split_md.py           ← 將英文 Markdown 切成 4 個 chunk，交給翻譯 agent 分段翻譯
-    └── merge_translation.py  ← 將 4 個翻譯後的 chunk 合併回單一 zh_TW.md
+├── The New SDLC With Vibe Coding_Day_1_images/        ← index.html 使用的 9 張圖（600 DPI 壓縮版）
+├── Whitepaper Companion Podcast..._compressed.mp4     ← index.html 嵌入的 Podcast 影片
+├── source/                                            ← 原始素材與中間產物
+│   ├── The New SDLC With Vibe Coding_Day_1.pdf        ← 原文 PDF（白皮書正本）
+│   ├── The New SDLC With Vibe Coding_Day_1.md         ← docling 解析出的英文 Markdown
+│   ├── The New SDLC With Vibe Coding_Day_1_zh_TW.md   ← 分段翻譯後合併的繁中 Markdown
+│   ├── The New SDLC With Vibe Coding_Day_1_images_Origin/ ← 第一次 docling 擷取（低解析度備查）
+│   ├── podcast/                                       ← Podcast 逐字稿與影音相關素材
+│   │   └── Whitepaper Companion Podcast Introduction to Agents and Vibe Coding.en-orig.srt
+│   └── livestream/                                    ← Day 1 直播原始素材
+│       ├── DAY 1 Livestream - 5-Day AI Agents Intensive Vibe Coding Course With Google.en-orig.srt
+│       ├── day1-transcript.txt                        ← 去除 SRT 時間戳的純文字逐字稿
+│       └── day1-deep-guide.md                         ← 深度導讀 Markdown 草稿
+└── pipeline/                                          ← PDF → Markdown 轉換用腳本
+    ├── convert_pdf.py
+    ├── match_figures.py
+    ├── reprocess_600dpi.py
+    ├── post_process.py
+    ├── split_md.py
+    └── merge_translation.py
 ```
 
 ---
@@ -161,6 +171,19 @@ Day1/
     - 以 `md_to_html` 排版規範建立 `podcast-deep-guide.html`：sticky 橫向導覽列（8 個章節錨點）、莫蘭迪暖色系、表格、blockquote、callout 卡片、頁底附錄（摺疊式 `<details>` 展示英文原文逐字稿，一字未改，僅做段落化整理）。
     - 同步將 `podcast-deep-guide` 加入 `index.html` 學習頻道（第三張卡片）。
     - 採用 `python3 -m html.parser` 驗證兩個 HTML 語法正確。
+
+11. **Day 1 直播深度導讀（day1-deep-guide）**
+    - 建立全域 skill `ai-mentor-agents`（`~/.claude/skills/ai-mentor-agents/`），參考 `ai-mentor.skill` 結構，融合 10 位 AI Agents 實踐者人格（Karpathy、Andrew Ng、Logan/DeepMind、李宏毅等），並定義教學六段式格式（📌定義→💡比喻→🔧技術→🏭實戰→⚠️誤解→🧪驗證）。
+    - 以 `grep` 過濾 SRT 時間戳，產出純文字逐字稿 `source/livestream/day1-transcript.txt`（357 行、47KB）。
+    - 同時啟用 `deep-guide`（敘事層：流動論述、強烈開場、章節邏輯連結）與 `ai-mentor-agents`（教學層：callout 框）撰寫導讀文章，存入 `source/livestream/day1-deep-guide.md`，共 10 章節，核心命題：「實作的能力不再是瓶頸；規格的品質，才是新的瓶頸。」
+    - 以 `md_to_html` 流程建立 `day1-deep-guide/index.html`：
+      - Codex CLI 生成 3 組共 6 張資訊圖（手寫筆記風摘要 banner、Vibe vs Agentic 比較圖、Agent Harness 公式圖，各含 16:9 桌機版與 9:16 行動版）。
+      - `<picture>` + CSS `aspect-ratio` 切換桌機/行動圖片版本，所有圖片支援 lightbox 點擊放大。
+      - 4 種 callout 色系（藍/綠/紅/黃）對應 📌💡⚠️🧪 四類 ai-mentor 教學元素。
+      - 新增含講者識別的摺疊逐字稿區塊（`<details>`）：Python 腳本依 `>>` 切換符號與稱謂關鍵字，自動為 7 位 Google 講者標注色系 badge（Smitha/Anand/Logan/Partha/Jamie/Sham/Fran）。
+    - 整合進主入口：`index.html` 學習頻道新增「🎬 Day 1 直播深度導讀」卡片；`day1-deep-guide/index.html` 導覽列新增「← 返回 Day 1」連結。
+    - 根目錄整理：SRT、純文字逐字稿、Markdown 草稿移入 `source/livestream/`。
+    - `python3 -m html.parser` 驗證語法，Playwright 截圖 QA（桌機 1280px + 行動 390px）。
 
 ---
 
@@ -341,6 +364,26 @@ Day1/
       連結指向 `https://doggy8088.github.io/the-new-sdlc-with-vibe-coding/index.html`。
     - `python3 -m html.parser` 驗證語法正確。
     - 更新 README.md 對話歷史。
+
+27. 「read DAY 1 Livestream - 5-Day AI Agents Intensive Vibe Coding Course With Google.en-orig.srt，如果要比照podcast的導讀，應該要怎麼下指令？」
+    → 分析 SRT 格式（357 行純文字、47KB），說明兩種方式：先萃取純文字再下 deep-guide 指令（推薦），或直接貼文字。
+
+28. 「幫我執行方式一」
+    → 萃取 SRT 純文字（`day1-transcript.txt`），讀取全文後呼叫 deep-guide skill 撰寫導讀文章。
+
+29. 「除了deepguide外，也請加入ai-mentor（請參考codex cli的ai-mentor skill，建立自己的）」
+    → 解壓縮 `ai-mentor.skill` 讀取結構（iPAS 考試準備導師），並建立全域 `ai-mentor-agents` skill（`~/.claude/skills/ai-mentor-agents/`），融合 10 位 AI Agents 實踐者，含 SKILL.md 與 references/experts.md。接著合體 deep-guide + ai-mentor-agents 撰寫完整導讀，存入 `source/livestream/day1-deep-guide.md`。
+
+30. 「執行 /md_to_html 將文章轉為網頁」
+    → 以 `md_to_html` skill 執行完整流程：Codex CLI 生成 3 組 6 張資訊圖（各 16:9 + 9:16）、建置 `day1-deep-guide/index.html`、語法驗證、Playwright 截圖 QA。
+
+31. 「這個html也是從srt整理出來的，所以應該仿照podcast導讀也放逐字稿（而且逐字稿應該要辨識講者）」
+    → 撰寫 Python 腳本依 `>>` 切換符號與稱謂關鍵字識別 7 位 Google 講者，為每位講者設定色系 badge，注入摺疊式逐字稿區塊至 `day1-deep-guide/index.html`。
+
+32. 「1. 與podcast導讀一樣整併到day1/index.html，並且有回到上一頁功能
+    2. day1根目錄的檔案參考目錄架構收納整理
+    3. 更新readme」
+    → 本次執行（見 Pipeline 步驟 11）。
 
 25. 「補充需求，html最後提供不改字，優化段落形式的逐字稿」 → 「yes」
     → 實際執行：
