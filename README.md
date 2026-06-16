@@ -7,7 +7,7 @@ Google」（2026/06/15–06/19）課程的中文學習筆記彙整站。`index.h
 專案的入口首頁（課程介紹 + Day1-5 導覽），每個 `DayN/` 子目錄則放該日白皮書
 的繁體中文長文網頁（依 Day1 的 pipeline 製作）。
 
-**目前狀態（2026-06-15）**：Day1 已完成並已連結；Day2-5 尚未建立，根目錄
+**目前狀態（2026-06-16）**：Day1、Day2 已完成並已連結；Day3-5 尚未建立，根目錄
 `index.html` 中對應卡片顯示「即將推出」（灰階、不可點擊）。
 
 ---
@@ -18,15 +18,24 @@ Google」（2026/06/15–06/19）課程的中文學習筆記彙整站。`index.h
 .
 ├── README.md          ← 本檔案（專案總覽 + 接續指南）
 ├── index.html         ← 入口首頁：Kaggle 課程介紹（中文）+ Day1-5 導覽卡片
-└── Day1/
-    ├── README.md       ← Day1 的完整 pipeline 紀錄（PDF→HTML 流程、決策原則、可重用腳本）
-    ├── index.html      ← Day1 白皮書中文長文網頁（最終產出）
-    ├── source/         ← 原始 PDF + 中間產物（英文/中文 Markdown）
-    ├── pipeline/        ← PDF→Markdown 轉換腳本
-    └── ...images/, *.mp4
+├── Day1/
+│   ├── README.md       ← Day1 完整 pipeline 紀錄
+│   ├── index.html      ← Day1 白皮書中文長文網頁（最終產出）
+│   ├── source/         ← 原始 PDF + 中間產物
+│   ├── pipeline/       ← PDF→Markdown 轉換腳本
+│   └── ...guides/, *.mp4
+└── Day2/
+    ├── README.md       ← Day2 完整 pipeline 紀錄
+    ├── index.html      ← Day2 白皮書中文長文網頁（最終產出）
+    ├── source/         ← 原始 PDF + 中間產物
+    ├── pipeline/       ← PDF→Markdown 轉換腳本
+    ├── images_cht/     ← 8 張中文化圖表
+    ├── antigravity-cli-guide/   ← 學習頻道導讀（deep-guide）
+    ├── mcp-knowledge-guide/     ← 學習頻道導讀（deep-guide）
+    └── *.mp4
 ```
 
-`DayN/`（N=2~5）尚未建立，建立時請比照 `Day1/` 的結構。
+`DayN/`（N=3~5）尚未建立，建立時請比照 `Day1/`、`Day2/` 的結構。
 
 ---
 
