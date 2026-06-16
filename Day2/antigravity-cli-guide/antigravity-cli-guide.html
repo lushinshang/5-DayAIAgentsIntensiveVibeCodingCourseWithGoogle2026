@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>你以為在用 AI，其實你還在複製貼上｜Antigravity CLI 導讀</title>
+  <meta name="description" content="從上下文斷裂到終端機 Agent——Antigravity CLI 權限模式、Shell 模式與非互動自動化的工程邏輯深度導讀。">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: #f9f7f4;
+      color: #1a1a1a;
+      font-size: 16px;
+      line-height: 1.72;
+      letter-spacing: 0;
+    }
+
+    /* NAV */
+    .toc { position: sticky; top: 0; z-index: 100; background: rgba(249,247,244,0.96); backdrop-filter: blur(8px); border-bottom: 1px solid #e2ddd8; height: 56px; }
+    .toc-inner { max-width: 1120px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+    .toc-inner::-webkit-scrollbar { display: none; }
+    .toc-inner a { color: #555; text-decoration: none; font-size: 13.5px; font-weight: 500; padding: 6px 12px; border-radius: 6px; white-space: nowrap; transition: background .15s, color .15s; }
+    .toc-inner a:hover { background: #e8f0e8; color: #2f6f73; }
+    .toc-inner a.back { font-weight: 700; color: #2f6f73; }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg, #1a3d2e 0%, #2f6f73 60%, #3d9b8f 100%); color: #fff; padding: 72px 24px 64px; }
+    .hero-inner { max-width: 720px; margin: 0 auto; }
+    .hero-tag { font-size: 13px; font-weight: 500; letter-spacing: .08em; color: rgba(255,255,255,.7); text-transform: uppercase; margin-bottom: 16px; }
+    .hero h1 { font-size: clamp(2rem,5vw,3rem); font-weight: 700; line-height: 1.2; margin-bottom: 20px; text-wrap: balance; }
+    .hero-subtitle { font-size: 17px; line-height: 1.6; color: rgba(255,255,255,.88); }
+
+    /* LAYOUT */
+    main { max-width: 1120px; margin: 0 auto; padding: 0 24px 80px; }
+    article { max-width: 720px; margin: 0 auto; }
+    section { padding-top: 64px; }
+
+    /* HEADINGS */
+    h2 { font-size: clamp(1.4rem,3vw,1.9rem); font-weight: 700; color: #1a3d2e; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #d4ede8; text-wrap: balance; }
+    p { margin-bottom: 18px; }
+    a { color: #2f6f73; }
+    a:hover { text-decoration: underline; }
+
+    /* LISTS */
+    ul, ol { margin: 0 0 18px 0; padding-left: 24px; }
+    li { margin-bottom: 8px; }
+    li strong { color: #1a3d2e; }
+
+    /* CODE */
+    code { font-family: "SF Mono","Consolas","Monaco",monospace; background: #edf5f4; padding: 2px 6px; border-radius: 4px; font-size: .88em; color: #1a3d2e; }
+
+    /* FIGURES */
+    figure.section-figure { margin: 32px 0; text-align: center; }
+    figure.section-figure img { width: 100%; max-width: 860px; height: auto; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,.1); cursor: zoom-in; }
+    figcaption { margin-top: 10px; font-size: 13.5px; color: #666; line-height: 1.5; }
+    @media (max-width: 640px) {
+      figure.section-figure img { aspect-ratio: 9/16; max-width: 360px; }
+    }
+
+    /* SOURCE */
+    .source-note { margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2ddd8; font-size: 13.5px; color: #666; }
+
+    /* LIGHTBOX */
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,26,26,.88); align-items: center; justify-content: center; padding: 24px; cursor: zoom-out; }
+    .lightbox.is-open { display: flex; }
+    .lightbox img { max-width: 96vw; max-height: 92vh; width: auto; height: auto; border-radius: 8px; box-shadow: 0 12px 48px rgba(0,0,0,.4); }
+    .lightbox .lightbox-hint { position: absolute; top: 20px; right: 24px; color: rgba(255,255,255,.75); font-size: 14px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .hero { padding: 48px 20px 40px; }
+      .hero h1 { font-size: 1.9rem; }
+      main { padding: 0 16px 60px; }
+      section { padding-top: 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="../index.html" class="back">← 返回白皮書</a>
+    <a href="#glass">AI 在玻璃後面</a>
+    <a href="#agent">終端機裡的 Agent</a>
+    <a href="#permissions">四個權限模式</a>
+    <a href="#exits">兩個出口</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Day 2 · 學習頻道導讀</div>
+    <h1>你以為在用 AI，其實你還在複製貼上</h1>
+    <p class="hero-subtitle">Antigravity CLI 不是更炫的聊天框——它讓 Agent 真正進入你的工作環境，從終端機直接讀你的目錄、改你的檔案、自動執行任務。</p>
+  </div>
+</header>
+
+<main>
+<article>
+
+<section id="intro">
+  <p>每次要讓 AI 幫你分析一個專案，你做什麼？</p>
+  <p>打開 ChatGPT 或 Gemini 的網頁，把 <code>README.md</code> 複製進去，把幾個關鍵函式的程式碼也貼進去，然後送出。AI 回答，你再把答案複製回終端機執行。如果有錯，再複製錯誤訊息，貼回去問。</p>
+  <p>這個流程你做了多少次？每一次「複製→貼上→複製→貼上」的迴圈，都在提醒你一件事：你沒有真正讓 AI 進入你的工作環境，你只是在兩個世界之間當人工搬運工。</p>
+</section>
+
+<section id="glass">
+  <h2>當 AI 還活在玻璃後面</h2>
+  <p>問題的根源不是 AI 不夠強，而是它被關在一個和你的工作完全隔離的空間裡。</p>
+  <p>你的程式碼在本機。你的日誌在本機。你的設定檔在本機。但你問 AI 的地方，是一個對你的檔案系統一無所知的網頁視窗。</p>
+  <p>這不只是不方便而已。這個隔離製造了一個根本性的上下文斷裂：AI 看到的永遠是你篩選過、手動貼過去的片段，而不是真實的工作情境。它分析的是你以為重要的部分，而不是它自己看過整個 repo 之後判斷出來的重點。</p>
+  <p>更嚴重的是，這種隔離讓 AI 沒有辦法「做事」，只能「說話」。它給你指令，你去執行。出錯了，你再回來報告。它永遠是顧問，不是隊友。</p>
+
+  <figure class="section-figure">
+    <picture>
+      <source media="(max-width: 640px)" srcset="images/isolation-gap-mobile.png">
+      <img src="images/isolation-gap.png" alt="舊方式（複製貼上循環）vs Antigravity CLI（Agent 直接操作本機環境）對比">
+    </picture>
+    <figcaption>上下文斷裂：舊方式讓你在兩個世界之間當搬運工，CLI 讓 Agent 直接進入你的工作空間</figcaption>
+  </figure>
+</section>
+
+<section id="agent">
+  <h2>終端機裡的 Agent：不是更炫的聊天框</h2>
+  <p>Antigravity CLI 想解決的就是這個斷裂。</p>
+  <p>它不是一個網頁聊天介面的命令列版本。它是一個在你的本機環境中真實運作的 Agent 介面——它能讀你的目錄、改你的檔案、執行指令，而且所有這些都發生在同一個工作空間裡，不需要你在中間搬運。</p>
+  <p>安裝完成、用 Google OAuth 登入之後，第一件事是「信任工作目錄」。這個步驟很多人會跳過不想，但它其實是整個設計的核心：你在明確告訴 Agent 它被允許操作的邊界在哪裡。這不是形式，是權限合約。</p>
+  <p>進入互動模式之後，你輸入 prompt，Agent 會推理、呼叫工具、編輯檔案，然後呈現結果——全部在你面前，全部可以被你觀察和打斷。</p>
+</section>
+
+<section id="permissions">
+  <h2>四個權限模式背後的工程判斷</h2>
+  <p>Antigravity CLI 最值得細看的設計，是它的工具權限層級（Tool Permission Modes）：</p>
+  <ul>
+    <li><strong>request-review</strong>（預設）：Agent 每次要採取行動前，都先問你。</li>
+    <li><strong>proceed-in-sandbox</strong>：在隔離環境中自動執行，不影響真實檔案。</li>
+    <li><strong>always-proceed</strong>：完全自動，不問。</li>
+    <li><strong>strict</strong>：最保守，只允許最低限度的操作。</li>
+  </ul>
+  <p>這四個模式不是「信任程度」的滑桿，而是風險評估框架的具體實作。</p>
+  <p>寫一個 README 草稿？<code>always-proceed</code> 沒問題，最壞情況是草稿爛，重寫就好。碰到 production 的資料庫 migration 腳本？<code>request-review</code> 是唯一合理的選擇，因為一旦執行沒有辦法輕易還原。</p>
+  <p>真正成熟的 Agent 使用方式，不是把所有東西設成自動，而是根據任務的不可逆程度來選擇對應的模式。這個判斷能力，才是讓 AI 真正進入生產環境的關鍵。</p>
+
+  <figure class="section-figure">
+    <picture>
+      <source media="(max-width: 640px)" srcset="images/permission-modes-mobile.png">
+      <img src="images/permission-modes.png" alt="四種工具權限模式：strict、request-review、proceed-in-sandbox、always-proceed，對應不同任務風險程度">
+    </picture>
+    <figcaption>根據任務的不可逆程度選擇對應的權限模式——這不是偏好設定，是風險管理</figcaption>
+  </figure>
+</section>
+
+<section id="exits">
+  <h2>兩個出口，打開完全不同的可能性</h2>
+  <p>理解了 CLI 的基本架構之後，有兩個功能值得特別注意，因為它們代表兩種截然不同的使用維度。</p>
+  <p><strong>Shell 模式</strong>（在提示符按 <code>!</code>）：讓你在同一個工作環境裡直接執行標準 terminal 指令，結果會保留在 Agent 的上下文裡。你不需要切換視窗、不需要複製輸出。Agent 看到的是連續的、完整的工作情境，而不是你挑選過的片段。</p>
+  <p><strong>非互動模式</strong>（<code>agy -p "prompt"</code>）：Agent 執行完就退出，回傳結果。這讓它可以被塞進 shell script、CI/CD pipeline、或定時排程。你可以讓 Agent 每天早上自動整理昨天的 git commit、每週生成一份程式碼品質報告、或在部署前自動審查變更差異。</p>
+  <p>這個組合的意義是：Agent 不再只是你坐在電腦前才能用的工具，它可以是一個在背景定期執行任務的自動化工作者。而你需要做的，只是設計好它的工作邊界和任務描述。</p>
+  <p>這正是 Agentic Engineering 的核心轉變：你的產出不再是你自己寫的程式碼，而是你設計的、能夠生產程式碼的系統。Antigravity CLI，就是讓這件事發生在你最熟悉的工作環境裡的入口。</p>
+
+  <figure class="section-figure">
+    <picture>
+      <source media="(max-width: 640px)" srcset="images/two-exits-mobile.png">
+      <img src="images/two-exits.png" alt="Shell 模式（!鍵即時執行）與非互動模式（agy -p 可排程自動化）兩條路徑">
+    </picture>
+    <figcaption>Shell 模式保持上下文連續性；非互動模式讓 Agent 成為可排程的背景工作者</figcaption>
+  </figure>
+
+  <div class="source-note">
+    <p>來源：Google Codelab「親自體驗 Antigravity CLI」<br>
+    <a href="https://codelabs.developers.google.com/antigravity-cli-hands-on?hl=zh-tw#0" target="_blank" rel="noopener">codelabs.developers.google.com/antigravity-cli-hands-on</a></p>
+  </div>
+</section>
+
+</article>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-hint">點擊或按 Esc 關閉</span>
+  <img src="" alt="">
+</div>
+
+<script>
+(function(){
+  var lb = document.getElementById("lightbox");
+  var lbImg = lb.querySelector("img");
+  function open(img){ lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lb.classList.add("is-open"); }
+  function close(){ lb.classList.remove("is-open"); lbImg.src = ""; }
+  document.querySelectorAll("figure.section-figure img").forEach(function(img){
+    img.addEventListener("click", function(){ open(img); });
+  });
+  lb.addEventListener("click", close);
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") close(); });
+})();
+</script>
+
+</body>
+</html>

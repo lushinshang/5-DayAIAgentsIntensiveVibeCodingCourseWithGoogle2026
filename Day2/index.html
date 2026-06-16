@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>代理人工具與互通性 — Day 2 | 5-Day AI Agents Intensive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:#f9f7f4;color:#1a1a1a;font-size:16px;line-height:1.68;letter-spacing:0;}
+
+    /* NAV */
+    .toc{position:sticky;top:0;z-index:100;background:rgba(249,247,244,0.96);backdrop-filter:blur(8px);border-bottom:1px solid #e2ddd8;height:56px;}
+    .toc-inner{max-width:1120px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none;}
+    .toc-inner::-webkit-scrollbar{display:none;}
+    .toc-inner a{color:#555;text-decoration:none;font-size:13.5px;font-weight:500;padding:6px 12px;border-radius:6px;white-space:nowrap;transition:background .15s,color .15s;}
+    .toc-inner a:hover{background:#e0ecf5;color:#1a5f8a;}
+
+    /* HERO */
+    .hero{background:linear-gradient(135deg,#1a3a5c 0%,#2d6a8f 60%,#3d8fb5 100%);color:#fff;padding:72px 24px 64px;}
+    .hero-inner{max-width:720px;margin:0 auto;}
+    .hero-tag{font-size:13px;font-weight:500;letter-spacing:.08em;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:16px;}
+    .hero h1{font-size:clamp(2.2rem,5vw,3.2rem);font-weight:700;line-height:1.2;margin-bottom:20px;text-wrap:balance;}
+    .hero-subtitle{font-size:17px;line-height:1.6;color:rgba(255,255,255,.88);margin-bottom:16px;}
+    .hero-authors{font-size:14px;color:rgba(255,255,255,.6);}
+
+    /* LAYOUT */
+    main{max-width:1120px;margin:0 auto;padding:0 24px 80px;}
+    article{max-width:720px;margin:0 auto;}
+    section{padding-top:64px;}
+
+    /* HEADINGS */
+    h1,h2,h3,h4{text-wrap:balance;}
+    h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;color:#1a3a5c;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #e0ecf5;}
+    h3{font-size:1.15rem;font-weight:700;color:#1a3a5c;margin-top:36px;margin-bottom:12px;}
+    h4{font-size:1rem;font-weight:700;color:#2d6a8f;margin-top:24px;margin-bottom:8px;}
+    p{margin-bottom:18px;}
+    a{color:#2d6a8f;}
+    a:hover{text-decoration:underline;}
+
+    /* LISTS */
+    ul,ol{margin:0 0 18px 0;padding-left:24px;}
+    li{margin-bottom:8px;}
+    li strong{color:#1a3a5c;}
+
+    /* BLOCKQUOTE */
+    blockquote{margin:24px 0;padding:16px 20px;border-left:4px solid #2d6a8f;background:#f0f6fb;border-radius:0 8px 8px 0;font-style:italic;color:#333;}
+    blockquote p{margin-bottom:0;}
+
+    /* CODE */
+    pre{background:#1e2a36;color:#cdd6e0;border-radius:8px;padding:20px 24px;overflow-x:auto;font-size:13px;line-height:1.6;margin:20px 0;}
+    code{font-family:"SF Mono","Consolas","Monaco",monospace;background:#edf2f7;padding:2px 6px;border-radius:4px;font-size:.88em;}
+    pre code{background:none;padding:0;font-size:inherit;color:inherit;}
+    .code-label{font-size:12.5px;color:#666;margin-bottom:4px;font-weight:500;}
+
+    /* TABLES */
+    .table-wrap{overflow-x:auto;margin:20px 0;}
+    table{width:100%;border-collapse:collapse;font-size:14.5px;}
+    th{background:#1a3a5c;color:#fff;padding:10px 14px;text-align:left;font-weight:600;}
+    td{padding:9px 14px;border-bottom:1px solid #e2ddd8;vertical-align:top;}
+    tr:nth-child(even) td{background:#f5f2ef;}
+    .table-caption{font-size:13px;color:#666;margin-bottom:8px;font-weight:500;}
+
+    /* FIGURES */
+    figure.section-figure{margin:32px 0;text-align:center;}
+    figure.section-figure img{width:100%;max-width:860px;height:auto;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.1);cursor:zoom-in;}
+    figcaption{margin-top:10px;font-size:13.5px;color:#666;line-height:1.5;}
+
+    /* CALLOUT */
+    .callout{margin:24px 0;padding:16px 20px;background:#fff8e8;border-left:4px solid #f5a623;border-radius:0 8px 8px 0;}
+    .callout-title{font-weight:700;color:#b87a00;margin-bottom:8px;font-size:14px;}
+    .callout p{margin-bottom:8px;}
+    .callout p:last-child{margin-bottom:0;}
+
+    /* BEST PRACTICE */
+    .bp-do{background:#f0faf4;border-left:4px solid #28a745;padding:16px 20px;border-radius:0 8px 8px 0;margin-bottom:16px;}
+    .bp-dont{background:#fff5f5;border-left:4px solid #dc3545;padding:16px 20px;border-radius:0 8px 8px 0;}
+    .bp-title{font-weight:700;font-size:14px;margin-bottom:12px;}
+    .bp-do .bp-title{color:#1a7a38;}
+    .bp-dont .bp-title{color:#b02020;}
+
+    /* STAT / COMPLEXITY */
+    .stat-highlight{display:inline-block;background:#e0ecf5;border:1px solid #2d6a8f;border-radius:8px;padding:10px 18px;font-weight:700;color:#1a3a5c;font-size:1.05rem;margin:8px 0;}
+    .complexity-box{background:#1e2a36;color:#cdd6e0;border-radius:8px;padding:20px 24px;margin:20px 0;font-family:"SF Mono","Consolas",monospace;font-size:12.5px;line-height:1.7;overflow-x:auto;white-space:pre;}
+
+    /* FOOTNOTES */
+    .footnotes{margin-top:48px;padding-top:24px;border-top:1px solid #e2ddd8;}
+    .footnotes ol{font-size:13.5px;color:#555;}
+    .footnotes li{margin-bottom:10px;}
+    .footnotes a{word-break:break-all;}
+
+    /* CHANNELS */
+    .channels-section{padding:32px 24px 8px;background:#f9f7f4;border-bottom:1px solid #e2ddd8;}
+    .channels-inner{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:28px;}
+    .channels-inner h3{margin:0 0 16px;font-size:1.15rem;font-weight:700;color:#1a1a1a;border-left:3px solid #2d6a8f;padding-left:10px;}
+    .channel-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:640px){.channel-grid{grid-template-columns:1fr;}}
+    .channel-card{display:flex;align-items:flex-start;gap:14px;padding:16px;background:#fff;border:1px solid #e2ddd8;border-radius:8px;text-decoration:none;color:#1a1a1a;transition:transform .2s,box-shadow .2s,border-color .2s;}
+    .channel-card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.06);border-color:#2d6a8f;}
+    .channel-icon{font-size:1.6rem;line-height:1;padding-top:2px;}
+    .channel-info h4{margin:0 0 4px;font-size:1rem;font-weight:600;color:#1a1a1a;}
+    .channel-info p{margin:0;font-size:.85rem;color:#666;line-height:1.4;}
+
+    /* PODCAST */
+    .podcast{padding:40px 24px 8px;}
+    .podcast-inner{max-width:720px;margin:0 auto;}
+    .podcast h2{font-size:1.3rem;font-weight:700;color:#1a3a5c;margin:0 0 10px;}
+    .podcast p{margin:0 0 14px;color:#666;}
+    .podcast video{width:100%;max-width:720px;display:block;border-radius:10px;background:#000;box-shadow:0 6px 24px rgba(0,0,0,.08);}
+
+    /* LIGHTBOX */
+    .lightbox{display:none;position:fixed;inset:0;z-index:200;background:rgba(26,26,26,.88);align-items:center;justify-content:center;padding:24px;cursor:zoom-out;}
+    .lightbox.is-open{display:flex;}
+    .lightbox img{max-width:96vw;max-height:92vh;width:auto;height:auto;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,.4);}
+    .lightbox .lightbox-hint{position:absolute;top:20px;right:24px;color:rgba(255,255,255,.75);font-size:14px;}
+
+    /* RESPONSIVE */
+    @media(max-width:640px){
+      .hero{padding:48px 20px 40px;}
+      .hero h1{font-size:1.9rem;}
+      main{padding:0 16px 60px;}
+      section{padding-top:48px;}
+      pre{font-size:12px;padding:14px;}
+      .toc-inner{padding:0 16px;}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#intro">簡介</a>
+    <a href="#mcp">MCP 視角</a>
+    <a href="#nxm">突破 NxM</a>
+    <a href="#a2a">A2A 架構</a>
+    <a href="#workforce">虛擬勞動力</a>
+    <a href="#a2ui">A2UI</a>
+    <a href="#ap2ucp">AP2 &amp; UCP</a>
+    <a href="#podcast">Podcast</a>
+    <a href="#channels">學習頻道</a>
+    <a href="#notes">附註</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">5-Day AI Agents Intensive Course with Google · Day 2</div>
+    <h1>代理人工具與互通性</h1>
+    <p class="hero-subtitle">MCP・A2A・A2UI・AP2・UCP &mdash; 讓 AI 代理人能安全地與外部世界互動的工業標準</p>
+    <p class="hero-authors">Kanchana Patlolla・Łukasz Olejniczak・Pier Paolo Ippolito</p>
+  </div>
+</header>
+
+<section id="podcast" class="podcast">
+  <div class="podcast-inner">
+    <h2>白皮書同步 Podcast</h2>
+    <p>以對話形式重新詮釋本篇白皮書的核心概念，適合在閱讀前快速暖身，或閱讀後加深理解。</p>
+    <video controls preload="metadata">
+      <source src="Whitepaper%20Companion%20Podcast%20Agent%20Tools%20%26%20Interoperability_compressed.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<section id="channels" class="channels-section">
+  <div class="channels-inner">
+    <div class="channel-group">
+      <h3>學習頻道</h3>
+      <div class="channel-grid">
+        <a href="antigravity-cli-guide/antigravity-cli-guide.html" class="channel-card">
+          <div class="channel-icon">🖥️</div>
+          <div class="channel-info">
+            <h4>Antigravity CLI 白話導讀</h4>
+            <p>終端機裡的 Agent 指揮方式——互動模式、Shell 模式、非互動自動化與四種權限層級完整解析。</p>
+          </div>
+        </a>
+        <a href="mcp-knowledge-guide/mcp-knowledge-guide.html" class="channel-card">
+          <div class="channel-icon">🔌</div>
+          <div class="channel-info">
+            <h4>Google Developer Knowledge MCP 白話導讀</h4>
+            <p>用一個 JSON 設定檔，讓 Antigravity 即時查詢最新 Google 官方文件，告別訓練資料過時問題。</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="channel-group">
+      <h3>推薦頻道</h3>
+      <div class="channel-grid">
+        <a href="https://meta-ghost.notion.site/Vibe-Coding-Agent-Engineering-AI-code-3817b792315a8174b658e0fac71f556d" target="_blank" rel="noopener" class="channel-card">
+          <div class="channel-icon">📝</div>
+          <div class="channel-info">
+            <h4>阿魁</h4>
+            <p>阿魁的 Vibe Coding × Agent Engineering 學習筆記，涵蓋 Day 2 MCP、A2A、A2UI、AP2 深度解析。</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main>
+<article>
+
+<!-- ===== 簡介 ===== -->
+<section id="intro">
+  <h2>簡介</h2>
+
+  <p>在第 1 天，我們概述了從傳統軟體開發到代理工程（Agentic Engineering）的典範轉移，並介紹了工廠模型（Factory Model）——在此模型中，你身為開發者的主要產出不再是原始語法，而是生產程式碼的系統本身。我們定義了這個系統的核心架構：</p>
+
+  <p><span class="stat-highlight">代理人 = 模型 + 工具框架</span></p>
+
+  <p>如果說代理工程代表了你正在協調的工廠地板，那麼 MCP（模型情境協定）、A2A（代理人對代理人）、A2UI（代理人對使用者介面）、AP2（代理人支付協定）與 UCP（通用商務協定）就是<strong>工業標準</strong>——如同統一的螺帽、螺栓規格、資料格式與溝通頻道——讓你的機器能安全地與外部世界互動。</p>
+
+  <p>若缺乏這些開放協定，你所建立的每個代理人都將如同孤立在車庫裡的「客製化機器」。你將被迫花費大量時間與 token，為每個工具和 API 連接撰寫脆弱的客製化包裝器，讓自己困在一個低槓桿的「指揮者」角色中。</p>
+
+  <p>透過採用標準化的互通性層，你能將代理人的工具框架（Harness）轉化為模組化、隨插即用的平台，並將更多精力投注於以<strong>協調者（Orchestrator）</strong>身份指揮高層次意圖。</p>
+
+  <ul>
+    <li><strong>OpenResponses &amp; Interactions API</strong>：現代 LLM 推論的 API 方式，支援長時間執行的任務，模糊了無狀態單次交互與有狀態代理人之間的界線。</li>
+    <li><strong>MCP（模型情境協定）</strong>：代理工具框架中的「USB-C」角色，讓模型能即時連接資料庫、檔案系統與 Web API。</li>
+    <li><strong>技能（Skills）</strong>：「劇本」——非常簡單的 Markdown 指令與腳本或工具，可在終端機等沙盒環境中使用。</li>
+    <li><strong>A2A（代理人對代理人）</strong>：「工廠對講機」，讓專業代理人能相互協商、腦力激盪並委派任務。</li>
+    <li><strong>A2UI（代理人對使用者介面）</strong>：「生成式顯示視窗」，將原始的複雜 JSON 輸出轉化為安全、可互動的視覺元件，供人工操作員使用。</li>
+    <li><strong>AP2 與 UCP</strong>：「全球供應鏈與交易網路」，讓代理人能安全地協商並執行自主商業交易。</li>
+  </ul>
+
+  <figure class="section-figure">
+    <img src="images_cht/Figure 1 Ecosystem of Agent Protocols.png" alt="圖 1：代理人協定生態系統">
+    <figcaption>圖 1：代理人協定生態系統</figcaption>
+  </figure>
+
+  <h3>為何撰寫本文、為何是現在</h3>
+  <p>在缺乏嚴謹結構的氛圍程式設計（vibecoding）時代，工具框架與協定有助於在代理人開發流程中建立信任。標準化協定能讓我們在實現複雜目標時走得更遠——將孤立的「客製化機器」轉化為模組化、可互通的平台。若缺乏公認的開放標準，開發者便在不斷累積技術債，每個 API 都自成一套標準。採用這些互通性層，能讓開發者從單純的建造者，蛻變為高層次的協調者。</p>
+
+  <h3>本文的目標讀者</h3>
+  <p>本文專為軟體工程師、工程主管、架構師與技術領導者所設計——這些人都意識到，邁向代理工程的轉型需要嚴格遵循協定，以維持成果的保真度與可靠性。本文作為「氛圍程式設計師」的實務指南，示範如何建構一支虛擬資料與執行團隊。</p>
+
+  <div class="callout">
+    <div class="callout-title">📌 實務提示：AGENTS.MD 指引原則</div>
+    <p><strong>在撰寫程式碼前，務必先深入思考</strong>——明確陳述你的假設、揭示取捨，並在遭遇模糊之處時立即停下來尋求澄清，而非默默猜測。</p>
+    <p><strong>只撰寫解決當前問題所需的最少量程式碼</strong>，嚴格避免推測性功能、未經請求的抽象化或預測性設定。修改現有程式碼時，應進行高度外科手術式的變更。</p>
+    <p><strong>透過目標驅動的執行方式處理每項任務</strong>——將任務分解為清晰、逐步的計畫，並設定明確的成功標準，例如先撰寫一個可重現或失敗的測試，並獨立循環驗證，直到嚴格達成該特定目標為止。</p>
+  </div>
+</section>
+
+<!-- ===== MCP ===== -->
+<section id="mcp">
+  <h2>氛圍程式設計師對 MCP 的視角：探索、設定與連接</h2>
+
+  <p>將工具導入 LLM 的傳統企業方式是<strong>客製化硬接線</strong>。每一個新連接都需要客製化的 REST 包裝器、API 金鑰、token 更新策略與客製化 JSON 解析器。MCP 以標準化的插槽取代了這些摩擦。設定你的程式設計代理人只需三個簡單步驟：</p>
+
+  <figure class="section-figure">
+    <img src="images_cht/Figure 2 Steps for Onboarding an MCP Server.png" alt="圖 2：MCP 伺服器導入步驟">
+    <figcaption>圖 2：MCP 伺服器導入步驟</figcaption>
+  </figure>
+
+  <h3>探索</h3>
+  <p>氛圍程式設計師不撰寫客製化連接器；他們從三個主要來源找到預先建立的 MCP 伺服器：</p>
+  <ul>
+    <li><strong>公開 MCP 登錄表</strong>：公開可用的登錄表託管數百個預建伺服器（例如 registry.modelcontextprotocol.io、github.com/mcp）。這些非常適合快速本地原型設計，但未經審核，使用需自行承擔風險。</li>
+    <li><strong>第三方（3P）遠端 MCP 伺服器</strong>：經過審核的平台公開託管的端點。例如，官方 Google 發布的 MCP 伺服器（如 Google Maps、BigQuery、Google Docs）讓你的代理人能安全地與受管理的服務互動。</li>
+    <li><strong>內部登錄表</strong>：在組織內部，內部工具以 MCP 伺服器形式公開，並收錄於安全登錄表中。技術實作通常透過 API 閘道、GCP Agent Registry 或私有微服務入口網站來管理。</li>
+  </ul>
+
+  <div class="callout">
+    <div class="callout-title">💡 實用技巧</div>
+    <p>在做決策時，請務必將安全性列為第一優先，並盡可能尋找官方指引。若使用公開的社群伺服器，請勿傳遞憑證，並考慮使用 Model Armor 等服務來避免安全性問題。</p>
+  </div>
+
+  <h3>設定（Configuration）</h3>
+  <p>連線之前，請先指定描述伺服器範疇與權限的標準參數。這包括設定環境檔案以處理 API 憑證（例如個人存取令牌 Personal Access Token 或 OAuth 密鑰），以及定義讀寫權限以保護您的檔案系統。</p>
+
+  <h3>連線（Connection）</h3>
+  <p>完成設定後，客戶端即與伺服器建立連線。主機客戶端會執行一個基本的握手請求，列出可用的工具並驗證輸出結構描述（schema）。</p>
+</section>
+
+<!-- ===== NxM ===== -->
+<section id="nxm">
+  <h2>突破 NxM 原型開發問題</h2>
+
+  <p>假設您正在試驗 N 種不同的 LLM，並希望將它們連接到 M 種不同的外部工具（Jira、BigQuery、GitHub、Google Drive），傳統的臨時開發方式需要為每一個模型與工具的交叉點編寫自訂整合程式碼。若您有 5 個模型和 10 個工具，則必須維護 <strong>50 個客製化整合點</strong>。一旦某個工具的 API 發生變更，多個解析迴圈就會相繼失效。</p>
+
+  <div class="complexity-box">傳統整合方式：                     MCP 互通性：
+模型       工具                     模型       MCP      工具
+[模型 A] ─ [工具 1]               [模型 A] ─┐ ┌─ [工具 1]
+[模型 B] ─ [工具 2]               [模型 B] ─┼─[MCP]┼─ [工具 2]
+[模型 C] ─ [工具 3]               [模型 C] ─┘ └─ [工具 3]
+複雜度：O(N × M)                  複雜度：O(N + M)</div>
+
+  <p>MCP 將此複雜度降低至線性規模：</p>
+  <p><span class="stat-highlight">整合複雜度：O(N + M)</span></p>
+
+  <h3>為什麼這很重要？</h3>
+  <p>透過標準化工具定義，您可以將標準傳輸層直接接入代理人框架（Harness），無需編寫整合程式碼：</p>
+  <ul>
+    <li><strong>stdio（標準輸入/輸出）</strong>：最常用於本地端與原型開發。主機客戶端以本地背景子程序的形式啟動 MCP 伺服器，透過 stdin 和 stdout 傳遞 JSON-RPC 2.0 訊息。</li>
+    <li><strong>SSE（伺服器推送事件）over HTTP</strong>：主機客戶端透過標準 Web 協定連接到遠端 MCP 端點，以即時串流方式將資料傳送給代理人。依賴項更少、始終保持最新狀態、佔用資源更小，但對雲端託管的 MCP 伺服器負擔較重。</li>
+  </ul>
+
+  <h3>偵錯 MCP 伺服器問題</h3>
+  <p>當您的代理人出現參數幻覺（hallucinate）、呼叫錯誤的工具，或無法解析 payload 時，請直接對傳輸管道進行偵錯：</p>
+  <ul>
+    <li><strong>MCP Inspector</strong>：原生開發者工具，可執行本地端網頁面板。讓您手動查詢任何本地或遠端 MCP 伺服器、檢視工具結構描述、手動測試 payload 輸入，並直接檢查原始 JSON-RPC 2.0 封包。</li>
+    <li><strong>Chrome DevTools</strong>：適用於執行網頁式開發環境或偵錯 SSE 連線，可讓您追蹤傳入的網路串流並檢查伺服器延遲。</li>
+  </ul>
+
+  <h3>直覺程式設計師工具箱：MCP 使用最佳實踐</h3>
+
+  <div class="bp-do">
+    <div class="bp-title">✅ 應該做的事</div>
+    <ul>
+      <li><strong>務必在連線前審核公開伺服器</strong>：在將任何公開可用的開源 MCP 伺服器連接到有權存取本地檔案系統或憑證的代理人之前，請務必審查其程式碼。</li>
+      <li><strong>務必為工具使用 RAG</strong>：保持代理人情境視窗（context window）的整潔。僅在需要時動態從登錄檔（registry）載入工具，並在任務完成後將其從情境中移除，以防止注意力稀釋。</li>
+      <li><strong>務必善用內部 API 閘道與登錄檔</strong>：依賴內部工具登錄檔，確保使用的是經過核准、受治理的資料結構描述。</li>
+      <li><strong>務必使用 MCP Inspector</strong>：當代理人對工具呼叫及其參數產生幻覺時，使用 MCP Inspector 查看原始傳輸資料，而非盲目調整系統提示。</li>
+      <li><strong>務必納入 HITL（Human-in-the-Loop）</strong>：在呼叫伺服器之前，將工具的輸入內容呈現給使用者確認，以避免惡意或意外的資料外洩。</li>
+      <li><strong>務必滿足稽核需求</strong>：記錄工具使用情況以供稽核之用。</li>
+    </ul>
+  </div>
+  <div class="bp-dont">
+    <div class="bp-title">❌ 不應該做的事</div>
+    <ul>
+      <li><strong>不要重複建置能直接使用的東西</strong>：先搜尋是否有現成的 MCP 伺服器，以維持「通用插座」的設計哲學。</li>
+      <li><strong>不要在正式環境中使用未經驗證的公開 MCP</strong>：開源 MCP 伺服器存在安全性與可靠性風險，請勿將核心業務邏輯依附於未經驗證的公開端點。</li>
+      <li><strong>不要硬編碼憑證</strong>：切勿將 API 金鑰或身份驗證令牌直接貼入代理人的提示或本地腳本中，請依賴環境變數。</li>
+      <li><strong>不要連接到正式環境</strong>：請將 MCP 伺服器用於開發專案，確保開發環境僅包含非正式環境資料（或已混淆處理的資料）。</li>
+      <li><strong>不要用於資料更新</strong>：若必須連接到真實資料，請將伺服器設定為唯讀模式。</li>
+      <li><strong>不要開放所有專案的存取權限</strong>：請將 MCP 伺服器的範疇限定於特定專案。</li>
+    </ul>
+  </div>
+
+  <p style="margin-top:20px;">至此，我們已學習如何讓直覺程式設計師透過 MCP 工具來建構 AI 代理人。接下來，我們將探討代理人互通性的運作方式。</p>
+</section>
+
+<!-- ===== A2A ===== -->
+<section id="a2a">
+  <h2>代理人對代理人（A2A）互通性</h2>
+
+  <p>隨著 AI 系統逐漸演進為由專業領域專家組成的分散式網路，標準化通訊對於規模擴展變得至關重要。本節探討 A2A（Agent-to-Agent）協定，作為解決生態系統碎片化問題的基礎層。</p>
+
+  <h3>代理人架構的演進</h3>
+  <p>技術發展有一個反覆出現的模式：從手動的低階設定，轉向高層次、以意圖為基礎的宣告式協調——使用者不說「<strong>如何</strong>」建置，而是說「<strong>需要什麼</strong>」。Google 提出 AutoML 背後的遠見前提，是透過自動化模型建立的「繁瑣工作」來普及 AI：</p>
+
+  <blockquote>
+    <p>「我們希望讓 AI 更易於取得的方式之一，是簡化機器學習模型（稱為神經網路）的建立過程。如今，設計神經網路極為耗時⋯⋯這就是為什麼我們建立了一種稱為 AutoML 的方法，證明了神經網路可以設計神經網路。」<sup>15</sup></p>
+  </blockquote>
+
+  <p>如今，代理人架構的發展軌跡正在重演軟體史上最重大的轉變之一：從<strong>單體式</strong>到<strong>微服務</strong>架構的轉型。</p>
+
+  <p>許多最初的直覺程式設計專案依賴「瑞士刀」式的<strong>單一代理人單體</strong>——一個高度複雜的單一提示，讓一個代理人身兼多職。這最終會遭遇「單體天花板」：</p>
+  <ul>
+    <li><strong>擴展摩擦</strong>：無法在不干擾「UI 邏輯」的情況下，單獨優化「資料庫邏輯」。單一代理人可存取的工具越多，其決策品質越差。</li>
+    <li><strong>情境超載</strong>：將龐大的系統指令、數十個複雜的工具結構描述以及持續的對話歷史塞入單一提示，很快就會耗盡模型的工作記憶。</li>
+    <li><strong>單點故障</strong>：某個「工具」或指令中的錯誤可能導致整個代理人產生幻覺或崩潰。</li>
+  </ul>
+
+  <figure class="section-figure">
+    <img src="images_cht/Figure 3 Monolithic Multi-agent Architecture.png" alt="圖 3：單體式多代理人架構">
+    <figcaption>圖 3：單體式多代理人架構</figcaption>
+  </figure>
+
+  <p>解決之道是將單體式代理人邏輯上拆分為獨立的子代理人（sub-agent）。每個代理人由高度聚焦的系統提示和相關的工具子集所管轄，帶來：</p>
+  <ul>
+    <li><strong>縮小搜尋空間</strong>：透過限制子代理人的工具和技能，大幅減少工具呼叫錯誤和幻覺。</li>
+    <li><strong>緩解注意力稀釋</strong>：專業化讓底層 LLM 能專注於單一領域提示，從而產生更敏銳的推理能力。</li>
+    <li><strong>優化情境負載</strong>：協調者（orchestrator）負責路由任務，子代理人的情境視窗能維持較高的訊噪比。</li>
+  </ul>
+
+  <figure class="section-figure">
+    <img src="images_cht/Figure 4 Distributed Multi-Agent Architecture.png" alt="圖 4：分散式多代理人架構">
+    <figcaption>圖 4：分散式多代理人架構。協調者跨越網路邊界，將任務委派給遠端的特定領域代理人。</figcaption>
+  </figure>
+
+  <h3>碎片化問題與 A2A 協定</h3>
+  <p>協調由分散式 AI 專家組成的虛擬團隊，引入了一個新的瓶頸：<strong>碎片化（Fragmentation）</strong>。Google 的代理人可能以 Python/ADK 編寫，Salesforce 的代理人可能在 LangChain 框架上運行，Workday 的代理人可能使用完全客製化的技術。它們存在於網路邊界之外，使用不同的「語言」，期待完全不同的 payload 結構。</p>
+
+  <p>這種碎片化的混亂正是 <strong>A2A（Agent-to-Agent，代理人對代理人）協定</strong> 旨在標準化的問題。A2A 最初由 Google 開發，現已捐贈給 Linux Foundation，它為代理人系統引入了一個通用的通訊層——AI 生態系統的<strong>通用語（lingua franca）</strong>，抽象化了網路傳輸的差異、底層框架、程式語言和 payload 差異。</p>
+
+  <blockquote>
+    <p>「呼叫方是需要一個結果，還是需要另一個參與者來承擔責任？」——這是我見過對此決策最清晰的框架。中央代理人提示意外演變成工作流程引擎的「異味」，正是大多數團隊在三個月後才發現自己早就需要協作語義的原因。<sup>19</sup></p>
+  </blockquote>
+
+  <h3>有界 vs. 無界領域</h3>
+  <p>標準工具或 API 採用的是「即發即忘（fire-and-forget）」機制。它期待一個格式完美的單一請求並回傳一個回應。然而代理人則在<strong>無界的問題解決空間</strong>中運作——現實世界的軟體環境充斥著模糊的資料結構、誤導性的需求和相互衝突的使用者偏好。在複雜的工作流程中，您幾乎不可能不經過多輪澄清就能指定所有必要細節。</p>
+
+  <h3>代理人架構中的 GOTO 問題</h3>
+  <p>試圖將代理人強塞進標準工具包裝器中，會在協調者內部引入架構上等同於 GOTO 語句的問題。當您呼叫一個協作代理人時，控制流程會離開預期的、結構化的情境。代理人可能進入中斷狀態、請求更多資訊，甚至可能永遠無法將預期的輸出回傳給原始呼叫方。</p>
+
+  <p>您需要一種協定，讓領域代理人能夠暫停執行、回頭聯繫協調者、協商解決方案，然後在不丟失其對話狀態的情況下繼續工作。這正是 A2A 協定所填補的空缺。透過將這種協作路由隔離在 A2A 層，我們保持了工具層（MCP）的整潔、可預測性和嚴格的結構化。</p>
+</section>
+
+<!-- ===== 虛擬勞動力 ===== -->
+<section id="workforce">
+  <h2>打造虛擬勞動力</h2>
+
+  <p>A2A 協定的引入不只解決了技術瓶頸，更為專業知識催生了新型市場。進入 A2A 時代後，開發者可以專注於打磨高價值的利基領域，例如專精於「即時法規合規」的代理人，被全球另一端的協調者發現並「聘用」。</p>
+
+  <h3>代理人卡片（Agent Card）</h3>
+  <p>為了促進這種發現機制，每個代理人都以一張代理人卡片來定義。這是 AI 世界中標準化的「履歷表」，概述以下內容：</p>
+  <ul>
+    <li><strong>能力（Capabilities）</strong>：代理人能執行哪些任務。</li>
+    <li><strong>安全性與合規性（Security &amp; Compliance）</strong>：其資料處理政策與權限需求。</li>
+    <li><strong>互動綱要（Interaction Schemas）</strong>：其他代理人應如何透過 A2A 協定與其通訊。</li>
+  </ul>
+
+  <h3>登錄中心：從公開市集到私有企業</h3>
+  <p>代理人備妥代理人卡片後，便可在<strong>代理人登錄中心（Agent Registry）</strong>中登錄，提供兩條主要路徑：</p>
+  <ol>
+    <li><strong>公開登錄中心（市集）</strong>：如同全球人才仲介機構，讓開發者能將其專業代理人公開給全世界搜尋，授權給數千個其他協調者。</li>
+    <li><strong>私有登錄中心</strong>：在企業內部，代理人登錄中心提供安全、受管控的環境。大型企業內部的開發者可以打造專業代理人，自動化內部工作流程，並確保專業知識在不同部門間流通共享，同時不危及安全性。</li>
+  </ol>
+
+  <h3>實作 A2A 協定</h3>
+  <p>A2A 架構的實際實作涵蓋兩種截然不同的開發模式：將 AI 代理人以 A2A 代理人形式<strong>公開（供給端）</strong>，以及<strong>協調遠端 A2A 代理人（需求端）</strong>。</p>
+
+  <h4>公開 A2A 代理人</h4>
+  <p>將代理人封裝至 A2A 生態系統涉及三個核心步驟：定義代理人卡片、實作代理人執行器（翻譯層）、建立 A2A 端點。</p>
+
+  <figure class="section-figure">
+    <img src="images_cht/Figure 5 A2A Server and Client Supply and Demand.png" alt="圖 5：A2A 伺服器與用戶端供需關係">
+    <figcaption>圖 5：將原生 AI 代理人以 A2A 伺服器形式公開（供給端），以及透過 A2A 用戶端使用的方式（需求端）</figcaption>
+  </figure>
+
+  <h4>連接遠端 A2A 代理人</h4>
+  <p>在成熟的生態系統中，應用程式扮演的是<strong>協調者（Orchestrator）</strong>的角色——理解使用者意圖、管理整體工作流程，並將特定任務委派給專業的遠端 A2A 代理人。</p>
+
+  <p class="code-label">直接點對點整合：</p>
+  <pre><code># 透過硬編碼端點直接實例化遠端 A2A 代理人
+# 適用於特定廠商整合或私有代理人
+billing_specialist = RemoteA2aAgent(
+    name="billing_agent",
+    endpoint="https://api.vendor.com/v1/billing/a2a"
+)</code></pre>
+
+  <p class="code-label">透過代理人登錄中心發現代理人：</p>
+  <pre><code># 透過代理人登錄中心間接實例化
+registry = AgentRegistry(project_id=project_id, location=location)
+agent_name = f"projects/{project_id}/locations/{location}/agents/YOUR_AGENT_ID"
+my_remote_agent = registry.get_remote_a2a_agent(agent_name=agent_name)</code></pre>
+
+  <h3>A2A 代理人的商業化</h3>
+  <p>讓代理人正常運作只是成功的一半，另一半是確保長期的商業可持續性。仿照 SaaS 典範的成功，A2A 協定自然地催生了<strong>代理人即服務（AaaS，Agent-as-a-Service）</strong> 模式。</p>
+
+  <p>一個典型案例是利用 <strong>Google Cloud Marketplace</strong> 作為商業化引擎。獨立代理人/軟體供應商可將其 A2A 代理人上架至市集，即時觸達 Google Cloud 現有的企業客戶群。市集基礎設施自動處理複雜的計費——原生支援混合定價模式，例如「基本費用 + 使用量」模型。</p>
+
+  <figure class="section-figure">
+    <img src="images_cht/Figure 6 Agent-as-a-Service AaaS Lifecycle.png" alt="圖 6：代理人即服務（AaaS）生命週期">
+    <figcaption>圖 6：代理人即服務（AaaS）生命週期</figcaption>
+  </figure>
+
+  <p>A2A 協定也支援無需許可的機器對機器微型交易，透過 <strong>x402（或 L402）</strong>標準實現。在此模式下，伺服器攔截請求，若「尚未付款」則回傳 HTTP 402 Payment Required 狀態碼，並附帶機器可讀的發票。呼叫方代理人自主完成付款，並附上加密的付款證明令牌重試請求。</p>
+
+  <h3>擴充層：A2A 作為使用者介面與商業的基礎</h3>
+  <p>A2A 協定建立了統一的通訊層，進而讓開發者得以在這個標準化的基礎之上構建應用。在核心 A2A 基礎之上作為原生擴充運作的三個基礎框架包括：<strong>代理人對使用者介面（A2UI）</strong>、<strong>通用商業協定（UCP）</strong>，以及<strong>代理人支付協定（AP2）</strong>。</p>
+</section>
+
+<!-- ===== A2UI ===== -->
+<section id="a2ui">
+  <h2>代理人對使用者介面（A2UI）互通性</h2>
+
+  <h3>溝通落差</h3>
+  <p>當你問同事「第四季各區域的表現如何？」，他們不會遞給你一張試算表。他們會在白板上畫出長條圖，圈出亮眼的區域，並補充背景說明。然而我們的代理人回傳的是原始 JSON。你得自己畫圖表、匯入函式庫、設定座標軸、管理狀態。在請求洞察與進行前端工作之間切換情境，打斷了氛圍編程的流暢感。</p>
+
+  <p><strong>代理人對使用者介面（A2UI）互通性</strong>解決了這個問題，讓代理人得以將完整的互動式使用者介面作為輸出，而非只是 JSON 資料塊。</p>
+
+  <h3>什麼是生成式 UI？</h3>
+  <p>生成式 UI 是指 LLM 在執行時期根據使用者意圖與情境動態創建使用者介面的概念。當你詢問「比較第四季各區域的銷售」，系統不只是擷取資料，而是組合出一個互動式版面配置，包含卡片、篩選器和控制項，量身打造以回應該特定請求。</p>
+  <p>挑戰在於如何安全地做到這一點。執行由 LLM 生成的任意 UI 程式碼可能帶來安全風險：程式碼注入、XSS 攻擊，以及不受控的副作用。</p>
+
+  <h3>A2UI：安全的實作方式</h3>
+  <p>A2UI 是一個與框架無關的標準，讓代理人以可移植、宣告式的格式描述介面，而非串流原始資料或傳送任意程式碼。</p>
+
+  <p>不妨想想作曲家如何傳遞作品：他們不遞給樂手錄音，而是樂譜。同一份樂譜可以在鋼琴、管弦樂團或合成器上演奏。<strong>A2UI 就是 UI 的樂譜</strong>：代理人書寫意圖（渲染什麼、如何組合），任何渲染器（React、Angular、Lit、Flutter、SwiftUI 等）都能在使用者實際使用的裝置上以原生方式呈現。</p>
+
+  <p>安全模型的關鍵：代理人不生成可執行程式碼，也不傳送預渲染的像素。它從受信任的目錄中請求元件，由用戶端使用自身的元件函式庫進行渲染。就像 LEGO 積木一樣具有組合性。</p>
+
+  <h3>基本目錄（及自帶目錄）</h3>
+  <p>A2UI 附帶一個包含 18 個即用型元件的基本目錄：</p>
+
+  <p class="table-caption">表 1：A2UI 基本目錄</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>類別</th><th>元件</th></tr></thead>
+      <tbody>
+        <tr><td>版面配置（Layout）</td><td>Row、Column、List</td></tr>
+        <tr><td>顯示（Display）</td><td>Text、Image、Icon、Divider</td></tr>
+        <tr><td>容器（Containers）</td><td>Card、Modal、Tabs</td></tr>
+        <tr><td>媒體（Media）</td><td>Video、AudioPlayer</td></tr>
+        <tr><td>互動（Interactive）</td><td>Button、TextField、CheckBox、Slider、DateTimeInput、ChoicePicker</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>此元件集在 v0.9 中更名為「basic」，生產環境的前端應自帶目錄，將現有元件（設計系統的按鈕、圖表、地圖）對應至 A2UI 型別。代理人本身無需改變，只有渲染器的目錄對應需要調整。</p>
+
+  <p class="code-label">A2UI 訊息範例（v0.9 格式）：</p>
+  <pre><code>{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "main",
+    "components": [
+      {"id": "root",   "component": "Column",
+       "children": ["title", "summary", "export"]},
+      {"id": "title",  "component": "Text",
+       "text": "Q4 Sales", "variant": "h1"},
+      {"id": "summary","component": "Text",
+       "text": "Revenue grew 12% QoQ"},
+      {"id": "export", "component": "Button",
+       "child": "export-label",
+       "action": {"event": {"name": "export_csv"}}},
+      {"id": "export-label", "component": "Text",
+       "text": "Export CSV"}
+    ]
+  }
+}</code></pre>
+
+  <h3>產生 A2UI 的兩種模式</h3>
+  <p><strong>預設方式（LLM 主導）</strong>：由模型掌控版面配置，根據使用者意圖進行調整，同一個代理人可以針對不同需求產生不同的介面。</p>
+  <p><strong>工具即範本方式</strong>：讓工具回傳固定的 A2UI 結構——一次工具呼叫、不耗費任何 LLM token 在 UI 生成上，輸出結果完全可預測。當版面配置可由輸入直接決定時（例如每個區域的銷售儀表板長相相同），這是最佳選擇。</p>
+
+  <p class="table-caption">表 2：查詢與輸出的對應關係</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>查詢</th><th>回傳內容</th></tr></thead>
+      <tbody>
+        <tr><td>「平均值是多少？」</td><td>資料（文字）</td></tr>
+        <tr><td>「比較這些區域」</td><td>LLM 生成的 UI</td></tr>
+        <tr><td>「顯示我的儀表板」</td><td>工具建構的 UI</td></tr>
+        <tr><td>API 對 API</td><td>資料（JSON）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="code-label">程式碼片段：LLM 生成 UI 模式（工具即範本）</p>
+  <pre><code>from google.adk.agents import LlmAgent
+from google.adk.models import Gemini
+
+def get_sales_dashboard(region: str) -> dict:
+    """Build a data-bound sales dashboard for `region`."""
+    data = fetch_sales(region)
+    return {
+        "version": "v0.9",
+        "updateComponents": {
+            "surfaceId": "sales",
+            "components": [
+                {"id": "root",  "component": "Column",
+                 "children": ["title", "total", "drill"]},
+                {"id": "title", "component": "Text",
+                 "text": {"path": "/title"}, "variant": "h1"},
+                {"id": "total", "component": "Text",
+                 "text": {"path": "/total"}},
+                {"id": "drill", "component": "Button",
+                 "child": "drill-label",
+                 "action": {"event": {"name": "expand_details"}}},
+                {"id": "drill-label", "component": "Text",
+                 "text": "Drill Down"},
+            ],
+        },
+    }
+
+agent = LlmAgent(
+    name="sales_agent",
+    model=Gemini(model="gemini-flash-latest"),
+    tools=[get_sales_dashboard],
+)
+# 在 executor 設定時接線 converter：
+# from a2ui.adk.send_a2ui_to_client_toolset import A2uiPartConverter
+# A2aAgentExecutorConfig(event_converter=A2uiPartConverter(catalog))</code></pre>
+
+  <h3>互動式人工製品與畫布</h3>
+  <p>傳統的聊天介面是線性的，每次回應都是靜態的。畫布方法截然不同：它建立一個持久性的工作空間，代理人與使用者都可以在其中進行編輯。不再需要滾動瀏覽聊天記錄，取而代之的是一份動態文件，代理人可以修改各個區塊，使用者也可以手動編輯，兩種變更都會即時反映。</p>
+
+  <figure class="section-figure">
+    <img src="images_cht/Figure 7 User Agent Canvas Interaction Flow.png" alt="圖 7：使用者、代理人、畫布的互動流程">
+    <figcaption>圖 7：使用者、代理人、畫布的互動流程</figcaption>
+  </figure>
+
+  <p>UI 不僅僅是被渲染出來的，它是一種溝通媒介。代理人會觀察你的互動並做出相應的回應。</p>
+
+  <h3>讓 LLM 產生 A2UI：最佳實踐</h3>
+  <p>手動撰寫 A2UI JSON 十分繁瑣。建議使用官方 <code>a2ui-agent-sdk</code>（<code>pip install a2ui-agent-sdk</code>）：<code>A2uiSchemaManager</code> 會建構一個已內嵌目錄 Schema 和實際範例的系統提示，目錄本身附帶 JSON Schema 驗證器，同一個 SDK 也提供解析代理人輸出之 <code>&lt;a2ui-json&gt;</code> 區塊的解析器。請在 Schema 驗證失敗時進行驗證並重試。</p>
+
+  <p class="code-label">程式碼片段：A2uiSchemaManager 實作（含重試邏輯）</p>
+  <pre><code>import asyncio, json
+import jsonschema
+from a2ui.schema.manager import A2uiSchemaManager
+from a2ui.basic_catalog.provider import BasicCatalog
+from a2ui.schema.constants import VERSION_0_9
+from a2ui.parser.parser import parse_response
+from google.adk.agents import LlmAgent
+from google.adk.models import Gemini
+from google.adk.runners import InMemoryRunner
+from google.genai import types
+
+# 1. SDK 載入目錄、建構驗證器，並渲染包含 schema 和範例的完整系統提示
+schema_manager = A2uiSchemaManager(
+    version=VERSION_0_9,
+    catalogs=[BasicCatalog.get_config(version=VERSION_0_9)],
+)
+catalog = schema_manager.get_selected_catalog()
+
+agent = LlmAgent(
+    model=Gemini(model="gemini-flash-latest"),
+    name="ui_agent",
+    instruction=schema_manager.generate_system_prompt(
+        role_description="You generate interactive UIs as A2UI v0.9 messages.",
+        ui_description="Use Cards, Lists, ChoicePickers, and Buttons.",
+        include_schema=True,
+        include_examples=True,
+    ),
+)
+
+async def create_ui(intent: str, data: dict, max_retries: int = 3) -> list:
+    runner = InMemoryRunner(agent=agent, app_name="ui_demo")
+    session = await runner.session_service.create_session(
+        app_name="ui_demo", user_id="u"
+    )
+    query = f"{intent}\n\nData: {json.dumps(data)}"
+    last_error = None
+    for _ in range(max_retries + 1):
+        chunks = []
+        msg = types.Content(role="user", parts=[types.Part(text=query)])
+        async for ev in runner.run_async(
+            user_id="u", session_id=session.id, new_message=msg
+        ):
+            if ev.content and ev.content.parts:
+                chunks.extend(p.text for p in ev.content.parts if p.text)
+        blocks = [
+            rp.a2ui_json
+            for rp in parse_response("".join(chunks))
+            if rp.a2ui_json
+        ]
+        try:
+            for b in blocks:
+                for m in (b if isinstance(b, list) else [b]):
+                    catalog.validator.validate(m)
+            return blocks
+        except jsonschema.ValidationError as e:
+            last_error = e
+            path = "/".join(str(p) for p in e.absolute_path)
+            query = (
+                f"Schema validation failed at {path}: {e.message[:200]}\n"
+                f"Fix this and retry: {intent}\nData: {json.dumps(data)}"
+            )
+    raise ValueError(f"Failed after {max_retries} retries: {last_error}")</code></pre>
+
+  <p>在生產環境中，請以 try/except 包覆 <code>create_ui()</code>，並在 Schema 驗證失敗時退而回傳文字回應。LLM 的輸出具有隨機性，渲染器絕不應看到格式錯誤的內容。</p>
+
+  <h3>混合輸出以提升彈性</h3>
+  <p>同時提供資料和 UI，讓使用端自行選擇：</p>
+  <pre><code>{
+  "data": {"sales": [...]},
+  "ui": {
+    "version": "v0.9",
+    "updateComponents": {"surfaceId": "main", "components": [...]}
+  },
+  "ui_available": true
+}</code></pre>
+  <p>API 客戶端忽略 <code>ui</code> 欄位並使用 <code>data</code>；面向使用者的客戶端則渲染 A2UI 訊息。</p>
+
+  <h3>小結</h3>
+  <p>生成式 UI 讓 LLM 能夠在執行期根據使用者意圖建立使用者介面。A2UI 是 Google 安全實現此目標的開源標準：一種與框架無關的 UI 意圖宣告格式，讓同一個代理人訊息能夠在 Lit、Flutter、React 或你自己的設計系統中原生渲染。安全模型至關重要：代理人無法注入任意程式碼，只能請求渲染器目錄中已信任的元件。這正是 A2UI 在實現動態、生成式介面的同時，仍能保持安全的原因。</p>
+</section>
+
+<!-- ===== AP2 / UCP ===== -->
+<section id="ap2ucp">
+  <h2>代理人與商務（AP2 與 UCP）</h2>
+
+  <p>前幾節聚焦於程式設計代理人如何透過 MCP、A2A 和 A2UI 等協定進行「讀取」操作。隨著這些系統持續演進，代理人必須開始過渡到執行具有真實財務影響的「動作」。優先採用商務協定並建構健全的運作框架，可確保代理人在處理交易時嚴格遵守行業標準。</p>
+
+  <figure class="section-figure">
+    <img src="images_cht/Figure 8 AP2 and UCP Ecosystem.png" alt="圖 8：AP2 與 UCP 生態系統">
+    <figcaption>圖 8：AP2 與 UCP 生態系統</figcaption>
+  </figure>
+
+  <p>想像一下，你和室友在凌晨兩點飢腸轆轆。你忙著念書抽不開身，於是部署你的 AI 智慧助理去幫公寓訂食物。以下是 UCP（Universal Commerce Protocol，通用商務協定）和 AP2（Agent Payments Protocol，代理人支付協定）如何分工合作，把那份捲餅送到你宿舍大廳的。</p>
+
+  <h3>UCP（通用商務協定）：終極外送 App</h3>
+  <p>在 2024 年，你的 AI 必須手動開啟 Chrome、進入當地捲餅店設計糟糕的網站、嘗試點擊「加酪梨醬」的核取方塊，然後祈禱網站不要當機。UCP 的作用就像一個通用翻譯器，校園裡的每家餐廳都以簡潔、標準的機器語言發布菜單、營業時間和客製化選項。</p>
+  <p>你的 AI 使用 UCP 詢問餐廳系統：「你們還在營業嗎？有素食捲餅嗎？」要建立訂單，可以說：「一份雞肉捲餅，不加洋蔥，加酸奶油，附一份薯片」，餐廳則回應稅金、外送費和預計到達時間。透過標準化互動，我們讓非人類之間的溝通變得更加容易。</p>
+
+  <h3>AP2（代理人支付協定）：附嚴格規定的家長信用卡</h3>
+  <p>現在食物已放入購物車，但你的 AI 需要付款。你顯然不會把真正的銀行卡號輸入 AI 提示中說「隨便用」。AP2 是一個開放、共享的協定，為代理人和商家之間的安全、合規交易提供共通語言：</p>
+  <ul>
+    <li><strong>護欄（授權）</strong>：在你派 AI 出門前，你核准一條數位規則：「你可以在 Taco Bell 消費最多 25 美元。」</li>
+    <li><strong>握手</strong>：當 AI 結帳時，它不會出示你的卡號，而是出示一張由你簽署的數位加密「本票」，上面寫著：「我的使用者已核准這筆 18.50 美元的訂單。」餐廳的銀行會立即驗證這個數位簽章。</li>
+    <li><strong>無隱藏費用</strong>：如果餐廳試圖偷偷向你收取 50 美元而非 18.50 美元，AP2 協定會立即封鎖，因為這違反了你所簽署的規則。</li>
+  </ul>
+  <p>簡而言之：AP2 是一個安全的保險箱，讓你的 AI 能夠用你的錢付款，同時確保它絕不會誤買一台一千美元的電視。</p>
+
+  <p class="table-caption">表 3：UCP 與 AP2 比較</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>UCP（通用商務協定）</th><th>AP2（代理人支付協定）</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>決定買什麼、處理菜單並將食物放入購物車的大腦。</td>
+          <td>安全處理付款方式、確保不被詐騙的錢包。</td>
+        </tr>
+        <tr>
+          <td>與任何企業供應商整合</td>
+          <td>與支付系統整合</td>
+        </tr>
+        <tr>
+          <td>統一整合、共通語言、可擴充架構、安全優先方針</td>
+          <td>授權與可稽核性、意圖真實性、代理人錯誤與幻覺問責制</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ul>
+    <li>如果你是為商家或支付處理商建構 UCP 代理人的開發者，請依照官方說明操作。</li>
+    <li>如果你是為商家或支付處理商建構 AP2 代理人的開發者，請依照官方說明操作。</li>
+    <li>如果你是建構消費 AP2 代理人（例如購物者）之代理人的開發者，請依照官方說明操作。</li>
+  </ul>
+
+  <h3>結語</h3>
+  <p>透過採用 MCP、A2A、A2UI、AP2 和 UCP 等基礎標準，組織可以消除客製化整合所累積的龐大技術債，將精力完全集中在協調高價值的業務邏輯上。這種典範轉移從根本上提升了開發者的角色，使其從單純串接脆弱 API 的技師，蛻變為全球自主工作力的真正架構師。隨著這些標準化通訊層的成熟，它們將開創全新的規模經濟，從根本上改變企業軟體的建構、使用和商業化方式。</p>
+</section>
+
+<!-- ===== 附註 ===== -->
+<section id="notes" class="footnotes">
+  <h2>附註</h2>
+  <ol>
+    <li>A2A Community (2026) A2A Documentation: Extensions, A2A Protocol, <a href="https://a2a-protocol.org/latest/topics/extensions/" target="_blank" rel="noopener">https://a2a-protocol.org/latest/topics/extensions/</a></li>
+    <li>Antigravity Team (2026) Antigravity Editor: MCP Integration, <a href="https://antigravity.google/docs/mcp" target="_blank" rel="noopener">https://antigravity.google/docs/mcp</a></li>
+    <li>Fowler M, Lewis J (2014) Microservices, <a href="https://martinfowler.com/articles/microservices.html" target="_blank" rel="noopener">https://martinfowler.com/articles/microservices.html</a></li>
+    <li>Google A2A Team (2025) Announcing the Agent2Agent Protocol (A2A), <a href="https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/" target="_blank" rel="noopener">https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</a></li>
+    <li>Google A2UI Team (2025) Introducing A2UI, <a href="https://developers.googleblog.com/introducing-a2ui-an-open-projectfor-agent-driven-interfaces/" target="_blank" rel="noopener">https://developers.googleblog.com/introducing-a2ui-an-open-projectfor-agent-driven-interfaces/</a></li>
+    <li>Google A2UI Team (2026) A2UI v0.9, <a href="https://developers.googleblog.com/a2ui-v0-9-generative-ui/" target="_blank" rel="noopener">https://developers.googleblog.com/a2ui-v0-9-generative-ui/</a></li>
+    <li>Google A2UI Team (2026) A2UI [Computer Software], GitHub, <a href="https://github.com/google/A2UI" target="_blank" rel="noopener">https://github.com/google/A2UI</a></li>
+    <li>Google Cloud Databases Team (2025) MCP Toolbox for Databases, <a href="https://cloud.google.com/blog/products/ai-machine-learning/mcp-toolbox-fordatabases-now-supports-model-context-protocol" target="_blank" rel="noopener">https://cloud.google.com/blog/products/ai-machine-learning/mcp-toolbox-fordatabases-now-supports-model-context-protocol</a></li>
+    <li>Google Cloud Team (2026) Announcing AP2 Protocol, <a href="https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol" target="_blank" rel="noopener">https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol</a></li>
+    <li>Google Cloud Team (2026) Configure MCP in an AI Application, <a href="https://docs.cloud.google.com/mcp/configure-mcp-ai-application#antigravity" target="_blank" rel="noopener">https://docs.cloud.google.com/mcp/configure-mcp-ai-application#antigravity</a></li>
+    <li>Google Stitch Team (2026) MCP Setup, <a href="https://stitch.withgoogle.com/docs/mcp/setup" target="_blank" rel="noopener">https://stitch.withgoogle.com/docs/mcp/setup</a></li>
+    <li>MCP Team (2026) Model Context Protocol Specification, <a href="https://modelcontextprotocol.io/specification/2025-11-25" target="_blank" rel="noopener">https://modelcontextprotocol.io/specification/2025-11-25</a></li>
+    <li>Muchandi V (2026) Rad-skills: Gemini Skills for Rapid Agent Development, <a href="https://github.com/VeerMuchandi/rad-skills" target="_blank" rel="noopener">https://github.com/VeerMuchandi/rad-skills</a></li>
+    <li>Hotz H (2026) The Agentic Commerce Revolution, O'Reilly Radar, <a href="https://www.oreilly.com/radar/the-agentic-commerce-revolution/" target="_blank" rel="noopener">https://www.oreilly.com/radar/the-agentic-commerce-revolution/</a></li>
+    <li>Pichai S (2017) Making AI Work for Everyone, Google Blog, <a href="https://blog.google/innovation-and-ai/products/making-ai-work-for-everyone/" target="_blank" rel="noopener">https://blog.google/innovation-and-ai/products/making-ai-work-for-everyone/</a></li>
+    <li>Saboo S, Overholt K (2026) Developer's Guide to AI Agent Protocols, <a href="https://developers.googleblog.com/developers-guide-to-ai-agent-protocols/" target="_blank" rel="noopener">https://developers.googleblog.com/developers-guide-to-ai-agent-protocols/</a></li>
+    <li>Styer M, Patlolla K et al. (2025) Agent Tools &amp; Interoperability with MCP, Kaggle, <a href="https://www.kaggle.com/whitepaper-agent-tools-and-interoperability-with-mcp" target="_blank" rel="noopener">https://www.kaggle.com/whitepaper-agent-tools-and-interoperability-with-mcp</a></li>
+    <li>The Linux Foundation (2026) A2A Protocol Surpasses 150 Organizations, <a href="https://www.linuxfoundation.org/press/a2a-protocol-surpasses-150-organizations-lands-in-major-cloud-platforms-and-sees-enterprise-production-use-in-first-year" target="_blank" rel="noopener">https://www.linuxfoundation.org/press/a2a-protocol-surpasses-150-organizations-lands-in-major-cloud-platforms-and-sees-enterprise-production-use-in-first-year</a></li>
+    <li>Common AI Catalog and Registry Standard Documentation (2026), <a href="https://github.com/Agent-Card/ai-catalog" target="_blank" rel="noopener">https://github.com/Agent-Card/ai-catalog</a></li>
+    <li>Ricardo Cataldi (2026) MCP vs A2A: Tools, Agents, and Where Each Protocol Belongs, <a href="https://levelup.gitconnected.com/mcp-vs-a2a-tools-agents-and-where-eachprotocol-belongs-53e1f9ab9765" target="_blank" rel="noopener">https://levelup.gitconnected.com/mcp-vs-a2a-tools-agents-and-where-eachprotocol-belongs-53e1f9ab9765</a></li>
+    <li>Lukas Geiger (2026) Monetizing AI Agents: Ensuring Profitability, <a href="https://medium.com/google-cloud/monetizing-ai-agents-ensuring-profitability-92efa535ebb3" target="_blank" rel="noopener">https://medium.com/google-cloud/monetizing-ai-agents-ensuring-profitability-92efa535ebb3</a></li>
+  </ol>
+</section>
+
+</article>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-hint">點擊或按 Esc 關閉</span>
+  <img src="" alt="">
+</div>
+
+<script>
+(function(){
+  var lb = document.getElementById("lightbox");
+  var lbImg = lb.querySelector("img");
+  function open(img){ lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lb.classList.add("is-open"); }
+  function close(){ lb.classList.remove("is-open"); lbImg.src = ""; }
+  document.querySelectorAll("figure.section-figure img").forEach(function(img){
+    img.addEventListener("click", function(){ open(img); });
+  });
+  lb.addEventListener("click", close);
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") close(); });
+})();
+</script>
+
+</body>
+</html>

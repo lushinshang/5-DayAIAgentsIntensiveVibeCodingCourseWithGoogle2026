@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>你的 AI 助理還活在去年｜Google Developer Knowledge MCP 導讀</title>
+  <meta name="description" content="LLM 訓練資料有截止日期，用一個 JSON 設定讓 Antigravity 即時查詢 Google 官方文件——MCP 如何從根本解決知識時效性問題。">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: #f9f7f4;
+      color: #1a1a1a;
+      font-size: 16px;
+      line-height: 1.72;
+      letter-spacing: 0;
+    }
+
+    /* NAV */
+    .toc { position: sticky; top: 0; z-index: 100; background: rgba(249,247,244,0.96); backdrop-filter: blur(8px); border-bottom: 1px solid #e2ddd8; height: 56px; }
+    .toc-inner { max-width: 1120px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+    .toc-inner::-webkit-scrollbar { display: none; }
+    .toc-inner a { color: #555; text-decoration: none; font-size: 13.5px; font-weight: 500; padding: 6px 12px; border-radius: 6px; white-space: nowrap; transition: background .15s, color .15s; }
+    .toc-inner a:hover { background: #e8f0e8; color: #2f6f73; }
+    .toc-inner a.back { font-weight: 700; color: #2f6f73; }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg, #1a3d2e 0%, #2f6f73 60%, #3d9b8f 100%); color: #fff; padding: 72px 24px 64px; }
+    .hero-inner { max-width: 720px; margin: 0 auto; }
+    .hero-tag { font-size: 13px; font-weight: 500; letter-spacing: .08em; color: rgba(255,255,255,.7); text-transform: uppercase; margin-bottom: 16px; }
+    .hero h1 { font-size: clamp(2rem,5vw,3rem); font-weight: 700; line-height: 1.2; margin-bottom: 20px; text-wrap: balance; }
+    .hero-subtitle { font-size: 17px; line-height: 1.6; color: rgba(255,255,255,.88); }
+
+    /* LAYOUT */
+    main { max-width: 1120px; margin: 0 auto; padding: 0 24px 80px; }
+    article { max-width: 720px; margin: 0 auto; }
+    section { padding-top: 64px; }
+
+    /* HEADINGS */
+    h2 { font-size: clamp(1.4rem,3vw,1.9rem); font-weight: 700; color: #1a3d2e; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #d4ede8; text-wrap: balance; }
+    p { margin-bottom: 18px; }
+    a { color: #2f6f73; }
+    a:hover { text-decoration: underline; }
+
+    /* LISTS */
+    ul, ol { margin: 0 0 18px 0; padding-left: 24px; }
+    li { margin-bottom: 8px; }
+
+    /* CODE */
+    pre { background: #1e2a36; color: #cdd6e0; border-radius: 8px; padding: 20px 24px; overflow-x: auto; font-size: 13px; line-height: 1.6; margin: 20px 0; }
+    code { font-family: "SF Mono","Consolas","Monaco",monospace; background: #edf5f4; padding: 2px 6px; border-radius: 4px; font-size: .88em; color: #1a3d2e; }
+    pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
+
+    /* FIGURES */
+    figure.section-figure { margin: 32px 0; text-align: center; }
+    figure.section-figure img { width: 100%; max-width: 860px; height: auto; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,.1); cursor: zoom-in; }
+    figcaption { margin-top: 10px; font-size: 13.5px; color: #666; line-height: 1.5; }
+    @media (max-width: 640px) {
+      figure.section-figure img { aspect-ratio: 9/16; max-width: 360px; }
+    }
+
+    /* SOURCE */
+    .source-note { margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2ddd8; font-size: 13.5px; color: #666; }
+
+    /* LIGHTBOX */
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,26,26,.88); align-items: center; justify-content: center; padding: 24px; cursor: zoom-out; }
+    .lightbox.is-open { display: flex; }
+    .lightbox img { max-width: 96vw; max-height: 92vh; width: auto; height: auto; border-radius: 8px; box-shadow: 0 12px 48px rgba(0,0,0,.4); }
+    .lightbox .lightbox-hint { position: absolute; top: 20px; right: 24px; color: rgba(255,255,255,.75); font-size: 14px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .hero { padding: 48px 20px 40px; }
+      .hero h1 { font-size: 1.9rem; }
+      main { padding: 0 16px 60px; }
+      section { padding-top: 48px; }
+      pre { font-size: 12px; padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="../index.html" class="back">← 返回白皮書</a>
+    <a href="#cutoff">訓練資料的保鮮期</a>
+    <a href="#mechanism">文件變成即時工具</a>
+    <a href="#architecture">一個 JSON 擋住的不只是錯誤</a>
+    <a href="#result">讓 AI 活在今天</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Day 2 · 學習頻道導讀</div>
+    <h1>你的 AI 助理還活在去年</h1>
+    <p class="hero-subtitle">一個 JSON 設定，讓 Antigravity 即時查詢最新 Google 官方文件——從根本解決 LLM 訓練資料過時的問題，不需要任何程式碼。</p>
+  </div>
+</header>
+
+<main>
+<article>
+
+<section id="intro">
+  <p>問一個你每週都在問的問題：「這個 Google Cloud API 的正確用法是什麼？」</p>
+  <p>AI 信心滿滿地給你程式碼。你貼進去跑。錯誤。你再問。它給你另一個版本。還是錯。你開始懷疑自己，然後才意識到——那個 API 的參數三個月前就改掉了，但 AI 的知識還停在訓練截止日。</p>
+  <p>這不是 AI 在說謊，這是 AI 在忠實地回憶一個已經過去的世界。</p>
+</section>
+
+<section id="cutoff">
+  <h2>訓練資料的保鮮期問題</h2>
+  <p>每個 LLM 都有一道看不見的時間牆。</p>
+  <p>訓練截止日之前的知識，模型記得清清楚楚；截止日之後的，它一無所知。而且它通常不會主動告訴你「我不確定這個還是不是最新的」——它會用和事實一樣有把握的語氣，把舊版本的資訊說給你聽。</p>
+  <p>這個問題在一般知識領域還好應付：常識不太會過期。但在開發者生態系，這就是一個根本性的缺陷。Google Cloud 的 SDK、API 介面、認證方式、配額限制，這些東西每幾個月就在變。AI 說「用這個方法」，但這個方法可能已經被 deprecated，甚至根本被移除了。</p>
+  <p>更麻煩的是，你沒有辦法從答案本身分辨出它是不是過時的。它說得一樣流暢，一樣具體，一樣有信心。</p>
+
+  <figure class="section-figure">
+    <picture>
+      <source media="(max-width: 640px)" srcset="images/training-cutoff-mobile.png">
+      <img src="images/training-cutoff.png" alt="LLM 訓練截止日時間牆：截止日前 AI 記得清楚，截止日後一無所知但說得一樣有把握">
+    </picture>
+    <figcaption>訓練截止日是一道隱形的時間牆——AI 說得有多自信，和它說的是不是最新版本，完全是兩回事</figcaption>
+  </figure>
+</section>
+
+<section id="mechanism">
+  <h2>文件變成即時工具的那一刻</h2>
+  <p>Google Developer Knowledge MCP 的邏輯很簡單，但影響卻很深遠。</p>
+  <p>它把 Google 所有公開開發者文件——Google Cloud、Workspace、Firebase——變成一個機器可讀的即時資料庫，並且透過 MCP（Model Context Protocol）的標準介面對外開放。Antigravity 只需要在設定檔裡加一段 JSON，就能在每次回答 Google 技術問題時，先查詢這個資料庫，拿到今天的答案，而不是訓練截止日的答案。</p>
+  <p>設定的核心就是一個 JSON 區塊，存放在 <code>~/.gemini/config/mcp_config.json</code>：</p>
+
+  <pre><code>{
+  "mcpServers": {
+    "google-developer-knowledge": {
+      "headers": {
+        "X-Goog-Api-Key": "&lt;YOUR_API_KEY&gt;"
+      },
+      "serverUrl": "https://developerknowledge.googleapis.com/mcp"
+    }
+  }
+}</code></pre>
+
+  <p>前置作業是去 Google Cloud Console 建一個 API Key，並把它的存取範圍限定在 Developer Knowledge API——這樣就算 Key 外洩，能做的事也只有查文件。加完設定、重新整理 MCP 清單後立即生效。</p>
+</section>
+
+<section id="architecture">
+  <h2>一個 JSON 擋住的不只是錯誤</h2>
+  <p>值得多想一層的，是這個設定背後的架構邏輯。</p>
+  <p>傳統上，如果你想讓 AI 知道「最新文件說什麼」，你有幾個選項：定期用新資料 fine-tune 模型（貴、慢）、每次對話把文件貼進 prompt（token 成本高、容易超出限制）、或者自己搭一套 RAG 系統去爬文件（維護成本高）。</p>
+  <p>MCP 的做法是把這件事標準化。文件提供方（Google）負責維護即時資料庫和 MCP Server，你只需要插上這個標準插座。不用 fine-tune，不用塞 prompt，不用維護爬蟲。而且這個插座是通用的——今天接 Developer Knowledge，明天可以用同樣的格式接 BigQuery、接 Google Maps、接任何有 MCP Server 的服務。</p>
+
+  <figure class="section-figure">
+    <picture>
+      <source media="(max-width: 640px)" srcset="images/mcp-architecture-mobile.png">
+      <img src="images/mcp-architecture.png" alt="舊方式 N×M=12 條亂線 vs MCP 方式 N+M=7 條整齊連線的架構對比">
+    </picture>
+    <figcaption>這就是 Day 2 白皮書「突破 NxM 複雜度」在實務中的樣子：標準插座取代客製整合</figcaption>
+  </figure>
+</section>
+
+<section id="result">
+  <h2>讓 AI 活在今天，而不是去年</h2>
+  <p>實際測試很直觀。設定完成之後，問 Antigravity「根據 Google Developer Knowledge，Python 上傳檔案到 Google Drive 的正確方法是什麼？」它會先呼叫 MCP 工具查詢文件，然後給你今天版本的答案。</p>
+  <p>第一次使用 MCP 工具時，Antigravity 會跳出確認視窗。這個設計本身也值得注意：Agent 要去外部查詢資料，使用者應該要知道它正在做什麼。確認之後，MCP 工具就被授權了，後續使用不用再逐次確認。</p>
+  <p>這個模式的本質是把「知識的時效性」從 AI 的訓練流程裡切割出來，變成一個可以獨立更新、獨立管理的組件。AI 不需要被重新訓練才能知道 API 改了——只要文件更新了，下一次查詢就拿到最新答案。</p>
+  <p>一個 JSON，讓你的 AI 助理從活在去年，變成活在今天。</p>
+
+  <div class="source-note">
+    <p>來源：Google Codelab「Google Antigravity 2.0、IDE 和/或 CLI 中的 Google Developer Knowledge MCP 伺服器」<br>
+    <a href="https://codelabs.developers.google.com/developer-knowledge-mcp-antigravity?hl=zh-tw#0" target="_blank" rel="noopener">codelabs.developers.google.com/developer-knowledge-mcp-antigravity</a></p>
+  </div>
+</section>
+
+</article>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-hint">點擊或按 Esc 關閉</span>
+  <img src="" alt="">
+</div>
+
+<script>
+(function(){
+  var lb = document.getElementById("lightbox");
+  var lbImg = lb.querySelector("img");
+  function open(img){ lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lb.classList.add("is-open"); }
+  function close(){ lb.classList.remove("is-open"); lbImg.src = ""; }
+  document.querySelectorAll("figure.section-figure img").forEach(function(img){
+    img.addEventListener("click", function(){ open(img); });
+  });
+  lb.addEventListener("click", close);
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") close(); });
+})();
+</script>
+
+</body>
+</html>
