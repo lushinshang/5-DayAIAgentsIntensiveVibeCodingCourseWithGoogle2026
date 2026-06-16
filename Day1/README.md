@@ -335,6 +335,13 @@ Day1/
 24. 「參考https://www.youtube.com/watch?v=cbzmr7vt4XA及其背景資訊，以ai-mentor and deepguide skill將其逐字稿實施主題式導讀，建立一個適當的目錄存入。接著以md_to_html建立html。（理解我的意圖，重述）」
     → 重述後確認規劃：讀取 SRT 全文，用 ai-mentor 分析主題，deepguide 產出導讀文章，md_to_html 建立 HTML，HTML 最後以 `<details>` 附上原文逐字稿（段落化，一字不改）。
 
+26. 「推薦頻道新增保哥（https://doggy8088.github.io/the-new-sdlc-with-vibe-coding/index.html）」
+    → 實際執行：
+    - 在 `index.html` 推薦頻道區塊的阿魁卡片後方，新增保哥卡片（🐕 圖示），
+      連結指向 `https://doggy8088.github.io/the-new-sdlc-with-vibe-coding/index.html`。
+    - `python3 -m html.parser` 驗證語法正確。
+    - 更新 README.md 對話歷史。
+
 25. 「補充需求，html最後提供不改字，優化段落形式的逐字稿」 → 「yes」
     → 實際執行：
     - 讀取 SRT 逐字稿全文（1001 行，250 段，21 分鐘）。
