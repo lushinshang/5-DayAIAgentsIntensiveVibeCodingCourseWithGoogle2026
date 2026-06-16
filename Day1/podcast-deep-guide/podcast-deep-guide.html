@@ -198,6 +198,29 @@
       main { padding: 0 16px 60px; }
       section { padding: 28px 0; }
     }
+  /* ── PODCAST VIDEO ── */
+  .podcast-video-section {
+    max-width: 720px;
+    margin: 0 auto 40px;
+  }
+  .podcast-video-section h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #555;
+  }
+  .podcast-video-section .video-note {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 14px;
+  }
+  .podcast-video-section video {
+    width: 100%;
+    max-height: 480px;
+    border-radius: 10px;
+    background: #000;
+    display: block;
+  }
   </style>
 </head>
 <body>
@@ -231,6 +254,16 @@
   </div>
   <p class="lead">41% 的新程式碼，已由 AI 全自動生成。但「有用 AI」和「用對 AI」之間的差距，正在成為下一個世代工程師最核心的能力分水嶺。</p>
 </header>
+
+<!-- Podcast 影片 -->
+<section class="podcast-video-section">
+  <h2>🎙️ Podcast 影片</h2>
+  <p class="video-note">完整 Podcast 影片（壓縮版），適合在閱讀導讀文章前快速暖身，或閱讀後加深理解。</p>
+  <video controls preload="metadata">
+    <source src="../source/podcast/Whitepaper%20Companion%20Podcast%20Introduction%20to%20Agents%20and%20Vibe%20Coding_compressed.mp4" type="video/mp4">
+    您的瀏覽器不支援 HTML5 影片播放，請直接下載後觀看。
+  </video>
+</section>
 
 <!-- Main Article -->
 <main>

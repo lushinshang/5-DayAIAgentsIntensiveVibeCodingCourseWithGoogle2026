@@ -5,8 +5,11 @@
 本目錄將 Google「5-Day AI Agents Intensive Course」Day 1 白皮書 PDF
 （`The New SDLC With Vibe Coding_Day_1.pdf`），透過「PDF 解析 → 圖文擷取 →
 分段翻譯 → 圖片/佔位符對齊 → HTML 排版（md_to_html skill）→ 對照 PDF 校對 →
-嵌入 Podcast → 圖片壓縮」的流程，產出可直接在瀏覽器開啟的繁體中文長文網頁
-`index.html`，內含 9 張原文圖表（已壓縮）與一支白皮書同步 Podcast 影片播放器。
+圖片壓縮」的流程，產出可直接在瀏覽器開啟的繁體中文長文網頁
+`index.html`，內含 9 張原文圖表（已壓縮）。
+
+白皮書同步 Podcast 影片播放器已移至 `podcast-deep-guide/podcast-deep-guide.html` 頂端；
+Day 1 直播錄影播放器位於 `day1-deep-guide/index.html` 頂端（Hero 正下方）。
 
 另外，本目錄也補充整理了 2 份 Day 1 相關 Google Codelabs，皆採用
 「讀取官方網頁 → deep-guide 白話繁中導讀 Markdown → md-to-phtml
@@ -53,7 +56,6 @@ Day1/
 ├── Promo_Channel/                                     ← 推薦頻道素材
 │   └── Day1.jpg                                       ← 歐罵罵推薦頻道首頁圖
 ├── The New SDLC With Vibe Coding_Day_1_images/        ← index.html 使用的 9 張圖（600 DPI 壓縮版）
-├── Whitepaper Companion Podcast..._compressed.mp4     ← index.html 嵌入的 Podcast 影片
 ├── source/                                            ← 原始素材與中間產物
 │   ├── The New SDLC With Vibe Coding_Day_1.pdf        ← 原文 PDF（白皮書正本）
 │   ├── The New SDLC With Vibe Coding_Day_1.md         ← docling 解析出的英文 Markdown
@@ -61,8 +63,12 @@ Day1/
 │   ├── The New SDLC With Vibe Coding_Day_1_images_Origin/ ← 第一次 docling 擷取（低解析度備查）
 │   ├── podcast/                                       ← Podcast 逐字稿與影音相關素材
 │   │   └── Whitepaper Companion Podcast Introduction to Agents and Vibe Coding.en-orig.srt
+│   ├── podcast/                                       ← Podcast 逐字稿與影音相關素材
+│   │   ├── Whitepaper Companion Podcast Introduction to Agents and Vibe Coding.en-orig.srt
+│   │   └── Whitepaper Companion Podcast..._compressed.mp4  ← podcast-deep-guide.html 嵌入的影片
 │   └── livestream/                                    ← Day 1 直播原始素材
 │       ├── DAY 1 Livestream - 5-Day AI Agents Intensive Vibe Coding Course With Google.en-orig.srt
+│       ├── DAY 1 Livestream..._compressed.mp4         ← 本地備份（HTML 使用 GitHub Releases URL）
 │       ├── day1-transcript.txt                        ← 去除 SRT 時間戳的純文字逐字稿
 │       └── day1-deep-guide.md                         ← 深度導讀 Markdown 草稿
 └── pipeline/                                          ← PDF → Markdown 轉換用腳本
@@ -119,8 +125,11 @@ Day1/
 
 6. **嵌入 Podcast**
    將白皮書同步 Podcast（`.mp4`，h264 1280x720 + AAC）以
-   `<video controls preload="metadata">` 嵌入頁首，並在導覽列加上
-   `#podcast` 錨點。檔名含空白，`src` 需做 `%20` URL encoding。
+   `<video controls preload="metadata">` 嵌入 `index.html` 頁首（初始版本）。
+   後來將播放器**移至 `podcast-deep-guide/podcast-deep-guide.html` 頂端**
+   （Hero 正下方），並從 `index.html` 移除 `#podcast` 區塊、nav 連結與對應 CSS，
+   讓主頁保持乾淨，播放功能集中在導讀頁面。
+   檔名含空白，`src` 需做 `%20` URL encoding。
 
 7. **圖片壓縮**
    600 DPI 擷取出的 9 張 PNG 原始檔每張約 4.5–5.9MB（總計 ~90MB），
@@ -184,6 +193,10 @@ Day1/
     - 整合進主入口：`index.html` 學習頻道新增「🎬 Day 1 直播深度導讀」卡片；`day1-deep-guide/index.html` 導覽列新增「← 返回 Day 1」連結。
     - 根目錄整理：SRT、純文字逐字稿、Markdown 草稿移入 `source/livestream/`。
     - `python3 -m html.parser` 驗證語法，Playwright 截圖 QA（桌機 1280px + 行動 390px）。
+    - **影片播放器位置調整（後續）**：
+      - Day 1 直播錄影（GitHub Releases MP4）播放器移至 `day1-deep-guide/index.html` Hero 正下方（頂端）。
+      - Podcast 播放器移至 `podcast-deep-guide/podcast-deep-guide.html` Hero 正下方（頂端）。
+      - `index.html` 的 `#podcast` 影片區塊、nav 連結、對應 CSS 一併移除，主頁改為純導覽入口。
 
 ---
 
@@ -384,6 +397,29 @@ Day1/
     2. day1根目錄的檔案參考目錄架構收納整理
     3. 更新readme」
     → 本次執行（見 Pipeline 步驟 11）。
+
+33. 「我有將livestream放到 GitHub Releases URL，請仿照podcast幫我建立播放功能」
+    → 在 `day1-deep-guide/index.html` 文章底部新增 `<section id="livestream">` 影片播放器，
+      nav 加入「直播影片」錨點，CSS 樣式與 podcast 區塊一致。
+
+34. 「1. 直播影片放html頂端 2. podcast影片也放到podcast導讀的html頂端」
+    → 將 `day1-deep-guide/index.html` 的直播影片 section 從文章底部移至 Hero 正下方，
+      調整 CSS（移除 `border-top`，改為底部 margin）；
+      在 `podcast-deep-guide/podcast-deep-guide.html` Hero 後插入 Podcast 影片區塊（加對應 CSS）。
+
+35. 「既然移到了podcast導讀的html了，day1的html影片播放可以拿掉」
+    → 從 `index.html` 移除 `<section id="podcast">` 影片區塊、nav 的「同步 Podcast」連結、
+      及 `.podcast` / `.podcast-inner` / `.podcast video` CSS，主頁改為純導覽頁面。
+
+36. 「更新 README 反映這個變更」
+    → 更新摘要、目錄結構說明、Pipeline 步驟 6 與 11，並補充對話需求紀錄 33–36。
+
+37. 「mp4應該要移動到適合的目錄」
+    → 將兩支 MP4 從根目錄移入對應 `source/` 子目錄：
+      - Podcast MP4 → `source/podcast/`（與 SRT 同目錄）
+      - 直播 MP4 → `source/livestream/`（與 SRT 及逐字稿同目錄）
+    → 更新 `podcast-deep-guide.html` 的 `<video src>` 路徑（`../` 改為 `../source/podcast/`）。
+    → 更新 README 目錄結構，移除根目錄的 MP4 條目，補充至各 `source/` 子目錄。
 
 25. 「補充需求，html最後提供不改字，優化段落形式的逐字稿」 → 「yes」
     → 實際執行：
