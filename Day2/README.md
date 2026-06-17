@@ -61,13 +61,13 @@ Day2/
 │       └── infographic_3.png / infographic_3_mobile.png  ← AP2 授權命令 + 握手流程
 ├── Whitepaper Companion Podcast Agent Tools & Interoperability_compressed.mp4
 ├── day2-deep-guide/                                       ← 學習頻道：Day 2 直播深度導讀
-│   ├── index.html                                         ← 導讀頁面（deep-guide + ai-mentor-agents + md_to_html）
-│   ├── build_html.py                                      ← HTML 建構腳本
-│   ├── desktop.png / mobile.png                           ← Playwright QA 截圖
-│   └── images/                                            ← 6 張 AI 生成圖（16:9 + 9:16 各 3 組）
-│       ├── protocol-stack.png / protocol-stack-mobile.png ← 四層 Agent 協定棧總覽
-│       ├── token-oil.png / token-oil-mobile.png           ← Token 是新石油
-│       └── boundary-dissolve.png / boundary-dissolve-mobile.png ← 邊界消融與責任
+│   ├── index.html                                         ← 導讀頁面（deep-guide + ai-mentor-agents）
+│   ├── build_html.py                                      ← HTML 建構腳本（含逐字稿片段路徑）
+│   ├── desktop.png                                        ← Playwright QA 截圖（全頁）
+│   └── images/                                            ← 6 張主題專屬圖（16:9 + 9:16 各 3 組）
+│       ├── nxm-complexity.png / nxm-complexity-mobile.png ← NxM→N+M 複雜度對比（Hero + 協定棧章節）
+│       ├── token-oil.png / token-oil-mobile.png           ← Token 是新石油（Token 章節）
+│       └── db-evolution.png / db-evolution-mobile.png     ← 資料庫必須進化（資料庫章節）
 └── source/                                                ← 所有原始素材集中存放
     ├── Agent Tools & Interoperability_Day_2.pdf           ← 原文 PDF（白皮書正本）
     ├── Agent Tools & Interoperability_Day_2.md            ← docling 解析出的英文 Markdown
@@ -264,10 +264,11 @@ https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2
    - Smitha Kohlan（藍色）· Anant Navalgariya（綠色）· Alan（紫色）
    - Kanchana（橙色）· Mike（青色）· Pierre（粉紅）· Fran Hinkelman（紅色）
    → `pipeline/build_day2_transcript.py` 產出 60 段帶 badge 的 HTML 片段，存入 `source/livestream/transcript_fragment.html`
-4. `codex_imagegen.py` 生成 6 張 AI 圖（先輸出至 `/tmp/day2-livestream-images/` 再 `cp`）：
-   - `protocol-stack.png / _mobile.png`：四層 Agent 協定棧總覽
+4. 生圖流程（**注意**：`codex_imagegen.py` 在本環境因 Codex 5 小時使用上限耗盡而失效，fallback 會複製舊圖導致所有圖 MD5 相同）：
+   → 改由使用者以其他工具生成 6 張圖（`01.png`–`06.png`），放入 `Day2/` 根目錄後由腳本移入 `day2-deep-guide/images/`：
+   - `nxm-complexity.png / _mobile.png`：NxM→N+M 複雜度對比
    - `token-oil.png / _mobile.png`：Token 是新石油
-   - `boundary-dissolve.png / _mobile.png`：邊界消融與責任
+   - `db-evolution.png / _mobile.png`：資料庫 Human-first vs Agent-first
 5. `day2-deep-guide/build_html.py` 建立 `day2-deep-guide/index.html`：
    - sticky nav（← 返回 Day 2 主頁 · NxM 問題 · 協定棧 · Token 新石油 · 資料庫轉型 · 邊界消融 · 直播影片 · 原文逐字稿）
    - 3 個 `<picture>` 響應式資訊圖 + lightbox
@@ -495,15 +496,33 @@ https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2
 
 44. 影片播放器下方的圖片被遮住了，而且圖片全部都一樣？
     → 確認 6 張 AI 生成圖 MD5 完全相同（Codex CLI fallback 機制抓到同一個 session 舊圖）。
-    → 改用 Day 2 白皮書中文化圖表替代 AI 生成圖：
-       - summary-figure → `images_cht/Figure 1 Ecosystem of Agent Protocols.png`
-       - 協定棧章節 → `images_cht/Figure 2 Steps for Onboarding an MCP Server.png`
-       - Token 章節 → `images_cht/Figure 5 A2A Server and Client Supply and Demand.png`
-       - 邊界章節 → `images_cht/Figure 4 Distributed Multi-Agent Architecture.png`
-    → 移除 `day2-deep-guide/images/` 目錄（含壞圖），圖片改以 `../images_cht/` 相對路徑引用。
-    → section-figure CSS 加 `aspect-ratio: unset; object-fit: contain` 避免白皮書圖被裁切。
-    → Lightbox querySelector 改為 `figure img` 覆蓋所有圖。
-    → 語法驗證通過，Playwright 截圖確認圖片各不相同且正確顯示。
+    → 暫改用 Day 2 白皮書中文化圖表替代（後續再換）。
+
+45. 直播html圖全拿掉，參考md_to_html的規劃，就直播逐字稿每個討論的次主題，檢視可以用圖示方式表達的方法，以codex cli協助生圖
+    → 識別三個可視覺化次主題：NxM→N+M 複雜度、Token 是新石油、資料庫 Human-first vs Agent-first。
+    → 各撰寫 16:9 + 9:16 共 6 個 Prompt，提交使用者確認。
+
+46. ok（確認 Prompt 規劃）
+    → 執行 codex_imagegen.py 生成 6 張圖，MD5 全部相同（dcd53846）——確認 Codex 5 小時使用上限已耗盡（重設 16:33）。
+
+47. 偵測codex cli生圖是否已經達到限制了？
+    → 診斷確認：`image_gen` tool 被呼叫但生成結果無法存到 filesystem，Codex fallback 複製最後一次成功的圖（06:41）。
+    → 根本原因：Codex 5 小時使用上限 = 0%，重設時間 16:33。並非 quota 耗盡而是 session 時間限制。
+
+48. 給我六張的prompt，我另外處理
+    → 提供 6 張圖的完整英文 Prompt，使用者自行以其他工具生圖。
+
+49. 在day2的01.png-06.png，幫我處理（含放回對的位置）
+    → 確認圖片內容正確（01=NxM 16:9、02=NxM 9:16、03=Token 16:9、04=Token 9:16、05=DB 16:9、06=DB 9:16）。
+    → 重新命名並移入 `day2-deep-guide/images/`：
+       - 01→nxm-complexity.png、02→nxm-complexity-mobile.png
+       - 03→token-oil.png、04→token-oil-mobile.png
+       - 05→db-evolution.png、06→db-evolution-mobile.png
+    → `build_html.py` 三個 section-figure 全改為 `<picture>` 響應式，section-figure CSS 改 `object-fit: contain`。
+    → summary-figure 也改用 nxm-complexity 圖（Hero 摘要圖與協定棧章節共用）。
+    → 語法驗證通過，Playwright 全頁截圖確認三張圖各不相同、位置正確。
+
+50. update readme
 ```
 
 ---
@@ -610,3 +629,17 @@ lbImg.src = img.currentSrc || img.src;
 - GPU 加速：MPS（Apple Silicon）
 - SSL Warning（`urllib3 v2 / LibreSSL`）：僅為警告，不影響功能，可忽略
 - 圖片壓縮（若需要）：`/Users/lanss/projects/2_Practice/readpaper/compress_jpg.py --preserve-resolution`
+
+---
+
+## 更新紀錄
+
+### 阿魁頻道卡片修正（2026-06-17）
+
+**問題說明**：Day2 的阿魁卡片原本指向 Day1 直播導讀 URL（錯位）。
+**修正內容**：
+- `index.html` 阿魁卡片 URL 更新為 Day2 直播導讀：
+  `https://meta-ghost.notion.site/Agent-3827b792315a817b9ce3c8b24046021f`
+- 標題改為「阿魁｜直播導讀」，圖示改為 🎥
+- 原 URL（`...3817b792...`）已移至 `Day1/index.html` 直播導讀卡片
+
