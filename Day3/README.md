@@ -14,7 +14,7 @@
 本檔案先作為 Day 3 的執行規劃與交接紀錄。尚未完成的產物會明確標示為「預計」，
 避免把規劃誤認為已完成。
 
-**目前狀態**：已完成 task1-task15。
+**目前狀態**：已完成 task1-task16。
 
 - task1：已建立 `source/`、`pipeline/`，並將 PDF 移入 `source/`。
 - task2：已用 docling 以 `images_scale=5.0` 產出英文 Markdown。
@@ -31,6 +31,7 @@
 - task13：已補上兩個 Codelab 導讀頁的官方步驟對照表。
 - task14：已整理 Day3 目錄，將根目錄散落 SRT 歸檔到 `source/podcast/`，並同步 README 目錄結構。
 - task15：已在 `index.html` 學習頻道新增「推薦頻道」群組，加入阿魁 Notion 卡片（外部連結）。
+- task16：已移除 `index.html` 中的「推薦頻道」群組（含阿魁卡片）。原因：task15 加入的連結實為 Day 2 直播導讀，已移至 Day 2 頁面；Day 3 阿魁分享連結尚未公開，暫時隱藏，待阿魁提供 Day 3 連結後再行補入。（2026-06-17）
 
 注意：這份 PDF 與 Day 2 不同，docling 成功產出 Markdown，但沒有抽出任何
 picture image。因此 Day 3 圖表改用 `pdfimages` 從 PDF 內嵌圖片直接抽出，
