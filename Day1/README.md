@@ -462,4 +462,30 @@ Day1/
   6. docling 高解析度（600 DPI）擷取出的圖檔通常每張數 MB，發佈前用
      `/Users/lanss/projects/2_Practice/readpaper/compress_jpg.py
      --preserve-resolution <file> -o <file>` 逐張壓縮並覆蓋，可在不
-     改變解析度與檔名（不影響 `<img src>`）的情況下大幅縮小檔案。
+      改變解析度與檔名（不影響 `<img src>`）的情況下大幅縮小檔案。
+  6. 影片/檔名含空白時，`<video src="...">` 需做 `%20` URL encoding。
+
+---
+
+## 更新紀錄
+
+### 阿魁頻道卡片修正（2026-06-17）
+
+**問題說明**：阿魁的分享分為兩種類型，Day1 原本只有「筆記」卡片，缺少「直播導讀」卡片。
+Day2 / Day3 的直播導讀 URL 各錯位一天（Day2 放了 Day1 的、Day3 放了 Day2 的）。
+
+**修正內容**：
+
+- `Day1/index.html`
+  - 原有阿魁卡片標題改為「阿魁｜筆記」，URL 不變
+  - 新增「阿魁｜直播導讀」卡片（🎥），URL：
+    `https://meta-ghost.notion.site/Vibe-Coding-Agent-Engineering-AI-code-3817b792315a8174b658e0fac71f556d`
+
+- `Day2/index.html`
+  - 阿魁卡片 URL 由 Day1 直播導讀改為 Day2 直播導讀：
+    `https://meta-ghost.notion.site/Agent-3827b792315a817b9ce3c8b24046021f`
+  - 標題改為「阿魁｜直播導讀」，圖示改為 🎥
+
+- `Day3/index.html`
+  - 標題改為「阿魁｜直播導讀」，圖示改為 🎥
+  - ⚠️ URL 仍為 Day2 直播導讀，待阿魁提供 Day3 正確 URL 後更新
