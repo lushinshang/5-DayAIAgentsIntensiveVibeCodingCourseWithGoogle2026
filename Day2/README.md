@@ -28,6 +28,7 @@ standalone HTML → Playwright 桌機/手機截圖 QA」流程，分別存放於
 Day2/
 ├── README.md                                              ← 本檔案
 ├── index.html                                             ← 最終輸出（繁中網頁，雙擊即可開啟）
+├── Agent Tools Interoperability Day 2-中文版.pdf          ← 阿魁提供的白皮書中文翻譯（推薦頻道連結）
 ├── images_cht/                                            ← index.html 使用的 8 張中文化圖
 │   ├── Figure 1 Ecosystem of Agent Protocols.png
 │   ├── Figure 2 Steps for Onboarding an MCP Server.png
@@ -213,8 +214,9 @@ https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2
 - 🖥️ Antigravity CLI 白話導讀 → `antigravity-cli-guide/antigravity-cli-guide.html`
 - 🔌 Google Developer Knowledge MCP 白話導讀 → `mcp-knowledge-guide/mcp-knowledge-guide.html`
 
-**推薦頻道**（外部連結）：
-- 📝 阿魁 Notion 學習筆記 → `https://meta-ghost.notion.site/...`
+**推薦頻道**（外部連結 / 本地 PDF）：
+- 🎥 阿魁｜直播導讀 → `https://meta-ghost.notion.site/Agent-3827b792315a817b9ce3c8b24046021f`
+- 📄 阿魁｜白皮書中文翻譯 → `Agent Tools Interoperability Day 2-中文版.pdf`（瀏覽器內開啟）
 
 每份導讀的建立流程：
 1. 以 `deep-guide` skill 輸入 Codelab 完整內容，產出 5 段式繁中導讀文章
@@ -387,7 +389,10 @@ https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2
 25. **結合到 Day 2 主頁**：「結合到day2的html」
     → 更新 `index.html` Podcast 卡片說明，加入「含英文原文逐字稿」，與 Day1 卡片模式一致。
 
-26. **Sticky Nav 加返回連結**：「我要參考day1/podcast的導讀一樣，上一頁放頂端」
+26. **新增白皮書中文版 PDF 至推薦頻道**：「Agent Tools Interoperability Day 2-中文版.pdf 是阿魁提供的白皮書中文翻譯，可以放在 index.html 的哪裡？」→「我選擇 3（推薦頻道），但是 pdf 不是提供下載，是提供用瀏覽器開啟」
+    → 在「推薦頻道」channel-grid 新增第二張卡片（📄 阿魁｜白皮書中文翻譯），`href` 指向本地 PDF，`target="_blank"` 瀏覽器內開啟。
+
+27. **Sticky Nav 加返回連結**：「我要參考day1/podcast的導讀一樣，上一頁放頂端」
     → 比對 Day1 做法：sticky nav 第一項為高亮顯示的「← 返回白皮書首頁」。
     → Day2 照樣：nav 第一項新增 `<a class="nav-back" href="../index.html">← 返回 Day 2 主頁</a>`，加 `.nav-back` 樣式（藍底高亮）。
     → 同時移除先前多餘的逐字稿底部返回連結。
@@ -523,6 +528,11 @@ https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2
     → 語法驗證通過，Playwright 全頁截圖確認三張圖各不相同、位置正確。
 
 50. update readme
+
+51. Agent Tools Interoperability Day 2-中文版.pdf 是阿魁提供的白皮書中文翻譯，可以放在 index.html 的哪裡？
+    → 我選擇 3，但是 pdf 不是提供下載，是提供用瀏覽器開啟，可以嗎？
+
+52. 更新 readme.md
 ```
 
 ---
@@ -642,4 +652,11 @@ lbImg.src = img.currentSrc || img.src;
   `https://meta-ghost.notion.site/Agent-3827b792315a817b9ce3c8b24046021f`
 - 標題改為「阿魁｜直播導讀」，圖示改為 🎥
 - 原 URL（`...3817b792...`）已移至 `Day1/index.html` 直播導讀卡片
+
+### 新增白皮書中文版 PDF 至推薦頻道（2026-06-17）
+
+**變更內容**：
+- `index.html` 推薦頻道新增第二張卡片（📄 阿魁｜白皮書中文翻譯）
+- `href="Agent Tools Interoperability Day 2-中文版.pdf"` + `target="_blank"`，瀏覽器內建 PDF 閱讀器開啟
+- 目錄結構補入 PDF 檔案說明
 
