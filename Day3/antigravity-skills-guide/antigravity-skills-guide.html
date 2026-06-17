@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>不要再把所有規則塞進 Prompt｜Antigravity Skills 導讀</title>
+  <meta name="description" content="Google Antigravity Skills Codelab 白話導讀：從 context rot、SKILL.md、progressive disclosure 到四種 skill authoring pattern。">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:#f8f7f3;color:#202124;font-size:16px;line-height:1.72;letter-spacing:0}
+    a{color:#176b75}
+    .toc{position:sticky;top:0;z-index:100;background:rgba(248,247,243,.96);backdrop-filter:blur(8px);border-bottom:1px solid #ddd8cf;height:56px}
+    .toc-inner{max-width:1120px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none}
+    .toc-inner::-webkit-scrollbar{display:none}
+    .toc-inner a{color:#4a4a4a;text-decoration:none;font-size:13.5px;font-weight:600;padding:6px 12px;border-radius:6px;white-space:nowrap}
+    .toc-inner a:hover{background:#e3efed;color:#0f5961}
+    .toc-inner a.back{font-weight:800;color:#176b75}
+    .hero{background:linear-gradient(135deg,#193c3f 0%,#176b75 56%,#c2a84b 100%);color:#fff;padding:72px 24px 64px}
+    .hero-inner{max-width:760px;margin:0 auto}
+    .hero-tag{font-size:13px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.72);text-transform:uppercase;margin-bottom:16px}
+    h1{font-size:clamp(2rem,5vw,3.05rem);font-weight:800;line-height:1.18;margin-bottom:20px;text-wrap:balance}
+    .hero-subtitle{font-size:17px;line-height:1.6;color:rgba(255,255,255,.9)}
+    main{max-width:1120px;margin:0 auto;padding:0 24px 80px}
+    article{max-width:760px;margin:0 auto}
+    section{padding-top:64px}
+    h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;color:#163f44;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #dfe9e7;text-wrap:balance}
+    h3{font-size:1.12rem;color:#176b75;margin:28px 0 10px}
+    p{margin-bottom:18px}
+    ul,ol{margin:0 0 18px;padding-left:24px}
+    li{margin-bottom:8px}
+    code{font-family:"SF Mono","Consolas","Monaco",monospace;background:#edf1ee;padding:2px 6px;border-radius:4px;font-size:.88em;color:#163f44}
+    pre{background:#1d292a;color:#dbe7e3;border-radius:8px;padding:18px 20px;overflow-x:auto;font-size:13px;line-height:1.55;margin:20px 0}
+    pre code{background:none;padding:0;color:inherit;font-size:inherit}
+    .diagram{margin:28px 0;padding:20px;background:#fff;border:1px solid #ded9cf;border-radius:8px}
+    figure.section-figure{margin:32px 0;text-align:center}
+    figure.section-figure img{width:100%;max-width:860px;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+    figcaption{margin-top:10px;font-size:13.5px;color:#666;line-height:1.5}
+    .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .node{min-height:98px;border:1px solid #d8e4e2;border-radius:8px;background:#f1f7f5;padding:12px}
+    .node strong{display:block;color:#163f44;margin-bottom:6px}
+    .node span{font-size:.88rem;color:#5f6368}
+    .pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+    .pattern{background:#fff;border:1px solid #ded9cf;border-radius:8px;padding:16px}
+    .pattern h3{margin-top:0}
+    .step-map{background:#fff;border:1px solid #ded9cf;border-radius:8px;padding:18px 20px;margin:24px 0}
+    .step-map li{margin-bottom:12px}
+    .step-map strong{color:#163f44}
+    .source-note{margin-top:48px;padding-top:24px;border-top:1px solid #ddd8cf;font-size:13.5px;color:#666}
+    @media(max-width:760px){.flow,.pattern-grid{grid-template-columns:1fr}.hero{padding:48px 20px 40px}main{padding:0 16px 60px}section{padding-top:48px}pre{font-size:12px;padding:14px}figure.section-figure img{aspect-ratio:9/16;max-width:360px}}
+  </style>
+</head>
+<body>
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="../index.html" class="back">返回白皮書</a>
+    <a href="#problem">Prompt 變成倉庫</a>
+    <a href="#folder">Skill 是資料夾</a>
+    <a href="#patterns">四種模式</a>
+    <a href="#cli">開發者工具包</a>
+    <a href="#source-map">官方步驟</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Day 3 · 學習頻道導讀</div>
+    <h1>不要再把所有規則塞進 Prompt</h1>
+    <p class="hero-subtitle">Antigravity Skills Codelab 的重點不是多學一個檔案格式，而是學會把「代理人該怎麼做事」拆成可觸發、可測試、可搬移的工程單位。</p>
+  </div>
+</header>
+
+<main>
+<article>
+<section id="intro">
+  <p>很多團隊第一次做 coding agent，最自然的做法是把所有規則都塞進 system prompt：commit message 怎麼寫、license header 怎麼加、JSON 要怎麼轉型、資料庫 schema 有哪些禁忌。短期看起來很快，長期會變成一個越來越沉的 prompt 倉庫。</p>
+  <p>Google 的 Antigravity Skills Codelab 要你改掉這個習慣。它把 Day 3 白皮書的核心概念放進實作：不要讓模型永遠背著所有流程，而是把流程整理成 skills，讓代理人在真正需要時才載入。</p>
+  <figure class="section-figure">
+    <picture>
+      <source media="(max-width: 640px)" srcset="images/antigravity-skills-guide-mobile.png">
+      <img src="images/antigravity-skills-guide.png" alt="Antigravity Skills progressive disclosure：metadata、body、references、scripts 按需載入">
+    </picture>
+    <figcaption>Antigravity Skills 的核心不是更長的 prompt，而是把工作流程拆成可觸發、可測試、可搬移的 skill package。</figcaption>
+  </figure>
+</section>
+
+<section id="problem">
+  <h2>當 Prompt 變成倉庫，模型會開始失焦</h2>
+  <p>Codelab 一開始先指出兩個痛點：Context Saturation 和 Tool Bloat。代理人可以讀檔、呼叫工具、接 MCP server，但如果你一開始就把整個 codebase、所有工具說明、所有公司規則都塞進 active context，模型不會因此變成全知，它只會被無關資訊稀釋注意力。</p>
+  <p>Agent Skill 的解法是 progressive disclosure。模型先只看到一份很薄的目錄：每個 skill 的名稱與 description。等使用者意圖真的符合某個 skill 時，再把該 skill 的完整指令、references 或 scripts 載進來。</p>
+  <div class="diagram" aria-label="Progressive disclosure diagram">
+    <div class="flow">
+      <div class="node"><strong>Metadata</strong><span>一開始只索引名稱與 description。</span></div>
+      <div class="node"><strong>Trigger</strong><span>使用者需求符合 skill 觸發條件。</span></div>
+      <div class="node"><strong>Body</strong><span>載入任務步驟、範例與限制。</span></div>
+      <div class="node"><strong>Assets</strong><span>必要時才讀 scripts、references、templates。</span></div>
+    </div>
+  </div>
+  <p>這就是 Day 3 反覆強調的重點：讓 context 保持瘦身，不是為了省 token 而已，而是為了讓代理人保持判斷清晰。</p>
+</section>
+
+<section id="folder">
+  <h2>Skill 其實是一個小型軟體套件</h2>
+  <p>Antigravity 裡的 skill 是一個資料夾。最小形式只有 <code>SKILL.md</code>，但真正有用的 skill 通常會把 deterministic work、長文件與範本分開。</p>
+  <pre><code>my-skill/
+├── SKILL.md
+├── scripts/
+│   ├── run.py
+│   └── util.sh
+├── references/
+│   └── api-docs.md
+└── assets/
+    └── template.md</code></pre>
+  <p><code>SKILL.md</code> 的 frontmatter 是觸發介面，description 必須清楚到模型能判斷何時該用、何時不該用。Markdown body 則是執行指令，包含目標、步驟、範例與限制。scripts 負責不要交給模型猜的工作，例如 schema validation、格式轉換、固定規則檢查。</p>
+  <p>這個結構讓 skill 比 prompt 更接近工程資產：可以進版控，可以 code review，可以拆責任邊界，也可以搬到不同專案或全域環境使用。</p>
+</section>
+
+<section id="patterns">
+  <h2>四個範例，其實是在教四種 authoring pattern</h2>
+  <p>Codelab 不是只讓你照抄四個 skills，而是在示範四種封裝代理人能力的方法。</p>
+  <div class="pattern-grid">
+    <div class="pattern">
+      <h3>Basic Router</h3>
+      <p><code>git-commit-formatter</code> 只靠 <code>SKILL.md</code> 指令，把 lazy commit message 改成 Conventional Commits。重點是 description 要能精準觸發。</p>
+    </div>
+    <div class="pattern">
+      <h3>Static Reference</h3>
+      <p><code>license-header-adder</code> 把長 license template 放到 resources。法律文字不該每次進 prompt，也不該讓模型自由改寫。</p>
+    </div>
+    <div class="pattern">
+      <h3>Few-Shot Example</h3>
+      <p><code>json-to-pydantic</code> 用 input/output golden examples 教模型模式。很多結構化轉換，範例比五十條文字規則更可靠。</p>
+    </div>
+    <div class="pattern">
+      <h3>Script Delegation</h3>
+      <p><code>database-schema-validator</code> 把判斷交給 Python script。安全規則、命名規範、禁止語句這類檢查，應由程式保證。</p>
+    </div>
+  </div>
+  <p>這四種 pattern 串起來，就是從「提示詞」走向「可維護 skill library」的路線圖。越是重要、越容易出錯、越需要一致性的任務，就越應該從純文字指令升級成 references、examples 或 scripts。</p>
+</section>
+
+<section id="cli">
+  <h2>Agents CLI Skills 把生命週期變成可呼叫能力</h2>
+  <p>Codelab 最後把視角拉到 Agents CLI Skills。開發 AI agent 有很多重複工作：scaffold 專案、安裝依賴、跑 lint、啟動 playground、測試 prompt、部署。若每次都讓 coding assistant 猜專案結構，品質會飄。</p>
+  <p><code>uvx google-agents-cli setup</code> 安裝的是一套生命週期工具，也註冊一組 domain-specific skills。這些 skills 讓 Antigravity 不只會「幫你寫程式」，還知道如何用標準路徑建立、測試、評估與部署 agent。</p>
+  <pre><code>uvx google-agents-cli setup
+agents-cli create weather-assistant --prototype --yes
+cd weather-assistant
+agents-cli install
+agents-cli run "How are you?"
+agents-cli playground</code></pre>
+  <p>這裡的深層意義是：skills 可以封裝的不只是單一任務，也可以封裝整個開發生命週期。當 scaffold、lint、test、playground 變成穩定能力，agent 開發就不再靠一次次手工拼湊。</p>
+  <h3>npx skills：open skill ecosystem 的安裝層</h3>
+  <p>官方 Codelab 最後還介紹 <code>npx skills</code>：這是 Vercel Labs 開發的 skills 套件管理工具，可把技能安裝到 <code>~/.agents/skills</code>，供 Antigravity、Claude Code、GitHub Copilot、Cursor、Cline 等代理人工具使用。</p>
+  <p>這一段補上了 Skills 的另一個重點：skill 不只是單一 IDE 的個人設定，而是逐漸形成可散布、可安裝、可審查的 open agent skills ecosystem。也因此第三方 skill 應像軟體依賴一樣審查來源、版本與 scripts。</p>
+</section>
+
+<section id="source-map">
+  <h2>官方 Codelab 步驟對照</h2>
+  <p>上面的文章是導讀，不是逐步操作手冊；為了避免漏掉官方流程，以下把官方 Codelab 的 9 個 step 全部對齊列出。</p>
+  <ol class="step-map">
+    <li><strong>Introduction</strong>：介紹 Google Antigravity 與 Agent Skills，前置條件是已安裝並設定 Antigravity。</li>
+    <li><strong>Why Skills</strong>：說明 context saturation、tool bloat，以及 Agent Skills 如何用 progressive disclosure 解決。</li>
+    <li><strong>Agent Skills and Antigravity</strong>：定義 Antigravity 裡的 skill，並和 tools、rules、workflows 做定位比較。</li>
+    <li><strong>Creating Skills</strong>：說明目錄結構、<code>SKILL.md</code> frontmatter / body，以及 scripts integration。</li>
+    <li><strong>Authoring Skills</strong>：實作四個層級的 skill：<code>git-commit-formatter</code>、<code>license-header-adder</code>、<code>json-to-pydantic</code>、<code>database-schema-validator</code>。</li>
+    <li><strong>The Developer Toolkit</strong>：安裝 Agents CLI Skills，並走過 scaffold、local test query、interactive web playground。</li>
+    <li><strong>Installing Agent Skills using npx skills</strong>：介紹 <code>npx skills</code> 與 <code>~/.agents/skills</code> 安裝位置。</li>
+    <li><strong>Congratulations</strong>：總結已完成 skill 建立、設定與全域 / 專案 scope 的自訂能力。</li>
+    <li><strong>Reference docs</strong>：列出 Antigravity 官方網站、文件、下載與相關 Codelab。</li>
+  </ol>
+  <div class="source-note">
+    <p>來源：Google Codelab「Authoring Google Antigravity Skills」<br>
+    <a href="https://codelabs.developers.google.com/getting-started-with-antigravity-skills" target="_blank" rel="noopener">codelabs.developers.google.com/getting-started-with-antigravity-skills</a></p>
+  </div>
+</section>
+</article>
+</main>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent 不是 Demo，而是一條生命週期｜Agents CLI + ADK 導讀</title>
+  <meta name="description" content="Agents CLI + ADK Lifecycle Codelab 白話導讀：從 scaffold、graph workflow、lint、playground 到 CLI run 的本機 agent 開發生命週期。">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:#f8f7f3;color:#202124;font-size:16px;line-height:1.72;letter-spacing:0}
+    a{color:#176b75}
+    .toc{position:sticky;top:0;z-index:100;background:rgba(248,247,243,.96);backdrop-filter:blur(8px);border-bottom:1px solid #ddd8cf;height:56px}
+    .toc-inner{max-width:1120px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none}
+    .toc-inner::-webkit-scrollbar{display:none}
+    .toc-inner a{color:#4a4a4a;text-decoration:none;font-size:13.5px;font-weight:600;padding:6px 12px;border-radius:6px;white-space:nowrap}
+    .toc-inner a:hover{background:#e3efed;color:#0f5961}
+    .toc-inner a.back{font-weight:800;color:#176b75}
+    .hero{background:linear-gradient(135deg,#1d292a 0%,#176b75 58%,#8aa05a 100%);color:#fff;padding:72px 24px 64px}
+    .hero-inner{max-width:760px;margin:0 auto}
+    .hero-tag{font-size:13px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.72);text-transform:uppercase;margin-bottom:16px}
+    h1{font-size:clamp(2rem,5vw,3.05rem);font-weight:800;line-height:1.18;margin-bottom:20px;text-wrap:balance}
+    .hero-subtitle{font-size:17px;line-height:1.6;color:rgba(255,255,255,.9)}
+    main{max-width:1120px;margin:0 auto;padding:0 24px 80px}
+    article{max-width:760px;margin:0 auto}
+    section{padding-top:64px}
+    h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;color:#163f44;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #dfe9e7;text-wrap:balance}
+    h3{font-size:1.12rem;color:#176b75;margin:28px 0 10px}
+    p{margin-bottom:18px}
+    ul,ol{margin:0 0 18px;padding-left:24px}
+    li{margin-bottom:8px}
+    code{font-family:"SF Mono","Consolas","Monaco",monospace;background:#edf1ee;padding:2px 6px;border-radius:4px;font-size:.88em;color:#163f44}
+    pre{background:#1d292a;color:#dbe7e3;border-radius:8px;padding:18px 20px;overflow-x:auto;font-size:13px;line-height:1.55;margin:20px 0}
+    pre code{background:none;padding:0;color:inherit;font-size:inherit}
+    .diagram{margin:28px 0;padding:20px;background:#fff;border:1px solid #ded9cf;border-radius:8px}
+    figure.section-figure{margin:32px 0;text-align:center}
+    figure.section-figure img{width:100%;max-width:860px;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+    figcaption{margin-top:10px;font-size:13.5px;color:#666;line-height:1.5}
+    .lifecycle{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    .step{border:1px solid #d8e4e2;border-radius:8px;background:#f1f7f5;padding:12px;min-height:110px}
+    .step strong{display:block;color:#163f44;margin-bottom:6px}
+    .step span{font-size:.86rem;color:#5f6368}
+    .concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+    .concept{background:#fff;border:1px solid #ded9cf;border-radius:8px;padding:16px}
+    .concept h3{margin-top:0}
+    .step-map{background:#fff;border:1px solid #ded9cf;border-radius:8px;padding:18px 20px;margin:24px 0}
+    .step-map li{margin-bottom:12px}
+    .step-map strong{color:#163f44}
+    .source-note{margin-top:48px;padding-top:24px;border-top:1px solid #ddd8cf;font-size:13.5px;color:#666}
+    @media(max-width:860px){.lifecycle{grid-template-columns:1fr 1fr}.concept-grid{grid-template-columns:1fr}}
+    @media(max-width:640px){.lifecycle{grid-template-columns:1fr}.hero{padding:48px 20px 40px}main{padding:0 16px 60px}section{padding-top:48px}pre{font-size:12px;padding:14px}figure.section-figure img{aspect-ratio:9/16;max-width:360px}}
+  </style>
+</head>
+<body>
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="../index.html" class="back">返回白皮書</a>
+    <a href="#loop">不是一次性 Demo</a>
+    <a href="#graph">Graph Workflow</a>
+    <a href="#feedback">快速回饋</a>
+    <a href="#production">走向正式環境</a>
+    <a href="#source-map">官方步驟</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Day 3 · 學習頻道導讀</div>
+    <h1>Agent 不是 Demo，而是一條生命週期</h1>
+    <p class="hero-subtitle">Agents CLI + ADK 2.0 Codelab 真正教的，是如何把一個本機代理人從 scaffold、理解、lint、playground 到 CLI 測試，整理成可重複的工程循環。</p>
+  </div>
+</header>
+
+<main>
+<article>
+<section id="intro">
+  <p>很多 agent 專案失敗，不是因為模型不會回答，而是因為開發流程太像一次性 Demo。你手動建幾個檔案，塞一段 prompt，跑一次看起來能動，就以為完成了。等到要修改、測試、重跑、交給別人接手時，問題才開始浮現。</p>
+  <p>Agents CLI + ADK Lifecycle Codelab 把焦點放在這條開發生命週期：如何用標準工具建立 agent 專案、理解 graph workflow、檢查健康狀態、在 playground 互動測試，再用 CLI 做快速查詢。</p>
+  <figure class="section-figure">
+    <picture>
+      <source media="(max-width: 640px)" srcset="images/agents-cli-adk-guide-mobile.png">
+      <img src="images/agents-cli-adk-guide.png" alt="Agents CLI + ADK 本機 agent 開發生命週期：setup、scaffold、inspect、lint、playground、run">
+    </picture>
+    <figcaption>Agents CLI + ADK Codelab 的主線：先把本機 agent 開發變成穩定循環，再往 eval、deploy、observability 前進。</figcaption>
+  </figure>
+</section>
+
+<section id="loop">
+  <h2>從模型呼叫，升級成開發循環</h2>
+  <p>Codelab 的第一步不是寫 agent，而是先準備認證與工具。你可以用 Gemini API Key，也可以用 Google Cloud ADC 與 Vertex AI。接著用 <code>uvx google-agents-cli setup</code> 安裝 Agents CLI 與一組 domain-specific skills。</p>
+  <p>這組 skills 的角色很關鍵：它們讓 Antigravity 知道如何 scaffold、build、lint、test agent，而不是每次都從空白目錄猜起。</p>
+  <div class="diagram" aria-label="Agent development lifecycle">
+    <div class="lifecycle">
+      <div class="step"><strong>Setup</strong><span>安裝 Agents CLI 與全域 skills。</span></div>
+      <div class="step"><strong>Scaffold</strong><span>建立標準 ADK 專案與檔案結構。</span></div>
+      <div class="step"><strong>Inspect</strong><span>理解 nodes、edges、root workflow。</span></div>
+      <div class="step"><strong>Validate</strong><span>跑 lint 與本機 playground 測試。</span></div>
+      <div class="step"><strong>Run</strong><span>用 CLI 做單次查詢與自動化。</span></div>
+    </div>
+  </div>
+  <pre><code>export GEMINI_API_KEY="your_api_key_here"
+export GOOGLE_GENAI_USE_ENTERPRISE=FALSE
+
+uvx google-agents-cli setup</code></pre>
+  <p>這不是單純安裝指令，而是在你的開發環境裡建立一條「agent 專案可以被一致管理」的路。</p>
+</section>
+
+<section id="graph">
+  <h2>ADK 2.0 的核心是 graph workflow</h2>
+  <p>Codelab 的範例是建立一個 <code>customer-support-agent</code>：它先判斷使用者問題是否和運送相關，相關就交給 shipping FAQ agent，不相關就禮貌拒答。</p>
+  <p>這個例子故意很小，但它展示了 ADK 2.0 的核心：agent 應用不是一團 prompt，而是一張圖。圖裡有節點、邊、狀態與路由。</p>
+  <div class="concept-grid">
+    <div class="concept">
+      <h3>Workflow & Edges</h3>
+      <p><code>Workflow</code> 定義整體流程，<code>Edge</code> 把 START、分類節點、回覆節點串起來，並依 route 分支。</p>
+    </div>
+    <div class="concept">
+      <h3>LlmAgent</h3>
+      <p>宣告式 LLM 節點，負責分類、回答或生成結構化輸出，可搭配 <code>output_schema</code> 控制結果。</p>
+    </div>
+    <div class="concept">
+      <h3>Node & Context</h3>
+      <p>Python function 節點處理狀態、資料傳遞與 routing signal，讓流程不是只靠自然語言控制。</p>
+    </div>
+    <div class="concept">
+      <h3>App Wrapper</h3>
+      <p><code>App</code> 包住 root workflow，讓 playground、eval harness、runtime 能以標準方式載入。</p>
+    </div>
+  </div>
+  <p>這個架構和 Day 3 的 skill 思維其實相通：把隱性的工作流程顯性化，讓它能被檢查、修改與測試。</p>
+</section>
+
+<section id="feedback">
+  <h2>好的本機開發流程，必須有快速回饋</h2>
+  <p>Agent 專案不能只靠「我問一次看起來有回答」來判斷健康。Codelab 用三種回饋機制建立基本安全感。</p>
+  <ul>
+    <li><strong>Linting</strong>：請 Antigravity 跑 <code>agents-cli lint</code>，檢查 imports、語法與格式一致性。</li>
+    <li><strong>Playground</strong>：用 <code>agents-cli playground</code> 開本機 web UI，互動測試 workflow 的 routing 行為。</li>
+    <li><strong>Auto-reload</strong>：修改 <code>app/agent.py</code> 後，playground 可即時重新載入，縮短修改與驗證之間的距離。</li>
+  </ul>
+  <pre><code>agents-cli lint
+agents-cli playground
+agents-cli run "How long does standard delivery take?"</code></pre>
+  <p>這裡最重要的不是工具名稱，而是開發節奏：改一點、看結果、再改。Agent engineering 需要這種迭代回饋，否則 prompt、routing 與程式邏輯很快會混成一團。</p>
+</section>
+
+<section id="production">
+  <h2>本機循環是 production 的前置條件</h2>
+  <p>Codelab 收尾提到下一步：用 <code>agents-cli eval run</code> 做評估，用 <code>agents-cli deploy</code> 部署到 Agent Runtime 或 Cloud Run，並串接 Cloud Trace、BigQuery 等 observability 管線。</p>
+  <p>在此之前，官方也提醒要做 cleanup：停止本機 playground，並移除 scaffold 出來的本機專案目錄。這看似瑣碎，但它提醒你 Agents CLI 管的不只是「啟動」，也包含開發環境的收尾與可重複性。</p>
+  <p>這和 Day 3 白皮書的「Demo-to-Deploy Gap」完全接上。你不能直接從一次漂亮 demo 跳到 production。你需要先有標準專案結構、可重跑測試、本機 playground、CLI execution，再往 evaluation、deployment、observability 前進。</p>
+  <p>所以這個 Codelab 的真正價值，是把 agent 從「聊天框裡能回答」推向「工程系統裡能被管理」。這也是 Agents CLI 和 ADK 2.0 的分工：ADK 定義 agent application 的程式結構，Agents CLI 管理它的開發生命週期。</p>
+</section>
+
+<section id="source-map">
+  <h2>官方 Codelab 步驟對照</h2>
+  <p>上面的文章整理設計意義；以下逐條對齊官方 Codelab 的 10 個 step，方便確認沒有漏掉操作流程。</p>
+  <ol class="step-map">
+    <li><strong>Overview</strong>：說明本 lab 屬於 Google × Kaggle 5-Day AI Agents 課程，目標是用 Agents CLI 管理本機 agent lifecycle。</li>
+    <li><strong>Set up Authentication & Environment</strong>：設定 Gemini API Key 或 Google Cloud Application Default Credentials。</li>
+    <li><strong>Set up Agents CLI & Skills</strong>：安裝 Agents CLI 與相關 skills，並提醒 Antigravity 可能要求 review / approve 計畫或指令。</li>
+    <li><strong>Create your Agent Project</strong>：用 Antigravity prompt 或 <code>agents-cli scaffold create customer-support-agent --prototype --yes</code> 建立專案。</li>
+    <li><strong>Explore the Agent Code</strong>：閱讀 <code>app/agent.py</code>，理解 tools、nodes、edges、root Workflow 等 ADK 2.0 graph workflow 結構。</li>
+    <li><strong>Automated Linting</strong>：執行 <code>agents-cli lint</code>，確認專案健康狀態與格式。</li>
+    <li><strong>Interactive Testing with the Playground</strong>：啟動 <code>agents-cli playground</code>，用本機 web playground 測試 agent，並觀察 auto-reload。</li>
+    <li><strong>Command Line Execution</strong>：用 <code>agents-cli run "How long does standard delivery take?"</code> 做快速 CLI 查詢。</li>
+    <li><strong>Cleanup</strong>：停止 playground，並移除本機 scaffold 專案目錄，避免留下不需要的資源。</li>
+    <li><strong>Summary & Next Steps</strong>：總結 setup、scaffold、graph workflow、lint、playground、CLI run，並指向 eval、deploy、observability 等下一步。</li>
+  </ol>
+  <div class="source-note">
+    <p>來源：Google Codelab「Vibe Coding AI Agents: Managing the Agent Lifecycle with Agents CLI and ADK 2.0」<br>
+    <a href="https://codelabs.developers.google.com/agents-cli-adk-lifecycle" target="_blank" rel="noopener">codelabs.developers.google.com/agents-cli-adk-lifecycle</a></p>
+  </div>
+</section>
+</article>
+</main>
+</body>
+</html>

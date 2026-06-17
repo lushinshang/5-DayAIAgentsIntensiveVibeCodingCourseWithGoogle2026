@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Skills Podcast 深度導讀</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink:#202124;
+      --muted:#5f6368;
+      --line:#ded9cf;
+      --paper:#fffdf8;
+      --panel:#ffffff;
+      --teal:#176b75;
+      --red:#b34235;
+      --gold:#ad7f22;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      line-height:1.75;
+    }
+    header {
+      padding:56px 22px 28px;
+      border-bottom:1px solid var(--line);
+      background:#f6efe3;
+    }
+    .wrap { max-width:980px; margin:0 auto; }
+    .back { color:var(--teal); text-decoration:none; font-weight:700; }
+    h1 { font-size:clamp(2rem,5vw,4.4rem); line-height:1.08; margin:24px 0 16px; letter-spacing:0; }
+    .dek { max-width:760px; font-size:1.08rem; color:#3f4749; }
+    nav {
+      position:sticky;
+      top:0;
+      z-index:5;
+      background:rgba(255,253,248,.94);
+      border-bottom:1px solid var(--line);
+      backdrop-filter:blur(12px);
+    }
+    nav .wrap { display:flex; gap:16px; overflow:auto; padding:10px 22px; }
+    nav a { white-space:nowrap; color:#29484c; text-decoration:none; font-size:.92rem; font-weight:700; }
+    main { padding:32px 22px 72px; }
+    .media-panel {
+      display:grid;
+      grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);
+      gap:18px;
+      align-items:start;
+      margin:0 auto 34px;
+      max-width:980px;
+    }
+    video {
+      width:100%;
+      aspect-ratio:16/9;
+      background:#111;
+      border:1px solid var(--line);
+      border-radius:8px;
+      display:block;
+    }
+    .resource-box {
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:16px;
+    }
+    .resource-box h2 { margin-top:0; font-size:1.08rem; }
+    .resource-box a {
+      display:block;
+      color:var(--teal);
+      font-weight:800;
+      text-decoration:none;
+      margin:10px 0;
+      overflow-wrap:anywhere;
+    }
+    article {
+      max-width:820px;
+      margin:0 auto;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:clamp(20px,4vw,44px);
+    }
+    article h1 { font-size:clamp(1.9rem,4vw,3.1rem); margin-top:0; }
+    article h2 {
+      font-size:1.55rem;
+      line-height:1.35;
+      margin:42px 0 12px;
+      padding-top:6px;
+      border-top:1px solid #ece6da;
+    }
+    article p { margin:0 0 16px; }
+    ul { padding-left:1.25rem; }
+    li { margin:7px 0; }
+    code {
+      font-family:"SFMono-Regular",Consolas,monospace;
+      background:#f2eadc;
+      padding:.12em .34em;
+      border-radius:5px;
+    }
+    .transcript-section {
+      max-width:820px;
+      margin:28px auto 0;
+    }
+    .transcript-section h2 {
+      font-size:1.35rem;
+      color:#163f44;
+      margin:0 0 12px;
+    }
+    .transcript-note {
+      color:var(--muted);
+      font-size:.92rem;
+      margin-bottom:14px;
+    }
+    details {
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:16px 18px;
+    }
+    summary { cursor:pointer; font-weight:800; color:#163f44; }
+    .transcript-turn {
+      display:grid;
+      grid-template-columns:74px minmax(0,1fr);
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid #eee6da;
+    }
+    .transcript-turn:last-child { border-bottom:0; }
+    .spk-badge {
+      align-self:start;
+      display:inline-block;
+      text-align:center;
+      border:1px solid;
+      border-radius:999px;
+      padding:3px 8px;
+      font-size:.78rem;
+      font-weight:800;
+    }
+    .spk-badge.host {
+      background:#176b7515;
+      color:#176b75;
+      border-color:#176b7540;
+    }
+    .spk-badge.expert {
+      background:#ad7f2215;
+      color:#856115;
+      border-color:#ad7f2240;
+    }
+    .transcript p {
+      margin:0;
+      color:#333;
+      font-size:.94rem;
+      line-height:1.58;
+    }
+    .transcript time {
+      display:block;
+      color:var(--muted);
+      font-size:.78rem;
+      font-family:"SFMono-Regular",Consolas,monospace;
+    }
+    footer {
+      max-width:820px;
+      margin:34px auto 0;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+    @media(max-width:760px) {
+      header { padding-top:34px; }
+      .media-panel { grid-template-columns:1fr; }
+      article { padding:20px; }
+      .transcript-turn { grid-template-columns:1fr; gap:6px; }
+      .spk-badge { justify-self:start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="back" href="../index.html">返回 Day 3 主頁</a>
+      <h1>Agent Skills Podcast 深度導讀</h1>
+      <p class="dek">從 context rot、progressive disclosure、trajectory scoring 到企業治理，這份導讀把 Podcast 的對話整理成可落地的 Agent Skills 工程判斷。</p>
+    </div>
+  </header>
+  <nav>
+    <div class="wrap">
+      <a href="#skill-不是新模型-而是可版本控制的工作記憶">Skill 結構</a>
+      <a href="#token-經濟學-context-太多會讓模型變笨">Token 經濟學</a>
+      <a href="#失敗不是模型不聰明-而是-skill-沒被測好">評估</a>
+      <a href="#從-demo-到-production-真正重的是基礎設施">Production</a>
+      <a href="#明天可以怎麼開始">明天開始</a>
+    </div>
+  </nav>
+  <main class="wrap">
+    <section class="media-panel" aria-label="Podcast media and resources">
+      <video controls preload="metadata" src="https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/Whitepaper.Companion.Podcast.Agent.Skills_compressed.mp4"></video>
+      <aside class="resource-box">
+        <h2>實作學習頻道</h2>
+        <a href="https://codelabs.developers.google.com/getting-started-with-antigravity-skills">Antigravity Skills Codelab</a>
+        <a href="https://codelabs.developers.google.com/agents-cli-adk-lifecycle">Agents CLI + ADK Lifecycle Codelab</a>
+        <a href="Whitepaper Companion Podcast Agent Skills.en-orig.srt">英文 SRT 逐字稿</a>
+      </aside>
+    </section>
+    <article>
+<h1>Agent Skills Podcast 深度導讀：不要把整家公司塞進 Prompt</h1>
+<p>如果把一百萬頁標準作業流程丟進 AI，它不會自動變成最強員工。這集 Podcast 一開始就戳破一個很常見的誤解：更大的 context window 不等於更強的代理人。模型能「裝下」大量文字，和它能在正確時刻「用對」那些文字，是兩回事。</p>
+<p>Day 3 白皮書談的 Agent Skills，真正想解決的不是「如何把更多資料塞進模型」，而是「如何讓模型只在需要時看到剛好足夠的程序知識」。這個轉向很重要，因為它把 Agent 工程的焦點從模型本身，移到模型周圍的工作環境、記憶結構、測試制度與組織治理。</p>
+<h2 id="skill-不是新模型-而是可版本控制的工作記憶">Skill 不是新模型，而是可版本控制的工作記憶</h2>
+<p>Podcast 用很直接的方式拆解 Agent Skill：它本質上是一個資料夾，裡面有必要的 <code>SKILL.md</code>，也可以有 <code>scripts/</code>、<code>references/</code>、<code>assets/</code>。這個結構的重點不是形式，而是把三種東西拆開：</p>
+<ul>
+<li><code>SKILL.md</code>：告訴代理人這個 skill 何時該用、要做什麼、成功輸出長什麼樣子。</li>
+<li><code>scripts/</code>：放可重複、可驗證、不要交給語言模型猜的 deterministic work。</li>
+<li><code>references/</code>：放很長但不該常駐 prompt 的領域文件。</li>
+<li><code>assets/</code>：放 schema、template、範本檔等可重用素材。</li>
+</ul>
+<p>這等於把「知道這件事」和「每次都把全部內容背在腦中」分開。好的 skill 不要求模型永遠記住所有流程，而是讓模型在觸發到任務時，才讀取那一小段必要的程序記憶。</p>
+<p>Podcast 裡用餐廳廚房作比喻：<code>SKILL.md</code> 像菜單，代理人先知道有哪些菜；真的有人點菜時，才去拿食譜、開機器、叫工具。這就是 progressive disclosure 的精神。</p>
+<h2 id="mcp-給代理人-手-skill-給代理人-手藝">MCP 給代理人「手」，Skill 給代理人「手藝」</h2>
+<p>這集 Podcast 特別釐清三個容易混在一起的東西：MCP、<code>AGENTS.md</code>、Agent Skill。</p>
+<p>MCP 讓代理人連到外部系統，例如查 BigQuery、讀 Salesforce、呼叫內部 API。它提供的是 reach，也就是觸達能力。Skill 提供的是 know-how，也就是拿到資料後該怎麼做的程序知識。<code>AGENTS.md</code> 則比較像常駐的專案規範，例如整個專案都要用 TypeScript、測試要怎麼跑、commit 前要檢查什麼。</p>
+<p>三者不是互斥，而是分工不同。真正穩健的代理人系統，通常會讓 skill 裡的步驟去呼叫 MCP 工具；也會把全域規則留在 <code>AGENTS.md</code>，把特定任務流程留在 skill。</p>
+<p>這個分工一旦清楚，系統設計會變得比較乾淨：不要把所有任務規則都塞進全域 prompt，也不要以為有 MCP 就等於代理人知道怎麼完成業務流程。</p>
+<h2 id="token-經濟學-context-太多會讓模型變笨">Token 經濟學：context 太多會讓模型變笨</h2>
+<p>Podcast 最有價值的一段，是把 Agent Skills 的流行原因拉回 token economics。過去很多團隊以為，只要 context window 夠大，就可以把所有工具、規則、文件、API spec 全部塞進去。白皮書和 Podcast 都指出，這會造成 attention dilution：模型雖然沒有報錯，但它的注意力被大量無關資訊稀釋，表現會安靜地變差。</p>
+<p>Agent Skills 的設計是反過來的。假設有 50 個 workflow，不需要把 50 份完整流程都載入 prompt；只需要載入每個 skill 的簡短描述。Podcast 提到，50 個 skill 的 metadata 可能約 4,000 tokens；真的觸發其中一個 skill 時，再載入該 skill 的內容。其餘 49 個留在硬碟，不進 context。</p>
+<p>這種設計的效果不是單純省錢，而是保護模型的短期注意力。對企業來說，這意味著 agent architecture 的關鍵問題不是「context window 能多大」，而是「哪些資訊有資格在此刻進入 context」。</p>
+<p>當 skill library 大到數萬個時，連 metadata 都不該全部載入。Podcast 也提到更大規模的做法：用 retrieval 或 embedding 先從大量 skill descriptions 中挑出最相關的幾個，再交給代理人判斷。也就是 progressive disclosure 的下一層：連菜單都要先檢索。</p>
+<h2 id="多代理人沒有消失-但被迫回到真正需要它的場景">多代理人沒有消失，但被迫回到真正需要它的場景</h2>
+<p>這集 Podcast 對 multi-agent architecture 的態度很務實：多代理人不是死了，但用途變窄了。</p>
+<p>如果任務真的需要非同步平行，例如三個代理人同時研究三家公司，multi-agent 仍然合理。如果不同工作有截然不同的安全權限，例如 HR 代理人可讀薪資、行銷代理人只能看公開網頁，也應該拆成不同代理人。</p>
+<p>但如果只是同一個代理人需要切換一百種物流流程，硬拆成一百個 worker agents，會帶來部署、記憶、權限、路由與維護成本。這種情況下，一個 general-purpose agent 動態載入一百個 skills，通常更簡潔，也更容易治理。</p>
+<p>這裡的實務判斷很重要：不要把「專業化」等同於「一定要多代理人」。很多專業化其實是程序知識的切換，不是身份或權限的切換。</p>
+<h2 id="失敗不是模型不聰明-而是-skill-沒被測好">失敗不是模型不聰明，而是 skill 沒被測好</h2>
+<p>Podcast 引用白皮書裡幾個警訊：設計不良的 skill 可能讓代理人比沒有 skill 時更差；有些研究也指出 skill 可能根本沒被正確觸發。這提醒我們，skill 不是只要寫成 Markdown 就會變成能力。</p>
+<p>常見失敗模式有四種：</p>
+<ul>
+<li>Trigger failure：description 太模糊，導致該觸發的不觸發，或不該觸發的亂觸發。</li>
+<li>Execution failure：內部步驟不清楚，工具呼叫順序錯誤，甚至產生幻覺。</li>
+<li>Token budget failure：references 太肥，反而破壞 context。</li>
+<li>Regression：新增一個 skill 後，搶走既有 skill 的觸發流量。</li>
+</ul>
+<p>因此白皮書強調 evaluation-driven development。不是先寫 skill，再憑感覺試用；而是在寫 <code>SKILL.md</code> 前，先定義幾個 JSON eval cases：輸入是什麼、預期工具軌跡是什麼、輸出格式是什麼。</p>
+<p>Podcast 對 trajectory scoring 的說明尤其關鍵。只看最後答案是不夠的，因為代理人可能「用危險方式碰巧得到正確結果」。例如客服代理人成功退款，但途中誤刪了使用者地址。Output-only scoring 會判定通過；trajectory scoring 才會抓到這種錯誤。</p>
+<p>這是 Agent 工程與一般生成式 AI Demo 的分水嶺：生產環境在乎的不只是答案對不對，也在乎它走過哪些不可逆動作。</p>
+<h2 id="從-demo-到-production-真正重的是基礎設施">從 Demo 到 Production，真正重的是基礎設施</h2>
+<p>Podcast 提到一個很有衝擊力的觀察：成熟 coding agent 的大量工程其實不是 prompt reasoning loop，而是權限分類、session storage、retry logic、context compaction 等操作基礎設施。這也解釋了為什麼很多 agent demo 在本機看起來很強，一進 production 就破功。</p>
+<p>Production agent 的難點不是「模型會不會回答」，而是：</p>
+<ul>
+<li>它能不能在錯誤環境中拒絕危險操作？</li>
+<li>它能不能把暫存資料保存到正確地方，而不是污染 context？</li>
+<li>它能不能在工具失敗時重試、回報、降級？</li>
+<li>它能不能用權限層級限制 skill 的行為？</li>
+<li>它能不能讓人類在高風險節點介入？</li>
+</ul>
+<p>Podcast 提到的三層升級很值得採用：Read-Only、Draft-Only、Action-Allowed。新的 skill 不該一開始就能執行真實操作。先讓它只讀資料，再讓它產出待審草稿，最後才在足夠評估與審核後允許不可逆動作。</p>
+<p>這種設計讓 skill 變成可以治理的軟體資產，而不是一堆散落的 prompt。</p>
+<h2 id="meta-skill-的邊界-ai-可以提案-但不能直接掌權">Meta-skill 的邊界：AI 可以提案，但不能直接掌權</h2>
+<p>Podcast 也談到 meta-skills：讓代理人協助撰寫、改善、甚至從使用紀錄中提議新的 skill。這很有吸引力，因為它能把成功的工作 trace 變成可重用流程，也能讓 library 隨著真實需求演化。</p>
+<p>但這也是最容易失控的地方。若沒有乾淨的 eval suite，代理人可能把 description 改到只會通過測試，卻破壞真實觸發邊界；也可能讓新 skill 搶走重要舊 skill 的流量。</p>
+<p>所以最務實的規則是：AI 產生的 skill 一律從 draft tier 開始，人類必須審核前幾次修改，且每次升級都要通過 regression suite。AI 可以加速制度化知識，但不能繞過制度。</p>
+<h2 id="dag-與-file-message-bus-不要把-context-window-當資料庫">DAG 與 file message bus：不要把 context window 當資料庫</h2>
+<p>當代理人連續使用多個 skills 時，還會遇到另一個問題：前一個 skill 的大量輸出如果直接丟回聊天歷史，context 又會膨脹。Podcast 用 DAG orchestration 與 file message bus 解釋 production 解法。</p>
+<p>DAG 定義任務依賴順序，避免流程互相循環。File message bus 則讓 skill 把大型中間結果存成檔案，只把檔案路徑交給下一個 skill。這樣模型不用把十萬行 JSON 全部讀進 prompt，只需要知道「資料在這裡，需要時再讀」。</p>
+<p>這背後有一個很重要的工程原則：shift intelligence left。能用 deterministic code 保證的東西，不要用 prompt 祈禱模型記得。例如郵遞區號驗證、schema validation、雜湊、欄位轉換，都應該放進 scripts，而不是寫一句「請務必檢查」。</p>
+<h2 id="企業護城河不是模型-而是被整理過的組織記憶">企業護城河不是模型，而是被整理過的組織記憶</h2>
+<p>Podcast 最後用大型居家修繕零售商作案例：顧客問「我想鋪浴室磁磚，需要哪些材料，星期二能送到嗎？」這個問題看似一句話，其實牽涉工程知識、材料估算、庫存、物流與交期。</p>
+<p>傳統做法可能是 AI 團隊嘗試打造一個巨大零售助理，結果 AI 工程師不懂防水層、磁磚耗損率、木材等級、物流規則。Skills-first 的做法則不同：</p>
+<ul>
+<li>工法團隊維護 project-guidance skill。</li>
+<li>商品團隊維護 materials-list skill。</li>
+<li>履約團隊維護 delivery-window skill。</li>
+<li>代理人依任務順序載入這些 skill，必要時透過檔案傳遞中間結果。</li>
+</ul>
+<p>這就是 Agent Skills 最深的商業意義：它把最懂流程的人變成 skill owner，而不是要求 AI 團隊替全公司背下所有知識。競爭者可以買到同樣的基礎模型，卻買不到一家公司長年累積、可版本控制、可評估、可部署的程序記憶。</p>
+<h2 id="明天可以怎麼開始">明天可以怎麼開始</h2>
+<p>最實際的起點不是先建立一個宏大的 skill library，而是找一個高頻、低風險、流程明確的任務：</p>
+<p>1. 找一位領域專家，錄下他如何完成一個手動 workflow。</p>
+<p>2. 把步驟整理成第一版 <code>SKILL.md</code>。</p>
+<p>3. 補三個 JSON eval cases，包含正向、邊界與負向案例。</p>
+<p>4. 把 deterministic work 放進 <code>scripts/</code>。</p>
+<p>5. 先放到 Read-Only tier。</p>
+<p>6. 觀察 trigger accuracy、tool trajectory、輸出品質與 token budget。</p>
+<p>7. 通過 regression suite 後，再考慮升到 Draft-Only。</p>
+<p>這集 Podcast 的核心訊息可以濃縮成一句話：不要期待模型本身記住整家公司；要把公司的程序記憶整理成可觸發、可測試、可版本控制、可治理的 skills。Agent Skills 不是讓 AI 更神祕，而是讓 AI 工作流更像真正的工程系統。</p>
+    </article>
+    <section class="transcript-section" id="transcript">
+      <h2>英文原始逐字稿</h2>
+      <div class="transcript-note">以下依 SRT 中的 <code>&gt;&gt;</code> 換 speaker 記號分為「主持人」與「專家」。原文內容僅移除 SRT 序號、時間軸外的 speaker 標記，未改寫英文句子。</div>
+      <details>
+        <summary>展開 / 收合完整逐字稿</summary>
+        <div class="transcript">
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:00:00,000 --&gt; 00:00:11,520</time>Imagine giving a a super smart AI a million pages of your company&#x27;s standard operating procedures. You&#x27;d think it would become your absolute best</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:00:09,040 --&gt; 00:00:14,080</time>employee, right? Like capable of doing anything.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:00:12,400 --&gt; 00:00:17,320</time>the dream. You just feed it everything and assume it&#x27;s going to work perfectly.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:00:15,560 --&gt; 00:00:25,200</time>Right, but the science shows it actually gets dumber. You hand it this massive encyclopedia and it acts like someone who just, you know, threw a giant</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:00:23,160 --&gt; 00:00:26,640</time>instruction manual into a blender.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:00:25,200 --&gt; 00:00:32,720</time>It&#x27;s a really fundamental misunderstanding of how these models actually process information.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:00:30,760 --&gt; 00:00:38,560</time>I mean, we we assume more context equals more capability, but in reality it just creates this massive attention dilution.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:00:37,080 --&gt; 00:00:43,120</time>And that is exactly what we are tearing apart today. Welcome to the deep dive.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:00:41,480 --&gt; 00:00:50,960</time>Today we&#x27;re looking at the day three white paper from the five day of AI agents vibe coding intensive course by Google X Kaggle.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:00:49,520 --&gt; 00:00:52,000</time>It&#x27;s a really fascinating read.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:00:50,960 --&gt; 00:00:59,400</time>It is. And you know, if you&#x27;re a technical Kaggle competitor looking to squeeze every drop of performance out of your agent architecture, or even if</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:00:57,600 --&gt; 00:01:07,160</time>you&#x27;re just intensely curious about how AI actually executes complex tasks behind the scenes, this deep dive is absolutely for you.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:01:05,280 --&gt; 00:01:09,440</time>Yeah, there&#x27;s a lot to unpack here.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:01:07,160 --&gt; 00:01:20,200</time>We are uncovering why dumping data into massive AI context windows is, frankly, a recipe for disaster. And why this simple lightweight primitive called an</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:01:16,920 --&gt; 00:01:25,720</time>agent skill is quietly replacing the entire bloated multi-agent ecosystem.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:01:23,960 --&gt; 00:01:32,760</time>It&#x27;s a massive paradigm shift. I mean, we spent the last few years building these incredibly complex networks of like manager agents and worker agents.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:01:31,640 --&gt; 00:01:34,280</time>whole swarm thing.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:01:32,760 --&gt; 00:01:41,440</time>Exactly, trying to brute force specialized behavior. But agent skills completely sidestep that complexity.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:01:39,120 --&gt; 00:01:48,160</time>They turn a single general purpose AI into a hyper specialist, but um only for the exact seconds you need it to be.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:01:46,600 --&gt; 00:01:56,280</time>Let&#x27;s start with the physical anatomy of this, because when I first read the term agent skill, I pictured some uh really dense compiled binary code or a deep</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:01:54,920 --&gt; 00:01:57,320</time>neural network weight adjustment.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:01:56,280 --&gt; 00:02:00,800</time>Oh yeah, like some complicated fine-tuning process.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:01:58,600 --&gt; 00:02:03,880</time>but it&#x27;s actually shockingly simple at a structural level.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:01,760 --&gt; 00:02:07,600</time>It really is. At its core, an agent skill is literally just a folder on your file system.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:02:06,880 --&gt; 00:02:08,880</time>Wait, just a folder?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:07,600 --&gt; 00:02:10,520</time>Just a folder.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:08,880 --&gt; 00:02:15,520</time>Inside that folder, you have one mandatory markdown file called skill.md.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:14,440 --&gt; 00:02:16,760</time>And you can think of this as the brain of the skill.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:02:16,200 --&gt; 00:02:19,480</time>Okay.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:16,760 --&gt; 00:02:23,800</time>It contains the metadata. So, the name and a very precise description of when to use it, along with the core instructions.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:02:23,480 --&gt; 00:02:25,640</time>Yeah.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:23,800 --&gt; 00:02:30,320</time>And then, around that file, you have optional subdirectories that handle all the heavy lifting.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:02:28,640 --&gt; 00:02:37,640</time>Right, I noticed the paper breaks down those subdirectories into three specific types. There&#x27;s a scripts folder, a references folder, and an assets folder.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:37,120 --&gt; 00:02:38,880</time>Yeah.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:02:37,640 --&gt; 00:02:43,080</time>Why do we need all of those if the skill.md already has the instructions?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:41,320 --&gt; 00:02:47,400</time>Because you really want to separate the what to do from the how to do it deterministically.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:02:46,800 --&gt; 00:02:48,880</time>Oh, I see.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:47,400 --&gt; 00:02:56,760</time>The scripts folder holds actual executable code, like, you know, Python or bash scripts. If the agent needs to calculate a cryptographic hash, you</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:55,280 --&gt; 00:02:58,640</time>don&#x27;t want the language model guessing the math.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:02:57,360 --&gt; 00:03:00,600</time>Definitely not. You want it to just run a script.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:02:59,320 --&gt; 00:03:08,640</time>Exactly. Python script that does it perfectly every time. Then, the references folder is for dense domain context, like a 50-page PDF of tax</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:03:06,680 --&gt; 00:03:17,320</time>codes, which is way too long for the main prompt. And the assets folder holds things like JSON schemas or email templates.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:03:15,280 --&gt; 00:03:20,880</time>The whole folder structure isolates the moving parts.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:03:18,720 --&gt; 00:03:26,440</time>And the paper outlines two distinct paths for how these skills actually get written in the real world.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:03:24,360 --&gt; 00:03:35,640</time>Path A is driven by subject matter experts. So, I&#x27;m picturing um an HR manager who has an onboarding guide, or maybe a compliance officer</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:03:34,440 --&gt; 00:03:36,120</time>with a massive run book.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:03:35,640 --&gt; 00:03:38,440</time>Right.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:03:36,120 --&gt; 00:03:46,280</time>They don&#x27;t need to learn Python. They just translate their existing human instructions into this skill.md format.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:03:43,640 --&gt; 00:03:51,320</time>Precisely. It really democratizes agent creation. You don&#x27;t have to be a software engineer to build a skill.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:03:49,680 --&gt; 00:03:52,720</time>But path B is different, right?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:03:51,320 --&gt; 00:04:00,240</time>Yeah, path B comes from the developer side and it&#x27;s much more dynamic. A developer might watch an agent successfully stumble through a really</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:03:58,240 --&gt; 00:04:00,640</time>complex multi-step workflow.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:04:00,240 --&gt; 00:04:02,240</time>Okay.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:04:00,640 --&gt; 00:04:08,760</time>And they take that successful trace, clean up and crystallize it into a reusable skill folder. Next time the agent doesn&#x27;t have to burn compute</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:04:07,440 --&gt; 00:04:09,800</time>figuring it all out from scratch.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:04:08,760 --&gt; 00:04:12,080</time>It sounds a lot like a restaurant kitchen.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:04:10,400 --&gt; 00:04:14,280</time>A restaurant kitchen, how so?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:04:12,080 --&gt; 00:04:21,480</time>Well, the skill.md metadata is essentially the menu out front. The agent, our chef, reads the menu to know what&#x27;s available.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:04:20,519 --&gt; 00:04:23,280</time>Okay, I like that.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:04:21,480 --&gt; 00:04:32,240</time>chef doesn&#x27;t actually plug in the blender, which would be our scripts folder, or read the exact grandma&#x27;s recipe out of the references folder</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:04:30,240 --&gt; 00:04:36,120</time>until a customer actually walks in and orders that specific dish.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:04:34,120 --&gt; 00:04:39,360</time>That is a highly accurate way to visualize it.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:04:37,600 --&gt; 00:04:43,000</time>The technical term the white paper uses for this is progressive disclosure.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:04:41,600 --&gt; 00:04:44,960</time>Progressive disclosure?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:04:43,000 --&gt; 00:04:49,800</time>Yeah. You only reveal the complex mechanics of a task when the task is actively triggered.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:04:48,280 --&gt; 00:04:55,400</time>But wait, a lot of developers listening to this are probably screaming at their dashboards right now because they already use MCP, the model context</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:04:54,720 --&gt; 00:04:55,880</time>protocol.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:04:55,400 --&gt; 00:04:58,720</time>Oh, sure.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:04:55,880 --&gt; 00:05:04,800</time>Or they just keep a giant agents.md file in their project root. Aren&#x27;t those tools already doing this exact thing?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:05:02,600 --&gt; 00:05:10,440</time>It&#x27;s a common confusion, actually, but the distinction is absolutely critical for system design.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:05:08,520 --&gt; 00:05:11,120</time>MCP gives an agent reach.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:05:10,440 --&gt; 00:05:13,680</time>Reach?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:05:11,120 --&gt; 00:05:20,200</time>Right. An MCP server acts as a bridge connecting your agent to an external system like pulling a record from Salesforce or, you know, querying a big</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:05:18,800 --&gt; 00:05:21,720</time>query database.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:05:20,200 --&gt; 00:05:24,360</time>Okay, so it connects to the outside world.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:05:22,120 --&gt; 00:05:33,040</time>Exactly. A skill, on the other hand, gives the agent know-how. It&#x27;s procedural memory. It&#x27;s the step-by-step logic of what to do with that Salesforce</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:05:31,200 --&gt; 00:05:34,960</time>record once you actually have it.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:05:33,040 --&gt; 00:05:42,640</time>So, the skill might say, &quot;Here are the five steps to process a customer refund.&quot; And step two might be, &quot;Use the MCP tool to check the database.&quot;</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:05:40,919 --&gt; 00:05:43,720</time>Exactly that. They compose beautifully together.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:05:43,160 --&gt; 00:05:46,880</time>Mhm.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:05:43,720 --&gt; 00:05:50,640</time>And regarding the agent.md file, that is global, always on context.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:05:49,040 --&gt; 00:05:52,520</time>Like project-wide rules?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:05:50,640 --&gt; 00:05:57,640</time>Yeah, like telling the AI, always write your code in TypeScript. Skills are strictly on demand.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:05:55,800 --&gt; 00:06:04,920</time>That distinction brings us right into the token economics of this whole movement. Because if a skill is just a smartly organized folder, why did this</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:06:03,160 --&gt; 00:06:12,760</time>specific architecture explode in popularity, especially with the vibe coding crowd? You hinted earlier at the issue with dumping a million pages into a model.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:06:11,120 --&gt; 00:06:17,960</time>Yeah, it solves a massive kind of hidden crisis in AI engineering known as context drought.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:06:16,040 --&gt; 00:06:20,160</time>Context drought, sounds gross.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:06:17,960 --&gt; 00:06:27,200</time>It is, computationally speaking. For a long time, the industry&#x27;s naive assumption was that larger context windows would just magically solve all</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:06:26,040 --&gt; 00:06:28,480</time>our orchestration problems.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:06:27,200 --&gt; 00:06:30,280</time>Just throw more context at it.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:06:28,480 --&gt; 00:06:39,600</time>Right. If you have a 1 million token window, just dump every tool, every instruction, every API spec into the system prompt, and let the model figure it out.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:06:37,720 --&gt; 00:06:50,080</time>But the paper references that famous lost in the middle study, and also a new 2025 study from Chroma research, they proved that across 18 different</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:06:47,520 --&gt; 00:06:54,120</time>frontier models, performance degrades silently as the input grows.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:06:52,000 --&gt; 00:06:58,040</time>Silently is the keyword there. You don&#x27;t get an error message, it just gets dumber.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:06:56,040 --&gt; 00:07:05,760</time>Wow. So, even if the window can physically hold a million tokens, the model&#x27;s accuracy, its ability to actually retrieve and use that</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:07:03,360 --&gt; 00:07:08,280</time>information, drops off a cliff long before the window fills up.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:07:06,880 --&gt; 00:07:13,000</time>Because the attention mechanism literally gets diluted. Every extra token you add competes for the model&#x27;s focus.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:07:12,560 --&gt; 00:07:14,800</time>Yeah.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:07:13,000 --&gt; 00:07:18,600</time>If your system prompt is cluttered with your instructions for 50 different tools, and the user just says hello,</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:07:18,080 --&gt; 00:07:21,480</time>Right.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:07:18,600 --&gt; 00:07:25,480</time>the model is wasting compute ignoring 49 irrelevant tools.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:07:22,880 --&gt; 00:07:32,840</time>So, progressive disclosure fixes this by keeping the noise out. If I have 50 workflows, I don&#x27;t load them all, I just load the metadata, the trigger</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:07:31,919 --&gt; 00:07:33,560</time>descriptions.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:07:32,840 --&gt; 00:07:35,240</time>Yes.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:07:33,560 --&gt; 00:07:39,560</time>And the paper notes that might only be about 4,000 tokens.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:07:37,480 --&gt; 00:07:48,440</time>When the user asks for a specific workflow, that single skill triggers and adds maybe 2,000 tokens for its active body.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:07:46,320 --&gt; 00:07:51,640</time>The other 49 stay completely hidden on the hard drive.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:07:49,360 --&gt; 00:07:57,680</time>You&#x27;re taking 15,000 tokens of active heavy context and compressing it down to maybe 6,000.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:07:56,040 --&gt; 00:08:01,600</time>The white paper shows this achieves up to a 98% reduction in active context.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:08:00,360 --&gt; 00:08:03,040</time>98%?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:08:01,600 --&gt; 00:08:08,160</time>Yeah, it&#x27;s huge. The model stays incredibly sharp because it&#x27;s only looking at what actually matters in that moment.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:08:06,720 --&gt; 00:08:12,360</time>Hold on, let me just I&#x27;m doing the math here. You said the metadata for 50 skills is 4,000 tokens.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:08:11,720 --&gt; 00:08:14,280</time>Roughly, yeah.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:08:12,360 --&gt; 00:08:22,200</time>If I&#x27;m an enterprise with 40,000 skills in my library, just reading the menu of metadata is going to blow out the context window anyway. How does</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:08:20,280 --&gt; 00:08:25,560</time>progressive disclosure survive at a massive corporate scale?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:08:23,600 --&gt; 00:08:28,880</time>That&#x27;s a great catch. At that scale, you don&#x27;t even load all the metadata into the prompt.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:08:27,960 --&gt; 00:08:30,320</time>Oh, you don&#x27;t?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:08:28,880 --&gt; 00:08:32,560</time>No, you use a lightweight retrieval system, a a rag pipeline.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:08:31,880 --&gt; 00:08:34,640</time>Okay.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:08:32,560 --&gt; 00:08:44,200</time>So, when the user types a prompt, a really fast embeddings model quickly scans the 40,000 skill descriptions, grabs the top five most relevant ones,</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:08:42,479 --&gt; 00:08:47,400</time>and only passes those five to the agent&#x27;s context window.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:08:46,040 --&gt; 00:08:49,000</time>Oh, wow.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:08:47,400 --&gt; 00:08:51,680</time>It&#x27;s progressive disclosure taken to the next level.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:08:49,680 --&gt; 00:08:55,120</time>That completely reframes how I think about routing.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:08:53,040 --&gt; 00:08:57,240</time>But, let me ask you this.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:08:55,120 --&gt; 00:09:05,040</time>If we can just dynamically swap skills in and out of single agent, does that mean the traditional multi-agent architecture is dead?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:09:02,240 --&gt; 00:09:10,520</time>Do we not need a manager agent routing tasks to a swarm of specialist worker agents anymore?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:09:08,920 --&gt; 00:09:14,000</time>Multi-agent systems aren&#x27;t dead, but their role is getting much, much narrower.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:09:12,520 --&gt; 00:09:15,960</time>Okay, when do you still use them?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:09:14,000 --&gt; 00:09:19,400</time>You still need them for genuine asynchronous parallelism.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:09:17,880 --&gt; 00:09:22,720</time>Like having three agents research three different companies simultaneously.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:09:21,400 --&gt; 00:09:24,040</time>Or when you have differing security postures.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:09:23,400 --&gt; 00:09:25,640</time>Security posture?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:09:24,040 --&gt; 00:09:33,280</time>Yeah. So, if you have an HR agent that needs clearance to read salaries, and a marketing agent scraping public websites, you keep those as separate</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:09:31,600 --&gt; 00:09:37,000</time>agents, so the marketing bot can&#x27;t accidentally leak payroll data.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:09:35,120 --&gt; 00:09:39,000</time>That makes perfect sense from a security standpoint.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:09:37,840 --&gt; 00:09:42,240</time>almost everything else,</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:09:39,000 --&gt; 00:09:44,040</time>Mhm. the swarm approach is dying.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:09:42,240 --&gt; 00:09:47,960</time>Let&#x27;s say you&#x27;re a logistics company with a hundred different process variants for shipping freight.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:09:47,360 --&gt; 00:09:49,240</time>Right.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:09:47,960 --&gt; 00:10:00,000</time>Maintaining a hundred different sub-agents with a hundred deployments, memory stores, and complex routing layers is just an operational nightmare. One</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:09:58,040 --&gt; 00:10:06,280</time>general purpose agent dynamically loading a hundred different skills from a folder is vastly more elegant.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:10:04,280 --&gt; 00:10:13,800</time>Which sounds amazing until you realize the danger zone we&#x27;re entering. I mean, if anyone in the company can write a skill just by typing up a markdown file,</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:10:12,120 --&gt; 00:10:15,440</time>it sounds like a recipe for absolute chaos.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:10:14,440 --&gt; 00:10:16,600</time>absolutely can be.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:10:15,440 --&gt; 00:10:23,080</time>If you&#x27;re listening to this and you&#x27;ve ever watched your agent just completely ignore the custom tool you spent three hours writing, this next part is going</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:10:21,680 --&gt; 00:10:25,440</time>to hit close to home.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:10:23,080 --&gt; 00:10:34,960</time>The reality is quite stark. The white paper references a 2025 study from Skills Bench that looked at real-world agent deployments. They found that 19%</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:10:32,480 --&gt; 00:10:40,120</time>of poorly designed skills actually caused the agent to perform worse than having no skill at all.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:10:39,040 --&gt; 00:10:41,800</time>Wait, worse?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:10:40,120 --&gt; 00:10:45,880</time>It actively subtracted baseline capability from the foundation model.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:10:43,480 --&gt; 00:10:54,280</time>That&#x27;s wild. And a Versel study found similar results, right? A 56% non-invocation rate, meaning more than half the time the agent just ignored the</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:10:51,880 --&gt; 00:11:00,200</time>skill completely. So, how exactly are these skills failing so catastrophically?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:10:58,120 --&gt; 00:11:04,200</time>Well, the paper outlines four specific failure modes. First is trigger failure.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:11:02,640 --&gt; 00:11:07,240</time>Your description&#x27;s too vague, so the wrong skill fires, or the right one just stays quiet.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:11:06,920 --&gt; 00:11:09,400</time>Okay.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:11:07,240 --&gt; 00:11:14,640</time>Second is execution failure. It triggers correctly, but the internal instructions are messy, so it produces wild tool calls or hallucinates data.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:11:14,200 --&gt; 00:11:16,520</time>Right.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:11:14,640 --&gt; 00:11:23,400</time>Third is token budget failure. This is when the skill author dumps a massive unoptimized PDS into the references folder, blowing up the context window,</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:11:22,120 --&gt; 00:11:26,200</time>and ruining the agent&#x27;s short-term memory.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:11:24,040 --&gt; 00:11:30,240</time>And the fourth one is regression, which honestly feels like the most insidious.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:11:28,680 --&gt; 00:11:39,040</time>You add a brand new skill to the library, and because its trigger phrase is too similar to an existing skill, it hijacks the routing.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:11:36,720 --&gt; 00:11:41,760</time>Yes. You break a system that used to work perfectly just by adding something new.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:11:41,040 --&gt; 00:11:43,280</time>Exactly.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:11:41,760 --&gt; 00:11:48,040</time>This is why the white paper heavily mandates evaluation-driven development or EDD.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:11:46,920 --&gt; 00:11:49,640</time>Right, EDD.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:11:48,040 --&gt; 00:11:56,800</time>Before you write a single line of your skill.md file, you must write three JSON evaluation cases.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:11:54,440 --&gt; 00:12:04,080</time>I love this concept. You have to define the input, the expected tools to be called, and the expected output format completely up front. If you don&#x27;t know</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:12:02,680 --&gt; 00:12:08,080</time>what success looks like, you really have no business writing the instructions.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:12:05,760 --&gt; 00:12:11,680</time>Yeah, exactly. You are testing the skill in isolation using a single skill sub-agent pattern.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:12:11,240 --&gt; 00:12:13,240</time>Okay.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:12:11,680 --&gt; 00:12:19,480</time>You give a blank agent only this one skill and run the JSON evals. But here&#x27;s the critical part.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:12:17,360 --&gt; 00:12:24,760</time>How you score those evaluations matters immensely. The paper dives deep into trajectory scoring.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:12:23,000 --&gt; 00:12:33,240</time>I want to stop and unpack trajectory scoring because the paper mentions modes like exact, in order, or in order.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:12:30,640 --&gt; 00:12:38,800</time>But like, if the user asks for a result and the agent delivers the correct final output, does it really matter how it got there?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:12:37,280 --&gt; 00:12:39,960</time>It matters more than the final output itself.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:12:39,320 --&gt; 00:12:42,560</time>Really?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:12:39,960 --&gt; 00:12:52,200</time>A 2026 analysis by Latitude found that if you only score the final output, you&#x27;ll pass 20 to 50% more test cases than if you score the trajectory,</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:12:50,400 --&gt; 00:12:54,440</time>meaning the specific sequence of tool calls.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:12:52,800 --&gt; 00:12:57,640</time>Wait, if it&#x27;s passing more cases, isn&#x27;t that a good thing? We want it to pass.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:12:56,040 --&gt; 00:13:00,520</time>Not if it&#x27;s stumbling into the right answer through disastrous methods.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:12:59,839 --&gt; 00:13:02,920</time>Uh.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:13:00,520 --&gt; 00:13:07,080</time>Let&#x27;s make this concrete. Imagine a user asks your customer service agent to refund my last order.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:13:06,160 --&gt; 00:13:08,640</time>Okay.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:13:07,080 --&gt; 00:13:15,040</time>The agent gets confused, pulls up the user&#x27;s profile, accidentally deletes their shipping address, but then somehow successfully triggers the Stripe refund</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:13:14,440 --&gt; 00:13:17,080</time>API.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:13:15,040 --&gt; 00:13:18,839</time>Oh, wow. That&#x27;s terrible.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:13:17,080 --&gt; 00:13:24,720</time>Right. If you were using output-only scoring, the test passes. The user got their money. But the trajectory was a complete disaster.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:13:24,160 --&gt; 00:13:27,000</time>I see.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:13:24,720 --&gt; 00:13:31,280</time>Trajectory scoring looks at the exact sequence of actions.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:13:28,920 --&gt; 00:13:39,680</time>For a read-only skill, like summarizing a public document, maybe any order is fine. But for an action-allowed skill that touches production databases, you</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:13:37,440 --&gt; 00:13:44,480</time>absolutely need exact or in-order trajectory scoring to catch that deleted address.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:13:42,960 --&gt; 00:13:52,400</time>So, if the model is just the engine block, I wouldn&#x27;t let a brand new unproven engine drive my kids to school without testing the brakes in a</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:13:50,320 --&gt; 00:13:58,040</time>controlled environment first. There has to be a staging area, right? Like a sandbox where these skills run without actually pressing the buy button in the</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:13:57,280 --&gt; 00:13:59,440</time>real world.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:13:58,040 --&gt; 00:14:00,440</time>You&#x27;re anticipating the demo-to-deploy gap.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:13:59,880 --&gt; 00:14:02,080</time>Right.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:14:00,440 --&gt; 00:14:10,160</time>Confidence always peaks during the local demo, but it completely shatters in production. Teams immediately blame the model for hallucinating, but it&#x27;s rarely</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:14:08,680 --&gt; 00:14:11,440</time>a model problem. It&#x27;s an environmental fit problem.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:14:10,920 --&gt; 00:14:12,960</time>Yeah.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:14:11,440 --&gt; 00:14:19,640</time>And this brings us to one of the most staggering statistics in the entire white paper involving Claude code.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:14:17,240 --&gt; 00:14:23,280</time>Yes, the reverse engineering stat. This completely blew my mind.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:14:21,120 --&gt; 00:14:33,080</time>It&#x27;s incredible. Researchers mapped the entire infrastructure of Claude code version 2.1.88, and they discovered that 98.4%</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:14:30,960 --&gt; 00:14:36,040</time>of the agent&#x27;s code base was purely operational infrastructure.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:14:34,480 --&gt; 00:14:37,280</time>98.4%.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:14:36,040 --&gt; 00:14:45,000</time>Yeah. Things like permission classifiers, session storage, retry logic, context compaction pipelines.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:14:42,600 --&gt; 00:14:48,400</time>Only 1.6% of the code base was the actual prompt reasoning loop.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:14:46,800 --&gt; 00:14:50,720</time>1.6%.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:14:48,400 --&gt; 00:14:58,520</time>The AI part of the AI agent is barely a rounding error. That proves your point completely. The foundation model is just a commodity. You can swap the engine out</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:14:56,400 --&gt; 00:15:05,800</time>tomorrow if a cheaper one drops, but the agent skills, the guardrails, the infrastructure, that&#x27;s the steering wheel and the transmission.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:15:03,680 --&gt; 00:15:09,839</time>Exactly. That is your durable proprietary asset, which is why we have the graduation ladder.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:15:08,720 --&gt; 00:15:11,240</time>Right, the staging area.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:15:09,839 --&gt; 00:15:19,280</time>To your earlier point about a sandbox, skills don&#x27;t just go live. A new skill starts at the read-only tier where it&#x27;s evaluated safely by an LLM as a judge.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:15:17,839 --&gt; 00:15:26,520</time>If it passes, it graduates to draft-only. Here, it can generate outputs and draft emails, but a human has to manually review and approve them</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:15:25,400 --&gt; 00:15:28,640</time>before they go out.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:15:26,520 --&gt; 00:15:36,560</time>And to get to the final tier, action allowed, the paper says it requires a metric called pass to the K. What does that math actually look like?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:15:34,880 --&gt; 00:15:40,680</time>Pass to the K measures sustained reliability.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:15:38,200 --&gt; 00:15:44,280</time>Let&#x27;s say a skill succeeds 60% of the time on a single run.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:15:42,360 --&gt; 00:15:44,920</time>That sounds okay for a quick prototype.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:15:44,280 --&gt; 00:15:46,440</time>Sure.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:15:44,920 --&gt; 00:15:57,440</time>But if you require it to succeed eight times in a row without a critical failure, so pass to the power of eight, that 60% success rate drops to about a</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:15:54,920 --&gt; 00:15:58,640</time>1.6% chance of clearing the hurdle.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:15:57,440 --&gt; 00:16:00,560</time>That is ruthless.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:15:58,640 --&gt; 00:16:06,280</time>It&#x27;s brutally effective. It exposes inconsistent skills long before they touch production data.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:16:04,480 --&gt; 00:16:14,800</time>That is ruthless, but you know, absolutely necessary. Now, earlier we talked about Path B developers capturing an agent&#x27;s successful workflow and</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:16:13,080 --&gt; 00:16:19,240</time>turning it into a skill. We are basically letting the AI write its own instructions here.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:16:17,640 --&gt; 00:16:20,600</time>Yeah, we are crossing into the frontier of meta skills.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:16:20,040 --&gt; 00:16:22,040</time>Meta skill.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:16:20,600 --&gt; 00:16:30,800</time>The white paper buckets these into four categories. First is authoring, where tools draft a skill based on a simple human prompt. Second is assisted</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:16:28,000 --&gt; 00:16:33,080</time>authoring from traces, which is Path B.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:16:30,800 --&gt; 00:16:36,920</time>Third is improvement, where an agent runs bounded automated experiments to optimize an existing skill.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:16:36,880 --&gt; 00:16:39,440</time>Right.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:16:36,920 --&gt; 00:16:46,480</time>And fourth is library evolution, where the agent analyzes, say, a month of chat logs, notices a recurring problem, and</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:16:44,360 --&gt; 00:16:49,320</time>independently proposes a brand new skill to solve it.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:16:47,240 --&gt; 00:16:57,480</time>Okay, I have to step in here. Letting an AI write, update, and evolve its own operating instructions sounds terrifying. What&#x27;s stopping it from</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:16:55,480 --&gt; 00:17:03,839</time>optimizing for some bizarre metric, over-fitting its own triggers, and quietly destroying our entire library over a weekend?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:17:02,440 --&gt; 00:17:05,199</time>The white paper strongly agrees with your paranoia.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:17:04,640 --&gt; 00:17:06,880</time>Good.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:17:05,199 --&gt; 00:17:13,079</time>Meta skills fall apart completely without that pristine evaluation suite we just discussed.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:17:10,199 --&gt; 00:17:19,439</time>The absolute non-negotiable rule is that anything an agent writes must enter the library at the draft tier.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:17:17,319 --&gt; 00:17:22,439</time>So, AI can never instantly deploy its own updates.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:17:20,280 --&gt; 00:17:30,280</time>Never. A human must be in the loop for the first few edits. I mean, an agent might optimize a skill&#x27;s description to pass a specific test, but accidentally</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:17:28,319 --&gt; 00:17:31,880</time>use a trigger phrase that steals traffic from another critical skill.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:17:31,520 --&gt; 00:17:33,520</time>Now,</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:17:31,880 --&gt; 00:17:36,960</time>a human reviewer can spot that regression instantly.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:17:35,120 --&gt; 00:17:44,880</time>But wait, keeping humans in the loop for meta skills solves the library destruction problem, but it doesn&#x27;t solve the traffic jam. If an agent uses</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:17:43,320 --&gt; 00:17:52,480</time>three different skills in a row to complete a complex task, aren&#x27;t we just dumping all those intermediate outputs back into the context window? Doesn&#x27;t</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:17:50,640 --&gt; 00:17:55,560</time>that trigger the exact context draw we just tried to escape?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:17:53,520 --&gt; 00:18:00,320</time>Yes. That is the orchestration challenge. You cannot use the context window as a database.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:17:59,040 --&gt; 00:18:01,920</time>Okay, so how do they fix it?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:18:00,320 --&gt; 00:18:06,360</time>Production systems use DAG orchestration.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:18:03,000 --&gt; 00:18:10,800</time>DAG? Woah, directed acyclic graph sounds like a terrifying college math course.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:18:09,200 --&gt; 00:18:16,640</time>Are we just saying it&#x27;s a one-way street so the AI doesn&#x27;t get stuck in an endless loop passing files back and forth?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:18:14,920 --&gt; 00:18:21,440</time>That&#x27;s exactly what the acyclic part means. No cycles, no infinite loops.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:18:18,920 --&gt; 00:18:23,280</time>It&#x27;s a structured map of dependencies.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:18:21,440 --&gt; 00:18:31,480</time>And to pass the data between these steps without polluting the context window, they use capability profiles over a file message bus.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:18:29,640 --&gt; 00:18:33,840</time>How does a file message bus work in this context?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:18:32,520 --&gt; 00:18:42,720</time>Okay, so instead of the first skill printing a massive 10,000-line JSON output directly into the chat history for the next skill to read,</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:18:40,800 --&gt; 00:18:45,040</time>which would blow up the context window.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:18:42,720 --&gt; 00:18:50,360</time>Right. Instead, it saves that JSON to a hidden file on the disk. Then, it just passes the file path URI to the next skill.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:18:49,920 --&gt; 00:18:51,840</time>Oh.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:18:50,360 --&gt; 00:18:56,600</time>The LLM&#x27;s attention is perfectly protected. It only sees data saved at file X.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:18:55,120 --&gt; 00:19:00,000</time>The golden rule here is to shift intelligence left.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:18:57,720 --&gt; 00:19:01,680</time>Shift intelligence left. Explain that.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:19:00,000 --&gt; 00:19:06,600</time>It means relying on deterministic software constraints rather than prompt engineering.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:19:05,000 --&gt; 00:19:10,600</time>Don&#x27;t write a system prompt yelling in all caps, &quot;Always validate the zip code.&quot;</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:19:09,200 --&gt; 00:19:13,200</time>Because it&#x27;s just hoping the LLM will pay attention.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:19:11,280 --&gt; 00:19:20,960</time>Exactly. Shifting intelligence left means you write a rigid five-line Python script in your scripts folder that validates the zip code, and the LLM</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:19:19,480 --&gt; 00:19:24,120</time>simply calls that tool.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:19:20,960 --&gt; 00:19:32,360</time>You rely on code, not vibes. I love that. So, moving from the mechanics to the real world, how is this actually being used in the enterprise right now?</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:19:30,760 --&gt; 00:19:38,520</time>Looking at the ecosystem, there are apparently over 40,000 public skills out there.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:19:36,400 --&gt; 00:19:45,360</time>Google has their official repository at github.com/ Google skills. How do you even navigate that safely?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:19:43,120 --&gt; 00:19:48,080</time>The paper gives three firm heuristics.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:19:45,360 --&gt; 00:19:56,880</time>First, prefer first-party skills. If you are querying BigQuery, use the official Google BigQuery skill, not a random community one. Second, pin your versions</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:19:55,040 --&gt; 00:20:03,480</time>aggressively so an unexpected update doesn&#x27;t break your DAG pipeline. And third, audit the code before adopting.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:20:01,360 --&gt; 00:20:05,400</time>Remember, a skill can contain executable Python scripts.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:20:04,440 --&gt; 00:20:06,880</time>Oh, right.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:20:05,400 --&gt; 00:20:08,760</time>treat it like a supply chain software dependency.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:20:07,640 --&gt; 00:20:15,520</time>Let&#x27;s ground all this theory with the case study they included in the appendix B. They looked at a massive home improvement retailer. I really want to</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:20:13,800 --&gt; 00:20:19,080</time>know exactly how a company of that size uses this architecture.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:20:16,880 --&gt; 00:20:21,840</time>They use it to distribute knowledge.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:20:19,080 --&gt; 00:20:30,840</time>Historically, an AI team at a retailer tries to build one massive monolithic retail assistant. It inevitably fails because AI engineers don&#x27;t know the</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:20:28,840 --&gt; 00:20:38,080</time>nuances of plumbing codes or lumber grading. With agent skills, the ownership is distributed to the actual domain experts.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:20:36,520 --&gt; 00:20:44,680</time>Let&#x27;s walk through a specific customer query. Say I go to their site and ask, &quot;I want to tile my shower. What do I need, and can I get it delivered by</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:20:43,520 --&gt; 00:20:48,400</time>Tuesday?&quot; How does that route through the system?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:20:46,560 --&gt; 00:20:55,320</time>The agent dynamically loads three separate skills in sequence. First, it triggers the project guidance skill.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:20:53,200 --&gt; 00:20:57,840</time>This folder is owned and maintained by the retailer&#x27;s actual trades team.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:20:57,200 --&gt; 00:20:59,440</time>Okay.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:20:57,840 --&gt; 00:21:06,320</time>It loads the expert logic about waterproofing substrates and grout types. Once the agent figures out the method, it drops that data into the file</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:21:05,520 --&gt; 00:21:08,320</time>message bus.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:21:06,320 --&gt; 00:21:10,600</time>And moves to the next node in the DAG.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:21:08,320 --&gt; 00:21:17,360</time>Exactly. It triggers the materials list skill, which is owned by the pro merchandising team. This skill calculates the exact square footage and wastage.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:21:16,720 --&gt; 00:21:18,920</time>Awesome.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:21:17,360 --&gt; 00:21:26,320</time>Finally, it passes that list to the delivery window skill, owned entirely by the fulfillment team, which runs a deterministic script against the</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:21:24,440 --&gt; 00:21:28,480</time>inventory database to check Tuesday availability.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:21:27,320 --&gt; 00:21:31,960</time>The brilliance of this governance structure is just staggering.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:21:30,400 --&gt; 00:21:40,000</time>You aren&#x27;t asking the AI engineering team to become experts in plumbing regulations. The plumbing experts write in a simple markdown file and the AI</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:21:38,440 --&gt; 00:21:41,680</time>just reads it when asked.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:21:40,000 --&gt; 00:21:44,640</time>And that distributed ownership is what creates a company&#x27;s strategic moat.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:21:44,400 --&gt; 00:21:47,240</time>Right.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:21:44,640 --&gt; 00:21:50,440</time>A competitor can buy access to the exact same base foundation model you are using.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:21:49,880 --&gt; 00:21:52,440</time>Right.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:21:50,440 --&gt; 00:21:58,400</time>But they cannot buy the codified, version controlled institutional knowledge of your best employees.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:21:56,800 --&gt; 00:22:00,080</time>What a journey.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:21:58,400 --&gt; 00:22:08,800</time>We&#x27;ve gone from unpacking the basic folder structure of a skill.md to understanding how progressive disclosure defeats attention dilution and context</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:22:06,400 --&gt; 00:22:12,840</time>rot. We looked at why trajectory scoring is vital to catch an agent that stumbles into the right answer dangerously.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:22:12,400 --&gt; 00:22:15,080</time>Yeah.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:22:12,840 --&gt; 00:22:22,960</time>And finally, how to use a DAG and a file message bus to deploy a distributed library of institutional knowledge without causing a massive traffic jam.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:22:20,600 --&gt; 00:22:30,160</time>It&#x27;s a profound shift. We are moving away from trying to make the model inherently smarter and instead focusing on making the environment around the</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:22:28,560 --&gt; 00:22:32,640</time>model highly structured and deterministic.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:22:31,280 --&gt; 00:22:41,440</time>And for everyone listening, don&#x27;t just let this be an academic theory. We strongly encourage you to actually build this. Jump into the code labs provided</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:22:38,360 --&gt; 00:22:44,520</time>in the 5-day of AI agents, Vibe coding intensive course by Google X Kaggle.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:22:43,800 --&gt; 00:22:46,840</time>Absolutely.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:22:44,520 --&gt; 00:22:54,960</time>Try out the practical implementation of these agent skills yourself. The paper gives incredible advice on where to start tomorrow. Find an expert in your</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:22:53,040 --&gt; 00:23:05,320</time>company, record them doing a manual workflow, draft a skill.md, rate your three JSON evil cases, and ship it to a read-only tier. Just start small.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:23:03,720 --&gt; 00:23:09,440</time>Getting that first successful skill to fire perfectly is a lightbulb moment.</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:23:08,000 --&gt; 00:23:12,720</time>You&#x27;ll never want to go back to massive system prompts again.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:23:10,560 --&gt; 00:23:17,880</time>It really changes everything. To wrap up our deep dive today, I want to leave you with a thought to mull over, circling</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:23:15,960 --&gt; 00:23:20,400</time>back to that home improvement retailer.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:23:17,880 --&gt; 00:23:28,480</time>If agent skills effectively digitize and version control the procedural memory, the exact how-to knowledge of your absolute best employees,</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:23:26,960 --&gt; 00:23:36,280</time>what happens to a company&#x27;s culture and its operations a decade from now when its corporate subconscious consists of hundreds of thousands of skills that</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:23:34,000 --&gt; 00:23:37,920</time>outlive any individual human worker?</p></div>
+<div class="transcript-turn"><span class="spk-badge host">主持人</span><p><time>00:23:36,280 --&gt; 00:23:39,920</time>That is a very big question.</p></div>
+<div class="transcript-turn"><span class="spk-badge expert">專家</span><p><time>00:23:37,920 --&gt; 00:23:43,880</time>Something to think about. Thanks for joining us on this deep dive. We&#x27;ll see you next time.</p></div>
+        </div>
+      </details>
+    </section>
+    <footer>
+      <p>本頁根據使用者提供的 Podcast SRT 與 Day 3 Agent Skills 白皮書主頁整理。導讀採繁體中文台灣用語，保留必要技術名稱。</p>
+    </footer>
+  </main>
+</body>
+</html>

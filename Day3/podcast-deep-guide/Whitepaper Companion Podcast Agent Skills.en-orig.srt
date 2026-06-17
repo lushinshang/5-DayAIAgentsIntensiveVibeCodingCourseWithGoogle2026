@@ -1,0 +1,1296 @@
+1
+00:00:00,000 --> 00:00:11,520
+Imagine giving a a super smart AI a million pages of your company's standard operating procedures. You'd think it would become your absolute best
+
+2
+00:00:09,040 --> 00:00:14,080
+employee, right? Like capable of doing anything.
+
+3
+00:00:12,400 --> 00:00:17,320
+>> the dream. You just feed it everything and assume it's going to work perfectly.
+
+4
+00:00:15,560 --> 00:00:25,200
+>> Right, but the science shows it actually gets dumber. You hand it this massive encyclopedia and it acts like someone who just, you know, threw a giant
+
+5
+00:00:23,160 --> 00:00:26,640
+instruction manual into a blender.
+
+6
+00:00:25,200 --> 00:00:32,720
+>> It's a really fundamental misunderstanding of how these models actually process information.
+
+7
+00:00:30,760 --> 00:00:38,560
+I mean, we we assume more context equals more capability, but in reality it just creates this massive attention dilution.
+
+8
+00:00:37,080 --> 00:00:43,120
+>> And that is exactly what we are tearing apart today. Welcome to the deep dive.
+
+9
+00:00:41,480 --> 00:00:50,960
+Today we're looking at the day three white paper from the five day of AI agents vibe coding intensive course by Google X Kaggle.
+
+10
+00:00:49,520 --> 00:00:52,000
+>> It's a really fascinating read.
+
+11
+00:00:50,960 --> 00:00:59,400
+>> It is. And you know, if you're a technical Kaggle competitor looking to squeeze every drop of performance out of your agent architecture, or even if
+
+12
+00:00:57,600 --> 00:01:07,160
+you're just intensely curious about how AI actually executes complex tasks behind the scenes, this deep dive is absolutely for you.
+
+13
+00:01:05,280 --> 00:01:09,440
+>> Yeah, there's a lot to unpack here.
+
+14
+00:01:07,160 --> 00:01:20,200
+>> We are uncovering why dumping data into massive AI context windows is, frankly, a recipe for disaster. And why this simple lightweight primitive called an
+
+15
+00:01:16,920 --> 00:01:25,720
+agent skill is quietly replacing the entire bloated multi-agent ecosystem.
+
+16
+00:01:23,960 --> 00:01:32,760
+>> It's a massive paradigm shift. I mean, we spent the last few years building these incredibly complex networks of like manager agents and worker agents.
+
+17
+00:01:31,640 --> 00:01:34,280
+>> whole swarm thing.
+
+18
+00:01:32,760 --> 00:01:41,440
+>> Exactly, trying to brute force specialized behavior. But agent skills completely sidestep that complexity.
+
+19
+00:01:39,120 --> 00:01:48,160
+They turn a single general purpose AI into a hyper specialist, but um only for the exact seconds you need it to be.
+
+20
+00:01:46,600 --> 00:01:56,280
+>> Let's start with the physical anatomy of this, because when I first read the term agent skill, I pictured some uh really dense compiled binary code or a deep
+
+21
+00:01:54,920 --> 00:01:57,320
+neural network weight adjustment.
+
+22
+00:01:56,280 --> 00:02:00,800
+>> Oh yeah, like some complicated fine-tuning process.
+
+23
+00:01:58,600 --> 00:02:03,880
+>> but it's actually shockingly simple at a structural level.
+
+24
+00:02:01,760 --> 00:02:07,600
+>> It really is. At its core, an agent skill is literally just a folder on your file system.
+
+25
+00:02:06,880 --> 00:02:08,880
+>> Wait, just a folder?
+
+26
+00:02:07,600 --> 00:02:10,520
+>> Just a folder.
+
+27
+00:02:08,880 --> 00:02:15,520
+Inside that folder, you have one mandatory markdown file called skill.md.
+
+28
+00:02:14,440 --> 00:02:16,760
+And you can think of this as the brain of the skill.
+
+29
+00:02:16,200 --> 00:02:19,480
+>> Okay.
+
+30
+00:02:16,760 --> 00:02:23,800
+>> It contains the metadata. So, the name and a very precise description of when to use it, along with the core instructions.
+
+31
+00:02:23,480 --> 00:02:25,640
+>> Yeah.
+
+32
+00:02:23,800 --> 00:02:30,320
+>> And then, around that file, you have optional subdirectories that handle all the heavy lifting.
+
+33
+00:02:28,640 --> 00:02:37,640
+>> Right, I noticed the paper breaks down those subdirectories into three specific types. There's a scripts folder, a references folder, and an assets folder.
+
+34
+00:02:37,120 --> 00:02:38,880
+>> Yeah.
+
+35
+00:02:37,640 --> 00:02:43,080
+>> Why do we need all of those if the skill.md already has the instructions?
+
+36
+00:02:41,320 --> 00:02:47,400
+>> Because you really want to separate the what to do from the how to do it deterministically.
+
+37
+00:02:46,800 --> 00:02:48,880
+>> Oh, I see.
+
+38
+00:02:47,400 --> 00:02:56,760
+>> The scripts folder holds actual executable code, like, you know, Python or bash scripts. If the agent needs to calculate a cryptographic hash, you
+
+39
+00:02:55,280 --> 00:02:58,640
+don't want the language model guessing the math.
+
+40
+00:02:57,360 --> 00:03:00,600
+>> Definitely not. You want it to just run a script.
+
+41
+00:02:59,320 --> 00:03:08,640
+>> Exactly. Python script that does it perfectly every time. Then, the references folder is for dense domain context, like a 50-page PDF of tax
+
+42
+00:03:06,680 --> 00:03:17,320
+codes, which is way too long for the main prompt. And the assets folder holds things like JSON schemas or email templates.
+
+43
+00:03:15,280 --> 00:03:20,880
+The whole folder structure isolates the moving parts.
+
+44
+00:03:18,720 --> 00:03:26,440
+>> And the paper outlines two distinct paths for how these skills actually get written in the real world.
+
+45
+00:03:24,360 --> 00:03:35,640
+Path A is driven by subject matter experts. So, I'm picturing um an HR manager who has an onboarding guide, or maybe a compliance officer
+
+46
+00:03:34,440 --> 00:03:36,120
+with a massive run book.
+
+47
+00:03:35,640 --> 00:03:38,440
+>> Right.
+
+48
+00:03:36,120 --> 00:03:46,280
+>> They don't need to learn Python. They just translate their existing human instructions into this skill.md format.
+
+49
+00:03:43,640 --> 00:03:51,320
+>> Precisely. It really democratizes agent creation. You don't have to be a software engineer to build a skill.
+
+50
+00:03:49,680 --> 00:03:52,720
+>> But path B is different, right?
+
+51
+00:03:51,320 --> 00:04:00,240
+>> Yeah, path B comes from the developer side and it's much more dynamic. A developer might watch an agent successfully stumble through a really
+
+52
+00:03:58,240 --> 00:04:00,640
+complex multi-step workflow.
+
+53
+00:04:00,240 --> 00:04:02,240
+>> Okay.
+
+54
+00:04:00,640 --> 00:04:08,760
+>> And they take that successful trace, clean up and crystallize it into a reusable skill folder. Next time the agent doesn't have to burn compute
+
+55
+00:04:07,440 --> 00:04:09,800
+figuring it all out from scratch.
+
+56
+00:04:08,760 --> 00:04:12,080
+>> It sounds a lot like a restaurant kitchen.
+
+57
+00:04:10,400 --> 00:04:14,280
+>> A restaurant kitchen, how so?
+
+58
+00:04:12,080 --> 00:04:21,480
+>> Well, the skill.md metadata is essentially the menu out front. The agent, our chef, reads the menu to know what's available.
+
+59
+00:04:20,519 --> 00:04:23,280
+>> Okay, I like that.
+
+60
+00:04:21,480 --> 00:04:32,240
+>> chef doesn't actually plug in the blender, which would be our scripts folder, or read the exact grandma's recipe out of the references folder
+
+61
+00:04:30,240 --> 00:04:36,120
+until a customer actually walks in and orders that specific dish.
+
+62
+00:04:34,120 --> 00:04:39,360
+>> That is a highly accurate way to visualize it.
+
+63
+00:04:37,600 --> 00:04:43,000
+The technical term the white paper uses for this is progressive disclosure.
+
+64
+00:04:41,600 --> 00:04:44,960
+>> Progressive disclosure?
+
+65
+00:04:43,000 --> 00:04:49,800
+>> Yeah. You only reveal the complex mechanics of a task when the task is actively triggered.
+
+66
+00:04:48,280 --> 00:04:55,400
+>> But wait, a lot of developers listening to this are probably screaming at their dashboards right now because they already use MCP, the model context
+
+67
+00:04:54,720 --> 00:04:55,880
+protocol.
+
+68
+00:04:55,400 --> 00:04:58,720
+>> Oh, sure.
+
+69
+00:04:55,880 --> 00:05:04,800
+>> Or they just keep a giant agents.md file in their project root. Aren't those tools already doing this exact thing?
+
+70
+00:05:02,600 --> 00:05:10,440
+>> It's a common confusion, actually, but the distinction is absolutely critical for system design.
+
+71
+00:05:08,520 --> 00:05:11,120
+MCP gives an agent reach.
+
+72
+00:05:10,440 --> 00:05:13,680
+>> Reach?
+
+73
+00:05:11,120 --> 00:05:20,200
+>> Right. An MCP server acts as a bridge connecting your agent to an external system like pulling a record from Salesforce or, you know, querying a big
+
+74
+00:05:18,800 --> 00:05:21,720
+query database.
+
+75
+00:05:20,200 --> 00:05:24,360
+>> Okay, so it connects to the outside world.
+
+76
+00:05:22,120 --> 00:05:33,040
+>> Exactly. A skill, on the other hand, gives the agent know-how. It's procedural memory. It's the step-by-step logic of what to do with that Salesforce
+
+77
+00:05:31,200 --> 00:05:34,960
+record once you actually have it.
+
+78
+00:05:33,040 --> 00:05:42,640
+>> So, the skill might say, "Here are the five steps to process a customer refund." And step two might be, "Use the MCP tool to check the database."
+
+79
+00:05:40,919 --> 00:05:43,720
+>> Exactly that. They compose beautifully together.
+
+80
+00:05:43,160 --> 00:05:46,880
+>> Mhm.
+
+81
+00:05:43,720 --> 00:05:50,640
+>> And regarding the agent.md file, that is global, always on context.
+
+82
+00:05:49,040 --> 00:05:52,520
+>> Like project-wide rules?
+
+83
+00:05:50,640 --> 00:05:57,640
+>> Yeah, like telling the AI, always write your code in TypeScript. Skills are strictly on demand.
+
+84
+00:05:55,800 --> 00:06:04,920
+>> That distinction brings us right into the token economics of this whole movement. Because if a skill is just a smartly organized folder, why did this
+
+85
+00:06:03,160 --> 00:06:12,760
+specific architecture explode in popularity, especially with the vibe coding crowd? You hinted earlier at the issue with dumping a million pages into a model.
+
+86
+00:06:11,120 --> 00:06:17,960
+>> Yeah, it solves a massive kind of hidden crisis in AI engineering known as context drought.
+
+87
+00:06:16,040 --> 00:06:20,160
+>> Context drought, sounds gross.
+
+88
+00:06:17,960 --> 00:06:27,200
+>> It is, computationally speaking. For a long time, the industry's naive assumption was that larger context windows would just magically solve all
+
+89
+00:06:26,040 --> 00:06:28,480
+our orchestration problems.
+
+90
+00:06:27,200 --> 00:06:30,280
+>> Just throw more context at it.
+
+91
+00:06:28,480 --> 00:06:39,600
+>> Right. If you have a 1 million token window, just dump every tool, every instruction, every API spec into the system prompt, and let the model figure it out.
+
+92
+00:06:37,720 --> 00:06:50,080
+>> But the paper references that famous lost in the middle study, and also a new 2025 study from Chroma research, they proved that across 18 different
+
+93
+00:06:47,520 --> 00:06:54,120
+frontier models, performance degrades silently as the input grows.
+
+94
+00:06:52,000 --> 00:06:58,040
+>> Silently is the keyword there. You don't get an error message, it just gets dumber.
+
+95
+00:06:56,040 --> 00:07:05,760
+>> Wow. So, even if the window can physically hold a million tokens, the model's accuracy, its ability to actually retrieve and use that
+
+96
+00:07:03,360 --> 00:07:08,280
+information, drops off a cliff long before the window fills up.
+
+97
+00:07:06,880 --> 00:07:13,000
+>> Because the attention mechanism literally gets diluted. Every extra token you add competes for the model's focus.
+
+98
+00:07:12,560 --> 00:07:14,800
+>> Yeah.
+
+99
+00:07:13,000 --> 00:07:18,600
+>> If your system prompt is cluttered with your instructions for 50 different tools, and the user just says hello,
+
+100
+00:07:18,080 --> 00:07:21,480
+>> Right.
+
+101
+00:07:18,600 --> 00:07:25,480
+>> the model is wasting compute ignoring 49 irrelevant tools.
+
+102
+00:07:22,880 --> 00:07:32,840
+>> So, progressive disclosure fixes this by keeping the noise out. If I have 50 workflows, I don't load them all, I just load the metadata, the trigger
+
+103
+00:07:31,919 --> 00:07:33,560
+descriptions.
+
+104
+00:07:32,840 --> 00:07:35,240
+>> Yes.
+
+105
+00:07:33,560 --> 00:07:39,560
+>> And the paper notes that might only be about 4,000 tokens.
+
+106
+00:07:37,480 --> 00:07:48,440
+When the user asks for a specific workflow, that single skill triggers and adds maybe 2,000 tokens for its active body.
+
+107
+00:07:46,320 --> 00:07:51,640
+The other 49 stay completely hidden on the hard drive.
+
+108
+00:07:49,360 --> 00:07:57,680
+>> You're taking 15,000 tokens of active heavy context and compressing it down to maybe 6,000.
+
+109
+00:07:56,040 --> 00:08:01,600
+The white paper shows this achieves up to a 98% reduction in active context.
+
+110
+00:08:00,360 --> 00:08:03,040
+>> 98%?
+
+111
+00:08:01,600 --> 00:08:08,160
+>> Yeah, it's huge. The model stays incredibly sharp because it's only looking at what actually matters in that moment.
+
+112
+00:08:06,720 --> 00:08:12,360
+>> Hold on, let me just I'm doing the math here. You said the metadata for 50 skills is 4,000 tokens.
+
+113
+00:08:11,720 --> 00:08:14,280
+>> Roughly, yeah.
+
+114
+00:08:12,360 --> 00:08:22,200
+>> If I'm an enterprise with 40,000 skills in my library, just reading the menu of metadata is going to blow out the context window anyway. How does
+
+115
+00:08:20,280 --> 00:08:25,560
+progressive disclosure survive at a massive corporate scale?
+
+116
+00:08:23,600 --> 00:08:28,880
+>> That's a great catch. At that scale, you don't even load all the metadata into the prompt.
+
+117
+00:08:27,960 --> 00:08:30,320
+>> Oh, you don't?
+
+118
+00:08:28,880 --> 00:08:32,560
+>> No, you use a lightweight retrieval system, a a rag pipeline.
+
+119
+00:08:31,880 --> 00:08:34,640
+>> Okay.
+
+120
+00:08:32,560 --> 00:08:44,200
+>> So, when the user types a prompt, a really fast embeddings model quickly scans the 40,000 skill descriptions, grabs the top five most relevant ones,
+
+121
+00:08:42,479 --> 00:08:47,400
+and only passes those five to the agent's context window.
+
+122
+00:08:46,040 --> 00:08:49,000
+>> Oh, wow.
+
+123
+00:08:47,400 --> 00:08:51,680
+>> It's progressive disclosure taken to the next level.
+
+124
+00:08:49,680 --> 00:08:55,120
+>> That completely reframes how I think about routing.
+
+125
+00:08:53,040 --> 00:08:57,240
+But, let me ask you this.
+
+126
+00:08:55,120 --> 00:09:05,040
+If we can just dynamically swap skills in and out of single agent, does that mean the traditional multi-agent architecture is dead?
+
+127
+00:09:02,240 --> 00:09:10,520
+Do we not need a manager agent routing tasks to a swarm of specialist worker agents anymore?
+
+128
+00:09:08,920 --> 00:09:14,000
+>> Multi-agent systems aren't dead, but their role is getting much, much narrower.
+
+129
+00:09:12,520 --> 00:09:15,960
+>> Okay, when do you still use them?
+
+130
+00:09:14,000 --> 00:09:19,400
+>> You still need them for genuine asynchronous parallelism.
+
+131
+00:09:17,880 --> 00:09:22,720
+Like having three agents research three different companies simultaneously.
+
+132
+00:09:21,400 --> 00:09:24,040
+Or when you have differing security postures.
+
+133
+00:09:23,400 --> 00:09:25,640
+>> Security posture?
+
+134
+00:09:24,040 --> 00:09:33,280
+>> Yeah. So, if you have an HR agent that needs clearance to read salaries, and a marketing agent scraping public websites, you keep those as separate
+
+135
+00:09:31,600 --> 00:09:37,000
+agents, so the marketing bot can't accidentally leak payroll data.
+
+136
+00:09:35,120 --> 00:09:39,000
+>> That makes perfect sense from a security standpoint.
+
+137
+00:09:37,840 --> 00:09:42,240
+>> almost everything else,
+
+138
+00:09:39,000 --> 00:09:44,040
+>> Mhm. the swarm approach is dying.
+
+139
+00:09:42,240 --> 00:09:47,960
+Let's say you're a logistics company with a hundred different process variants for shipping freight.
+
+140
+00:09:47,360 --> 00:09:49,240
+>> Right.
+
+141
+00:09:47,960 --> 00:10:00,000
+>> Maintaining a hundred different sub-agents with a hundred deployments, memory stores, and complex routing layers is just an operational nightmare. One
+
+142
+00:09:58,040 --> 00:10:06,280
+general purpose agent dynamically loading a hundred different skills from a folder is vastly more elegant.
+
+143
+00:10:04,280 --> 00:10:13,800
+>> Which sounds amazing until you realize the danger zone we're entering. I mean, if anyone in the company can write a skill just by typing up a markdown file,
+
+144
+00:10:12,120 --> 00:10:15,440
+it sounds like a recipe for absolute chaos.
+
+145
+00:10:14,440 --> 00:10:16,600
+>> absolutely can be.
+
+146
+00:10:15,440 --> 00:10:23,080
+>> If you're listening to this and you've ever watched your agent just completely ignore the custom tool you spent three hours writing, this next part is going
+
+147
+00:10:21,680 --> 00:10:25,440
+to hit close to home.
+
+148
+00:10:23,080 --> 00:10:34,960
+>> The reality is quite stark. The white paper references a 2025 study from Skills Bench that looked at real-world agent deployments. They found that 19%
+
+149
+00:10:32,480 --> 00:10:40,120
+of poorly designed skills actually caused the agent to perform worse than having no skill at all.
+
+150
+00:10:39,040 --> 00:10:41,800
+>> Wait, worse?
+
+151
+00:10:40,120 --> 00:10:45,880
+>> It actively subtracted baseline capability from the foundation model.
+
+152
+00:10:43,480 --> 00:10:54,280
+>> That's wild. And a Versel study found similar results, right? A 56% non-invocation rate, meaning more than half the time the agent just ignored the
+
+153
+00:10:51,880 --> 00:11:00,200
+skill completely. So, how exactly are these skills failing so catastrophically?
+
+154
+00:10:58,120 --> 00:11:04,200
+>> Well, the paper outlines four specific failure modes. First is trigger failure.
+
+155
+00:11:02,640 --> 00:11:07,240
+Your description's too vague, so the wrong skill fires, or the right one just stays quiet.
+
+156
+00:11:06,920 --> 00:11:09,400
+>> Okay.
+
+157
+00:11:07,240 --> 00:11:14,640
+>> Second is execution failure. It triggers correctly, but the internal instructions are messy, so it produces wild tool calls or hallucinates data.
+
+158
+00:11:14,200 --> 00:11:16,520
+>> Right.
+
+159
+00:11:14,640 --> 00:11:23,400
+>> Third is token budget failure. This is when the skill author dumps a massive unoptimized PDS into the references folder, blowing up the context window,
+
+160
+00:11:22,120 --> 00:11:26,200
+and ruining the agent's short-term memory.
+
+161
+00:11:24,040 --> 00:11:30,240
+>> And the fourth one is regression, which honestly feels like the most insidious.
+
+162
+00:11:28,680 --> 00:11:39,040
+You add a brand new skill to the library, and because its trigger phrase is too similar to an existing skill, it hijacks the routing.
+
+163
+00:11:36,720 --> 00:11:41,760
+>> Yes. You break a system that used to work perfectly just by adding something new.
+
+164
+00:11:41,040 --> 00:11:43,280
+>> Exactly.
+
+165
+00:11:41,760 --> 00:11:48,040
+>> This is why the white paper heavily mandates evaluation-driven development or EDD.
+
+166
+00:11:46,920 --> 00:11:49,640
+>> Right, EDD.
+
+167
+00:11:48,040 --> 00:11:56,800
+>> Before you write a single line of your skill.md file, you must write three JSON evaluation cases.
+
+168
+00:11:54,440 --> 00:12:04,080
+>> I love this concept. You have to define the input, the expected tools to be called, and the expected output format completely up front. If you don't know
+
+169
+00:12:02,680 --> 00:12:08,080
+what success looks like, you really have no business writing the instructions.
+
+170
+00:12:05,760 --> 00:12:11,680
+>> Yeah, exactly. You are testing the skill in isolation using a single skill sub-agent pattern.
+
+171
+00:12:11,240 --> 00:12:13,240
+>> Okay.
+
+172
+00:12:11,680 --> 00:12:19,480
+>> You give a blank agent only this one skill and run the JSON evals. But here's the critical part.
+
+173
+00:12:17,360 --> 00:12:24,760
+How you score those evaluations matters immensely. The paper dives deep into trajectory scoring.
+
+174
+00:12:23,000 --> 00:12:33,240
+>> I want to stop and unpack trajectory scoring because the paper mentions modes like exact, in order, or in order.
+
+175
+00:12:30,640 --> 00:12:38,800
+But like, if the user asks for a result and the agent delivers the correct final output, does it really matter how it got there?
+
+176
+00:12:37,280 --> 00:12:39,960
+>> It matters more than the final output itself.
+
+177
+00:12:39,320 --> 00:12:42,560
+>> Really?
+
+178
+00:12:39,960 --> 00:12:52,200
+>> A 2026 analysis by Latitude found that if you only score the final output, you'll pass 20 to 50% more test cases than if you score the trajectory,
+
+179
+00:12:50,400 --> 00:12:54,440
+meaning the specific sequence of tool calls.
+
+180
+00:12:52,800 --> 00:12:57,640
+>> Wait, if it's passing more cases, isn't that a good thing? We want it to pass.
+
+181
+00:12:56,040 --> 00:13:00,520
+>> Not if it's stumbling into the right answer through disastrous methods.
+
+182
+00:12:59,839 --> 00:13:02,920
+>> Uh.
+
+183
+00:13:00,520 --> 00:13:07,080
+>> Let's make this concrete. Imagine a user asks your customer service agent to refund my last order.
+
+184
+00:13:06,160 --> 00:13:08,640
+>> Okay.
+
+185
+00:13:07,080 --> 00:13:15,040
+>> The agent gets confused, pulls up the user's profile, accidentally deletes their shipping address, but then somehow successfully triggers the Stripe refund
+
+186
+00:13:14,440 --> 00:13:17,080
+API.
+
+187
+00:13:15,040 --> 00:13:18,839
+>> Oh, wow. That's terrible.
+
+188
+00:13:17,080 --> 00:13:24,720
+>> Right. If you were using output-only scoring, the test passes. The user got their money. But the trajectory was a complete disaster.
+
+189
+00:13:24,160 --> 00:13:27,000
+>> I see.
+
+190
+00:13:24,720 --> 00:13:31,280
+>> Trajectory scoring looks at the exact sequence of actions.
+
+191
+00:13:28,920 --> 00:13:39,680
+For a read-only skill, like summarizing a public document, maybe any order is fine. But for an action-allowed skill that touches production databases, you
+
+192
+00:13:37,440 --> 00:13:44,480
+absolutely need exact or in-order trajectory scoring to catch that deleted address.
+
+193
+00:13:42,960 --> 00:13:52,400
+>> So, if the model is just the engine block, I wouldn't let a brand new unproven engine drive my kids to school without testing the brakes in a
+
+194
+00:13:50,320 --> 00:13:58,040
+controlled environment first. There has to be a staging area, right? Like a sandbox where these skills run without actually pressing the buy button in the
+
+195
+00:13:57,280 --> 00:13:59,440
+real world.
+
+196
+00:13:58,040 --> 00:14:00,440
+>> You're anticipating the demo-to-deploy gap.
+
+197
+00:13:59,880 --> 00:14:02,080
+>> Right.
+
+198
+00:14:00,440 --> 00:14:10,160
+>> Confidence always peaks during the local demo, but it completely shatters in production. Teams immediately blame the model for hallucinating, but it's rarely
+
+199
+00:14:08,680 --> 00:14:11,440
+a model problem. It's an environmental fit problem.
+
+200
+00:14:10,920 --> 00:14:12,960
+>> Yeah.
+
+201
+00:14:11,440 --> 00:14:19,640
+>> And this brings us to one of the most staggering statistics in the entire white paper involving Claude code.
+
+202
+00:14:17,240 --> 00:14:23,280
+>> Yes, the reverse engineering stat. This completely blew my mind.
+
+203
+00:14:21,120 --> 00:14:33,080
+>> It's incredible. Researchers mapped the entire infrastructure of Claude code version 2.1.88, and they discovered that 98.4%
+
+204
+00:14:30,960 --> 00:14:36,040
+of the agent's code base was purely operational infrastructure.
+
+205
+00:14:34,480 --> 00:14:37,280
+>> 98.4%.
+
+206
+00:14:36,040 --> 00:14:45,000
+>> Yeah. Things like permission classifiers, session storage, retry logic, context compaction pipelines.
+
+207
+00:14:42,600 --> 00:14:48,400
+Only 1.6% of the code base was the actual prompt reasoning loop.
+
+208
+00:14:46,800 --> 00:14:50,720
+>> 1.6%.
+
+209
+00:14:48,400 --> 00:14:58,520
+The AI part of the AI agent is barely a rounding error. That proves your point completely. The foundation model is just a commodity. You can swap the engine out
+
+210
+00:14:56,400 --> 00:15:05,800
+tomorrow if a cheaper one drops, but the agent skills, the guardrails, the infrastructure, that's the steering wheel and the transmission.
+
+211
+00:15:03,680 --> 00:15:09,839
+>> Exactly. That is your durable proprietary asset, which is why we have the graduation ladder.
+
+212
+00:15:08,720 --> 00:15:11,240
+>> Right, the staging area.
+
+213
+00:15:09,839 --> 00:15:19,280
+>> To your earlier point about a sandbox, skills don't just go live. A new skill starts at the read-only tier where it's evaluated safely by an LLM as a judge.
+
+214
+00:15:17,839 --> 00:15:26,520
+If it passes, it graduates to draft-only. Here, it can generate outputs and draft emails, but a human has to manually review and approve them
+
+215
+00:15:25,400 --> 00:15:28,640
+before they go out.
+
+216
+00:15:26,520 --> 00:15:36,560
+>> And to get to the final tier, action allowed, the paper says it requires a metric called pass to the K. What does that math actually look like?
+
+217
+00:15:34,880 --> 00:15:40,680
+>> Pass to the K measures sustained reliability.
+
+218
+00:15:38,200 --> 00:15:44,280
+Let's say a skill succeeds 60% of the time on a single run.
+
+219
+00:15:42,360 --> 00:15:44,920
+That sounds okay for a quick prototype.
+
+220
+00:15:44,280 --> 00:15:46,440
+>> Sure.
+
+221
+00:15:44,920 --> 00:15:57,440
+>> But if you require it to succeed eight times in a row without a critical failure, so pass to the power of eight, that 60% success rate drops to about a
+
+222
+00:15:54,920 --> 00:15:58,640
+1.6% chance of clearing the hurdle.
+
+223
+00:15:57,440 --> 00:16:00,560
+>> That is ruthless.
+
+224
+00:15:58,640 --> 00:16:06,280
+>> It's brutally effective. It exposes inconsistent skills long before they touch production data.
+
+225
+00:16:04,480 --> 00:16:14,800
+>> That is ruthless, but you know, absolutely necessary. Now, earlier we talked about Path B developers capturing an agent's successful workflow and
+
+226
+00:16:13,080 --> 00:16:19,240
+turning it into a skill. We are basically letting the AI write its own instructions here.
+
+227
+00:16:17,640 --> 00:16:20,600
+>> Yeah, we are crossing into the frontier of meta skills.
+
+228
+00:16:20,040 --> 00:16:22,040
+>> Meta skill.
+
+229
+00:16:20,600 --> 00:16:30,800
+>> The white paper buckets these into four categories. First is authoring, where tools draft a skill based on a simple human prompt. Second is assisted
+
+230
+00:16:28,000 --> 00:16:33,080
+authoring from traces, which is Path B.
+
+231
+00:16:30,800 --> 00:16:36,920
+Third is improvement, where an agent runs bounded automated experiments to optimize an existing skill.
+
+232
+00:16:36,880 --> 00:16:39,440
+>> Right.
+
+233
+00:16:36,920 --> 00:16:46,480
+>> And fourth is library evolution, where the agent analyzes, say, a month of chat logs, notices a recurring problem, and
+
+234
+00:16:44,360 --> 00:16:49,320
+independently proposes a brand new skill to solve it.
+
+235
+00:16:47,240 --> 00:16:57,480
+>> Okay, I have to step in here. Letting an AI write, update, and evolve its own operating instructions sounds terrifying. What's stopping it from
+
+236
+00:16:55,480 --> 00:17:03,839
+optimizing for some bizarre metric, over-fitting its own triggers, and quietly destroying our entire library over a weekend?
+
+237
+00:17:02,440 --> 00:17:05,199
+>> The white paper strongly agrees with your paranoia.
+
+238
+00:17:04,640 --> 00:17:06,880
+>> Good.
+
+239
+00:17:05,199 --> 00:17:13,079
+>> Meta skills fall apart completely without that pristine evaluation suite we just discussed.
+
+240
+00:17:10,199 --> 00:17:19,439
+The absolute non-negotiable rule is that anything an agent writes must enter the library at the draft tier.
+
+241
+00:17:17,319 --> 00:17:22,439
+>> So, AI can never instantly deploy its own updates.
+
+242
+00:17:20,280 --> 00:17:30,280
+>> Never. A human must be in the loop for the first few edits. I mean, an agent might optimize a skill's description to pass a specific test, but accidentally
+
+243
+00:17:28,319 --> 00:17:31,880
+use a trigger phrase that steals traffic from another critical skill.
+
+244
+00:17:31,520 --> 00:17:33,520
+>> Now,
+
+245
+00:17:31,880 --> 00:17:36,960
+>> a human reviewer can spot that regression instantly.
+
+246
+00:17:35,120 --> 00:17:44,880
+>> But wait, keeping humans in the loop for meta skills solves the library destruction problem, but it doesn't solve the traffic jam. If an agent uses
+
+247
+00:17:43,320 --> 00:17:52,480
+three different skills in a row to complete a complex task, aren't we just dumping all those intermediate outputs back into the context window? Doesn't
+
+248
+00:17:50,640 --> 00:17:55,560
+that trigger the exact context draw we just tried to escape?
+
+249
+00:17:53,520 --> 00:18:00,320
+>> Yes. That is the orchestration challenge. You cannot use the context window as a database.
+
+250
+00:17:59,040 --> 00:18:01,920
+>> Okay, so how do they fix it?
+
+251
+00:18:00,320 --> 00:18:06,360
+>> Production systems use DAG orchestration.
+
+252
+00:18:03,000 --> 00:18:10,800
+>> DAG? Woah, directed acyclic graph sounds like a terrifying college math course.
+
+253
+00:18:09,200 --> 00:18:16,640
+Are we just saying it's a one-way street so the AI doesn't get stuck in an endless loop passing files back and forth?
+
+254
+00:18:14,920 --> 00:18:21,440
+>> That's exactly what the acyclic part means. No cycles, no infinite loops.
+
+255
+00:18:18,920 --> 00:18:23,280
+It's a structured map of dependencies.
+
+256
+00:18:21,440 --> 00:18:31,480
+And to pass the data between these steps without polluting the context window, they use capability profiles over a file message bus.
+
+257
+00:18:29,640 --> 00:18:33,840
+>> How does a file message bus work in this context?
+
+258
+00:18:32,520 --> 00:18:42,720
+>> Okay, so instead of the first skill printing a massive 10,000-line JSON output directly into the chat history for the next skill to read,
+
+259
+00:18:40,800 --> 00:18:45,040
+>> which would blow up the context window.
+
+260
+00:18:42,720 --> 00:18:50,360
+>> Right. Instead, it saves that JSON to a hidden file on the disk. Then, it just passes the file path URI to the next skill.
+
+261
+00:18:49,920 --> 00:18:51,840
+>> Oh.
+
+262
+00:18:50,360 --> 00:18:56,600
+>> The LLM's attention is perfectly protected. It only sees data saved at file X.
+
+263
+00:18:55,120 --> 00:19:00,000
+The golden rule here is to shift intelligence left.
+
+264
+00:18:57,720 --> 00:19:01,680
+>> Shift intelligence left. Explain that.
+
+265
+00:19:00,000 --> 00:19:06,600
+>> It means relying on deterministic software constraints rather than prompt engineering.
+
+266
+00:19:05,000 --> 00:19:10,600
+Don't write a system prompt yelling in all caps, "Always validate the zip code."
+
+267
+00:19:09,200 --> 00:19:13,200
+>> Because it's just hoping the LLM will pay attention.
+
+268
+00:19:11,280 --> 00:19:20,960
+>> Exactly. Shifting intelligence left means you write a rigid five-line Python script in your scripts folder that validates the zip code, and the LLM
+
+269
+00:19:19,480 --> 00:19:24,120
+simply calls that tool.
+
+270
+00:19:20,960 --> 00:19:32,360
+>> You rely on code, not vibes. I love that. So, moving from the mechanics to the real world, how is this actually being used in the enterprise right now?
+
+271
+00:19:30,760 --> 00:19:38,520
+Looking at the ecosystem, there are apparently over 40,000 public skills out there.
+
+272
+00:19:36,400 --> 00:19:45,360
+Google has their official repository at github.com/ Google skills. How do you even navigate that safely?
+
+273
+00:19:43,120 --> 00:19:48,080
+>> The paper gives three firm heuristics.
+
+274
+00:19:45,360 --> 00:19:56,880
+First, prefer first-party skills. If you are querying BigQuery, use the official Google BigQuery skill, not a random community one. Second, pin your versions
+
+275
+00:19:55,040 --> 00:20:03,480
+aggressively so an unexpected update doesn't break your DAG pipeline. And third, audit the code before adopting.
+
+276
+00:20:01,360 --> 00:20:05,400
+Remember, a skill can contain executable Python scripts.
+
+277
+00:20:04,440 --> 00:20:06,880
+>> Oh, right.
+
+278
+00:20:05,400 --> 00:20:08,760
+>> treat it like a supply chain software dependency.
+
+279
+00:20:07,640 --> 00:20:15,520
+>> Let's ground all this theory with the case study they included in the appendix B. They looked at a massive home improvement retailer. I really want to
+
+280
+00:20:13,800 --> 00:20:19,080
+know exactly how a company of that size uses this architecture.
+
+281
+00:20:16,880 --> 00:20:21,840
+>> They use it to distribute knowledge.
+
+282
+00:20:19,080 --> 00:20:30,840
+Historically, an AI team at a retailer tries to build one massive monolithic retail assistant. It inevitably fails because AI engineers don't know the
+
+283
+00:20:28,840 --> 00:20:38,080
+nuances of plumbing codes or lumber grading. With agent skills, the ownership is distributed to the actual domain experts.
+
+284
+00:20:36,520 --> 00:20:44,680
+>> Let's walk through a specific customer query. Say I go to their site and ask, "I want to tile my shower. What do I need, and can I get it delivered by
+
+285
+00:20:43,520 --> 00:20:48,400
+Tuesday?" How does that route through the system?
+
+286
+00:20:46,560 --> 00:20:55,320
+>> The agent dynamically loads three separate skills in sequence. First, it triggers the project guidance skill.
+
+287
+00:20:53,200 --> 00:20:57,840
+This folder is owned and maintained by the retailer's actual trades team.
+
+288
+00:20:57,200 --> 00:20:59,440
+>> Okay.
+
+289
+00:20:57,840 --> 00:21:06,320
+>> It loads the expert logic about waterproofing substrates and grout types. Once the agent figures out the method, it drops that data into the file
+
+290
+00:21:05,520 --> 00:21:08,320
+message bus.
+
+291
+00:21:06,320 --> 00:21:10,600
+>> And moves to the next node in the DAG.
+
+292
+00:21:08,320 --> 00:21:17,360
+>> Exactly. It triggers the materials list skill, which is owned by the pro merchandising team. This skill calculates the exact square footage and wastage.
+
+293
+00:21:16,720 --> 00:21:18,920
+>> Awesome.
+
+294
+00:21:17,360 --> 00:21:26,320
+>> Finally, it passes that list to the delivery window skill, owned entirely by the fulfillment team, which runs a deterministic script against the
+
+295
+00:21:24,440 --> 00:21:28,480
+inventory database to check Tuesday availability.
+
+296
+00:21:27,320 --> 00:21:31,960
+>> The brilliance of this governance structure is just staggering.
+
+297
+00:21:30,400 --> 00:21:40,000
+You aren't asking the AI engineering team to become experts in plumbing regulations. The plumbing experts write in a simple markdown file and the AI
+
+298
+00:21:38,440 --> 00:21:41,680
+just reads it when asked.
+
+299
+00:21:40,000 --> 00:21:44,640
+>> And that distributed ownership is what creates a company's strategic moat.
+
+300
+00:21:44,400 --> 00:21:47,240
+>> Right.
+
+301
+00:21:44,640 --> 00:21:50,440
+>> A competitor can buy access to the exact same base foundation model you are using.
+
+302
+00:21:49,880 --> 00:21:52,440
+>> Right.
+
+303
+00:21:50,440 --> 00:21:58,400
+>> But they cannot buy the codified, version controlled institutional knowledge of your best employees.
+
+304
+00:21:56,800 --> 00:22:00,080
+>> What a journey.
+
+305
+00:21:58,400 --> 00:22:08,800
+We've gone from unpacking the basic folder structure of a skill.md to understanding how progressive disclosure defeats attention dilution and context
+
+306
+00:22:06,400 --> 00:22:12,840
+rot. We looked at why trajectory scoring is vital to catch an agent that stumbles into the right answer dangerously.
+
+307
+00:22:12,400 --> 00:22:15,080
+>> Yeah.
+
+308
+00:22:12,840 --> 00:22:22,960
+>> And finally, how to use a DAG and a file message bus to deploy a distributed library of institutional knowledge without causing a massive traffic jam.
+
+309
+00:22:20,600 --> 00:22:30,160
+>> It's a profound shift. We are moving away from trying to make the model inherently smarter and instead focusing on making the environment around the
+
+310
+00:22:28,560 --> 00:22:32,640
+model highly structured and deterministic.
+
+311
+00:22:31,280 --> 00:22:41,440
+>> And for everyone listening, don't just let this be an academic theory. We strongly encourage you to actually build this. Jump into the code labs provided
+
+312
+00:22:38,360 --> 00:22:44,520
+in the 5-day of AI agents, Vibe coding intensive course by Google X Kaggle.
+
+313
+00:22:43,800 --> 00:22:46,840
+>> Absolutely.
+
+314
+00:22:44,520 --> 00:22:54,960
+>> Try out the practical implementation of these agent skills yourself. The paper gives incredible advice on where to start tomorrow. Find an expert in your
+
+315
+00:22:53,040 --> 00:23:05,320
+company, record them doing a manual workflow, draft a skill.md, rate your three JSON evil cases, and ship it to a read-only tier. Just start small.
+
+316
+00:23:03,720 --> 00:23:09,440
+>> Getting that first successful skill to fire perfectly is a lightbulb moment.
+
+317
+00:23:08,000 --> 00:23:12,720
+You'll never want to go back to massive system prompts again.
+
+318
+00:23:10,560 --> 00:23:17,880
+>> It really changes everything. To wrap up our deep dive today, I want to leave you with a thought to mull over, circling
+
+319
+00:23:15,960 --> 00:23:20,400
+back to that home improvement retailer.
+
+320
+00:23:17,880 --> 00:23:28,480
+If agent skills effectively digitize and version control the procedural memory, the exact how-to knowledge of your absolute best employees,
+
+321
+00:23:26,960 --> 00:23:36,280
+what happens to a company's culture and its operations a decade from now when its corporate subconscious consists of hundreds of thousands of skills that
+
+322
+00:23:34,000 --> 00:23:37,920
+outlive any individual human worker?
+
+323
+00:23:36,280 --> 00:23:39,920
+>> That is a very big question.
+
+324
+00:23:37,920 --> 00:23:43,880
+>> Something to think about. Thanks for joining us on this deep dive. We'll see you next time.
+

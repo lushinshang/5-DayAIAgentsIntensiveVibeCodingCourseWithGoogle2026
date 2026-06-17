@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Skills — Day 3 | 5-Day AI Agents Intensive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:#f8f7f3;color:#202124;font-size:16px;line-height:1.72;letter-spacing:0}
+    a{color:#176b75}
+    .toc{position:sticky;top:0;z-index:100;background:rgba(248,247,243,.96);backdrop-filter:blur(10px);border-bottom:1px solid #ddd8cf;height:56px}
+    .toc-inner{max-width:1160px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none}
+    .toc-inner::-webkit-scrollbar{display:none}
+    .toc a{color:#4a4a4a;text-decoration:none;font-size:13.5px;font-weight:600;padding:6px 11px;border-radius:6px;white-space:nowrap}
+    .toc a:hover{background:#e3efed;color:#0f5961}
+    .hero{background:linear-gradient(135deg,#193c3f 0%,#176b75 54%,#c2a84b 100%);color:#fff;padding:70px 24px 58px}
+    .hero-inner{max-width:820px;margin:0 auto}
+    .hero-tag{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:16px}
+    h1{font-size:clamp(2.1rem,5vw,3.3rem);line-height:1.16;margin-bottom:18px;text-wrap:balance}
+    .hero-subtitle{font-size:18px;color:rgba(255,255,255,.9);max-width:760px;margin-bottom:16px}
+    .hero-authors{font-size:14px;color:rgba(255,255,255,.68)}
+    main{max-width:1160px;margin:0 auto;padding:0 24px 80px}
+    article{max-width:760px;margin:0 auto}
+    section{padding-top:62px}
+    h2{font-size:clamp(1.45rem,3vw,2rem);line-height:1.28;color:#163f44;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #dfe9e7;text-wrap:balance}
+    h3{font-size:1.18rem;color:#176b75;margin:34px 0 12px}
+    h4{font-size:1rem;color:#163f44;margin:24px 0 8px}
+    p{margin-bottom:18px}
+    ul,ol{padding-left:24px;margin:0 0 18px}
+    li{margin-bottom:8px}
+    strong{color:#153f44}
+    code{font-family:"SF Mono","Consolas","Monaco",monospace;background:#edf1ee;padding:2px 6px;border-radius:4px;font-size:.88em}
+    pre{background:#1d292a;color:#dbe7e3;border-radius:8px;padding:18px 20px;overflow-x:auto;font-size:13px;line-height:1.55;margin:20px 0}
+    pre code{background:none;padding:0;color:inherit;font-size:inherit}
+    blockquote{margin:24px 0;padding:16px 20px;border-left:4px solid #176b75;background:#eef6f4;border-radius:0 8px 8px 0;color:#293635}
+    .callout{margin:24px 0;padding:16px 20px;border-left:4px solid #c2a84b;background:#fff9e7;border-radius:0 8px 8px 0}
+    .callout-title{font-weight:800;color:#866f17;margin-bottom:8px}
+    .table-wrap{overflow-x:auto;margin:22px 0}
+    .table-caption{font-size:13px;color:#666;font-weight:700;margin-bottom:8px}
+    table{width:100%;border-collapse:collapse;font-size:14px;background:#fff}
+    th{background:#163f44;color:#fff;text-align:left;padding:10px 12px;font-weight:700}
+    td{padding:10px 12px;border-bottom:1px solid #e2ddd3;vertical-align:top}
+    tr:nth-child(even) td{background:#f2f0ea}
+    figure.section-figure{margin:30px 0;text-align:center}
+    figure.section-figure img{width:100%;max-width:900px;height:auto;border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.12);cursor:zoom-in;background:#fff}
+    figcaption{font-size:13.5px;color:#666;margin-top:10px;line-height:1.5}
+    .checklist{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+    .check-card{background:#fff;border:1px solid #e1ddd4;border-radius:8px;padding:15px}
+    .check-card h4{margin-top:0}
+    @media(max-width:760px){.checklist{grid-template-columns:1fr}}
+    .channels-section{padding:32px 24px 8px;background:#f8f7f3;border-bottom:1px solid #ddd8cf}
+    .channels-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+    .channels-inner h3{margin:0 0 16px;font-size:1.15rem;font-weight:800;color:#202124;border-left:3px solid #176b75;padding-left:10px}
+    .channel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:640px){.channel-grid{grid-template-columns:1fr}}
+    .channel-card{display:flex;align-items:flex-start;gap:14px;text-decoration:none;color:#202124;background:#fff;border:1px solid #ded9cf;border-radius:8px;padding:16px;transition:transform .18s,box-shadow .18s,border-color .18s}
+    .channel-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08);border-color:#176b75}
+    .channel-icon{flex:0 0 34px;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:#e3efed;color:#0f5961;font-size:.78rem;font-weight:800}
+    .channel-info h4{margin:0 0 6px;font-size:1rem;color:#163f44}
+    .channel-info p{margin:0;font-size:.88rem;color:#666;line-height:1.45}
+    .footnotes{font-size:13.5px;color:#555;border-top:1px solid #ddd8cf;margin-top:48px;padding-top:22px}
+    .footnotes a{word-break:break-all;overflow-wrap:anywhere}
+    .lightbox{display:none;position:fixed;inset:0;z-index:200;background:rgba(20,24,25,.9);align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+    .lightbox.is-open{display:flex}
+    .lightbox img{max-width:96vw;max-height:92vh;width:auto;height:auto;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,.45);background:#fff}
+    .lightbox-hint{position:absolute;top:18px;right:24px;color:rgba(255,255,255,.76);font-size:14px}
+    @media(max-width:640px){.hero{padding:48px 18px 40px}.hero-subtitle{font-size:16px}main{padding:0 16px 64px}section{padding-top:48px}.toc-inner{padding:0 14px}pre{font-size:12px;padding:14px}table{font-size:13px}}
+  </style>
+</head>
+<body>
+  <nav class="toc">
+    <div class="toc-inner">
+      <a href="../index.html">← 返回課程首頁</a>
+      <a href="#intro">簡介</a>
+      <a href="#what">什麼是 Skill</a>
+      <a href="#popular">為何流行</a>
+      <a href="#eval">評估</a>
+      <a href="#production">上線</a>
+      <a href="#meta">Meta-Skills</a>
+      <a href="#compose">組合</a>
+      <a href="#choose">選擇 Skills</a>
+      <a href="#conclusion">結論</a>
+      <a href="#appendix">速查表</a>
+      <a href="#retail">零售案例</a>
+      <a href="#channels">學習頻道</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">5-Day AI Agents Intensive Course with Google · Day 3</div>
+      <h1>Agent Skills：把程序知識變成可攜帶的代理人能力</h1>
+      <p class="hero-subtitle">一個資料夾、一份 <code>SKILL.md</code>、幾個可選 scripts，就能讓通用代理人按需變成專家，同時避開 context rot 與多代理人過度設計。</p>
+      <p class="hero-authors">Tanvi Singhal・Gabriela Hernandez Larios・Debanshu Dus・Lavi Nigam・Smitha Kolan</p>
+    </div>
+  </header>
+
+  <section id="channels" class="channels-section">
+    <div class="channels-inner">
+      <div class="channel-group">
+        <h3>學習頻道</h3>
+        <div class="channel-grid">
+          <a class="channel-card" href="antigravity-skills-guide/antigravity-skills-guide.html">
+            <div class="channel-icon">SK</div>
+            <div class="channel-info">
+              <h4>Antigravity Skills 白話導讀</h4>
+              <p>從 context rot 到 progressive disclosure，理解如何用 <code>SKILL.md</code>、scripts、references 把工作流程變成可觸發能力。</p>
+            </div>
+          </a>
+          <a class="channel-card" href="agents-cli-adk-guide/agents-cli-adk-guide.html">
+            <div class="channel-icon">ADK</div>
+            <div class="channel-info">
+              <h4>Agents CLI + ADK Lifecycle 導讀</h4>
+              <p>從 scaffold、lint、playground 到 CLI run，理解 agent 專案如何形成可重複的本機開發生命週期。</p>
+            </div>
+          </a>
+          <a class="channel-card" href="podcast-deep-guide/podcast-deep-guide.html">
+            <div class="channel-icon">PC</div>
+            <div class="channel-info">
+              <h4>Podcast 深度導讀</h4>
+              <p>根據 Agent Skills Podcast 逐字稿整理，聚焦 context rot、評估、production governance 與企業知識資產。</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <article>
+      <section id="intro">
+        <h2>1. 簡介：Skills 是 LLM Agents 的程序記憶</h2>
+        <p>Agent Skills 是一種把知識、公司脈絡與可重複流程交給代理人的方法。最小單位是一個資料夾，裡面必須有 <code>SKILL.md</code>，並可選擇加入 <code>scripts/</code>、<code>references/</code>、<code>assets/</code> 等目錄。</p>
+        <p>它解決四個核心問題：指令太多導致 context rot、模型缺少「怎麼做」的 procedural memory、多代理人架構過度膨脹，以及跨平台可攜性不足。</p>
+        <div class="callout">
+          <div class="callout-title">核心命題</div>
+          <p>Skills 不是把所有專家知識塞進 prompt，而是把可重複流程封裝成按需載入的工程單位。這讓一個通用代理人可以在需要時變成專家，且不讓每一輪對話都背負完整上下文成本。</p>
+        </div>
+      </section>
+
+      <section id="what">
+        <h2>2. 什麼是 Agent Skill</h2>
+        <p>Agent Skill 是一種讓通用代理人按需取得專家能力的 primitive。它可以只是單一 Markdown 檔，但真正價值在於 progressive disclosure：metadata 永遠可見，body 觸發後才載入，references、assets、scripts 只有需要時才使用。</p>
+        <pre><code>cafe-preparation/
+├── SKILL.md
+├── scripts/
+│   ├── calc_quantities.py
+│   └── convert_to_ingredients.py
+├── references/
+│   ├── menu_and_recipes.md
+│   └── minimums.md
+└── assets/
+    ├── prep_sheet_template.md
+    └── shopping_list_template.md</code></pre>
+        <h3>兩條建立路徑</h3>
+        <p><strong>Path A</strong> 是把既有知識翻譯成 Skill。domain experts 已有 runbooks、SOP、onboarding guides，只需要整理成代理人能觸發與使用的格式。</p>
+        <p><strong>Path B</strong> 是把代理人剛成功完成的任務結晶化。代理人根據成功 trajectory 提出 <code>SKILL.md</code> 草稿，人類 review 後納入 library，這就是 meta-skills 的入口。</p>
+        <pre><code>---
+name: cafe-preparation
+description: |
+  Calculates daily ingredient needs and generates prep sheets for cafe operations.
+  Use when the user asks to estimate daily quantities, convert drinks to ingredients,
+  or generate shopping lists. Do NOT use for employee shift scheduling or financial accounting.
+---</code></pre>
+        <p>一開始最值得投資的是 naming 與 description。description 是 routing algorithm，模型只看這段來判斷是否載入 skill。</p>
+        <h3>Skill、MCP、AGENTS.md</h3>
+        <p><strong>Skill vs MCP：</strong>MCP 負責 reach，把 agent 連到外部系統；Skill 負責 know-how，教 agent 如何完成某類工作。兩者不是競爭，而是組合。</p>
+        <p><strong>Skill vs AGENTS.md：</strong><code>AGENTS.md</code> 是專案常駐上下文；Skills 按需載入。乾淨做法是兩者並用，讓 <code>AGENTS.md</code> 保持精簡，必要時列出 skill catalog。</p>
+      </section>
+
+      <section id="popular">
+        <h2>3. 為什麼 Agent Skills 這麼快流行</h2>
+        <p>2025 年初，許多團隊會用 multi-agent architecture 解決 back-office 自動化：一個 router agent 加上多個 specialist sub-agents。這能工作，但帶來 CI/CD、orchestration、deployment surface 與 regression 的維護成本。</p>
+        <p>Agent Skills 把這件事變輕：一個 agent 搭配 skill library，skills 可跑 commands、呼叫 MCP servers、包 Python scripts，由 agent 決定何時載入。你維護的是 skills，不是大量 agents。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>方案</th><th>問題</th><th>何時適合</th></tr></thead>
+            <tbody>
+              <tr><td>一個巨大 context window</td><td>立刻造成 context rot 與 token cost</td><td>幾乎不建議</td></tr>
+              <tr><td>RAG over runbooks</td><td>要維護 vector DB、embedding、chunking</td><td>以查詢知識為主，而非程序流程</td></tr>
+              <tr><td>一流程一 sub-agent</td><td>deployment 與 evaluation surface 暴增</td><td>需要平行性、權限隔離或異質模型</td></tr>
+              <tr><td>一 agent + 多 skills</td><td>需嚴格評估 routing 與 overlap</td><td>大量流程變體、同一 agent 可按需專精</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="eval">
+        <h2>4. 評估 Skills：沒有測試的 Skill 只是希望</h2>
+        <p>SkillsBench 研究顯示，19% 的真實任務在加入 skill 後反而更差。這些失敗可預測，主要分成四類：Trigger Failure、Execution Failure、Token Budget Failure、Regression。</p>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 1 Skill Failure Modes.png" alt="Figure 1 Skill Failure Modes">
+          <figcaption>Figure 1：Skill failure modes。單輪失敗與 library-level 失敗需要分開評估。</figcaption>
+        </figure>
+        <h3>Evaluation Toolkit</h3>
+        <p>五種互補測試模式覆蓋 Agent Skills 的主要 failure surface。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Pattern</th><th>Description</th><th>Failure Mode</th><th>When Required</th></tr></thead>
+            <tbody>
+              <tr><td>Eval-as-Unit-Test</td><td>skill 每次變更都在 CI 中跑測試；失敗阻擋 merge。</td><td>All</td><td>Every skill, every change</td></tr>
+              <tr><td>Golden Dataset</td><td>與 skill 一起版本化的 input / expected output pairs。</td><td>Execution, Trigger</td><td>Draft tier and above</td></tr>
+              <tr><td>LLM-as-Judge</td><td>peer model 依 rubric 評估輸出，交換 reference / actual 位置消除 bias。</td><td>Execution</td><td>Read-only and draft</td></tr>
+              <tr><td>Adversarial / Red-Team</td><td>用 rephrasing 與 negative boundary cases 系統性探測失敗。</td><td>Trigger, Execution</td><td>Before action-allowed graduation</td></tr>
+              <tr><td>Canary / Shadow Mode</td><td>full rollout 前用 shadow 或 1% live traffic 受控觀察。</td><td>Regression</td><td>Before each action-allowed release</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Single-Skill Sub-Agent pattern</h3>
+        <p>Trajectory testing 評估的是 host agent + skill 的複合系統。若多 skill trajectory 失敗，很難拆分是 routing、instruction quality 或 execution fidelity。因此校準時建議先用 Agent + 1 Skill 對比 Base Agent。</p>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 2 Skill Trigger Gatekeeping.png" alt="Figure 2 Skill Trigger Gatekeeping">
+          <figcaption>Figure 2：metadata 是薄 routing layer，只有 activation cues 匹配時才載入 body。</figcaption>
+        </figure>
+        <h3>trigger 是第一道 gate</h3>
+        <p>一個永遠不觸發的 skill 幫不上忙；一個觸發太廣的 skill 則會注入無關 context。Vercel 的 production analysis 發現，預期穩定啟用的 skills 有 56% non-invocation rate；設計不良的 skill 甚至可能比沒有 skill 更差。</p>
+        <ul>
+          <li><strong>Testable specificity：</strong>寫出 3 個 positive triggers 與 3 個 negative triggers。</li>
+          <li><strong>Clarity：</strong>模糊 query 不應與相鄰 skills 重疊。</li>
+          <li><strong>Execution fidelity：</strong>description 描述實際能力，不是 aspirational behavior。</li>
+          <li><strong>Rephrasing stability：</strong>使用者換句話說時仍能穩定 route。</li>
+        </ul>
+        <h3>Evaluation-Driven Development</h3>
+        <p>EDD 要求在寫 <code>SKILL.md</code> 前先寫 evaluation cases，明確指定 input、expected skill、expected tool calls、expected output 與 rubric。</p>
+        <pre><code>{
+  "case_id": "refund_dup_charge_001",
+  "input": "I was charged twice for order #4521 last Tuesday",
+  "expected_skill": "refund_processor",
+  "expected_tool_calls": [
+    {"tool": "lookup_order", "args": {"order_id": "4521"}},
+    {"tool": "check_duplicate_charge", "args": {"order_id": "4521"}}
+  ],
+  "expected_output_format": "confirmation_with_refund_id",
+  "rubric": ["acknowledges duplicate", "cites order id", "provides next step"]
+}</code></pre>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 3 Evaluation-Driven Development Loop.png" alt="Figure 3 Evaluation-Driven Development Loop">
+          <figcaption>Figure 3：先定義 expected trajectory，再寫 skill，避免 body 寫完才發現規格含糊。</figcaption>
+        </figure>
+        <h3>Token budget 與 co-loading</h3>
+        <p>不要只在 isolation 下評估 skill。production agents 常 co-load 5 到 15 個 skills，單一 skill body 超過 5,000 tokens 時，單獨測可能正常，合載後會造成 context rot。</p>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 4 Co-loaded Skills Performance Gap.png" alt="Figure 4 Co-loaded Skills Performance Gap">
+          <figcaption>Figure 4：單一 skill 與 15 個 co-loaded skills 的 performance gap，說明 isolation test 容易給假陽性。</figcaption>
+        </figure>
+        <div class="checklist">
+          <div class="check-card"><h4>Trigger</h4><p>正向與負向 test cases；目標 90% trigger accuracy。</p></div>
+          <div class="check-card"><h4>Execution</h4><p>代表性輸入範圍內輸出正確，tool trajectory 正確。</p></div>
+          <div class="check-card"><h4>Regression</h4><p>加入新 skill 後既有 library suite 零退步。</p></div>
+          <div class="check-card"><h4>Token budget</h4><p>與常用 skills co-load 後不退化無關 turns。</p></div>
+        </div>
+      </section>
+
+      <section id="production">
+        <h2>5. 從 Prototype 到 Production</h2>
+        <p>上線後，模型不再是最有趣的部分；skills 是讓你可靠出貨的工程 primitive。Google Agents CLI 將 scaffold、build、evaluate、deploy、publish、observe 等 lifecycle 包成 skills，支援 ADK agent 的完整開發流程。</p>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 5 Agents CLI Install Flow.png" alt="Figure 5 Agents CLI Install Flow">
+          <figcaption>Figure 5：Agents CLI install flow，一個命令安裝完整 agent lifecycle skills。</figcaption>
+        </figure>
+        <p>對 Claude Code v2.1.88 的 reverse-engineering 顯示，98.4% codebase 是 operational infrastructure，真正 agent loop 只有 1.6%。隨 foundation models 的 baseline reasoning 收斂，可靠性的差異化會來自 deterministic engineering，而在這層工程裡，被組合與重用的單位就是 skill。</p>
+        <div class="table-wrap">
+          <div class="table-caption">Agent improvement methodologies 對照</div>
+          <table>
+            <thead><tr><th>改進方式</th><th>週期</th><th>失敗模式</th><th>誰能做</th><th>Context Tax</th></tr></thead>
+            <tbody>
+              <tr><td>Model swap</td><td>數天到數週</td><td>無關任務 regression</td><td>ML/platform team</td><td>無</td></tr>
+              <tr><td>System prompt edit</td><td>數分鐘到數小時</td><td>context rot、instruction conflict</td><td>prompt owner</td><td>靜態，每輪都付</td></tr>
+              <tr><td>Fine-tune</td><td>數週到數月</td><td>catastrophic forgetting、overfitting</td><td>ML team</td><td>無</td></tr>
+              <tr><td>New skill</td><td>數小時到數天</td><td>只限匹配 turns</td><td>任何 domain team</td><td>動態，觸發才載入</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 6 Demo-to-Deploy Gap.png" alt="Figure 6 Demo-to-Deploy Gap">
+          <figcaption>Figure 6：demo-to-deploy gap。團隊信心在 demo 早期最高，接觸真實客戶環境後快速下降。</figcaption>
+        </figure>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 7 Context Rot in Practice.png" alt="Figure 7 Context Rot in Practice">
+          <figcaption>Figure 7：context rot。prompt size 增長時，accuracy 早在 context window 填滿前就退化。</figcaption>
+        </figure>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 8 Token Economics Skill Library.png" alt="Figure 8 Token Economics Skill Library">
+          <figcaption>Figure 8：token economics。一個巨大 prompt 與 50-skill library 的成本差異。</figcaption>
+        </figure>
+        <p>token budget 的實務含義很直接：capacity 不是正確指標，1M-token window 也可能在 50K tokens 出現顯著退化；active context 是預算，不是容器；skills 透過按需載入讓 active context 保持小，同時讓可用能力近乎無界。</p>
+      </section>
+
+      <section id="meta">
+        <h2>6. Meta-Skills 與 Self-Improving Skills</h2>
+        <p>Meta-skill 的核心是把成功 production histories 轉成可重用 procedural memories。這不是讓 LLM 無限制自我修改，而是建立「成功軌跡 → Skill 草稿 → eval gate → human review / CI」的治理迴圈。</p>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 9 Production Histories to Procedural Memories.png" alt="Figure 9 Production Histories to Procedural Memories">
+          <figcaption>Figure 9：成功執行歷史如何變成可靠的 procedural memories。</figcaption>
+        </figure>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 10 Meta-Skill Evaluation Gating.png" alt="Figure 10 Meta-Skill Evaluation Gating">
+          <figcaption>Figure 10：代理人可以提出修改，但必須通過 unit tests 與 eval gate 才能進 library。</figcaption>
+        </figure>
+        <p>若沒有代表性測試、production-like co-loading、ownership 與 review，meta-skill 會放大錯誤。它應是軟體工程迴圈的一部分，而不是跳過工程紀律的捷徑。</p>
+      </section>
+
+      <section id="compose">
+        <h2>7. 組合與封裝 Skills</h2>
+        <p>真實 workflow 不會永遠塞在單一 skill 裡。composition problem 包含 skills 如何互相引用、如何傳遞 state、如何避免 circular dependencies。把 raw LLM outputs 在 isolated skills 間傳來傳去通常不可靠，產業正在從 naive prompt chaining 走向可預期 orchestration。</p>
+        <h3>DAG Orchestration</h3>
+        <ul>
+          <li><strong>Decoupled State：</strong>DAG state routing 不依賴在 LLM prompt 中累積執行歷史。</li>
+          <li><strong>File Message Bus：</strong>controller 透過 schema references 在 subagent nodes 間交接。</li>
+          <li><strong>Protected Attention：</strong>把 payload 從文字 prompt 抽離，避免 context window bloat。</li>
+        </ul>
+        <h3>Capability Profiles</h3>
+        <p>同時啟用所有 skills 會降低 natural language routing 並壓垮 context window。Capability Profile 是針對特定 execution state 的 tool bundle，可定義 active skills、tool access、guardrails、workflow topology 與 LLM parameters。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>架構</th><th>機制</th><th>主要好處</th><th>適合場景</th></tr></thead>
+            <tbody>
+              <tr><td>Linear Pipelines</td><td>固定 nodes 間依序傳文字</td><td>工程負擔低</td><td>單一領域、低複雜度 generative tasks</td></tr>
+              <tr><td>DAG Orchestration</td><td>graph-based execution，schema refs 傳 state</td><td>避免 cycles、context isolation</td><td>高可靠 multi-agent workflows</td></tr>
+              <tr><td>Capability Profiles</td><td>可替換、版本化的 parameters 與 tool bundles</td><td>快速 persona switching</td><td>role-based deployment</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout">
+          <div class="callout-title">Shift Intelligence Left</div>
+          <p>不要在 runtime 用大量「ALWAYS DO X」逼 LLM 做 deterministic behavior。把可決定邏輯推進 scripts，把主觀判斷蒸餾成可測試 skills，減少混沌面積。</p>
+        </div>
+      </section>
+
+      <section id="choose">
+        <h2>8. 如何在大量 Skills 中選擇</h2>
+        <p>到 2026 年初，公開 skill marketplaces 已超過 40,000 listings。選擇問題本身已成為治理問題。</p>
+        <ol>
+          <li><strong>vendor-specific tools 優先 first-party skills。</strong>由底層產品團隊維護的 skills 通常更正確、更穩定。</li>
+          <li><strong>pin everything。</strong>community skills 會演進，昨天可用的 unpinned dependency 明天可能壞掉。</li>
+          <li><strong>adopt 前先 audit。</strong>skill 是會在你 context 中執行的 code，必須用 supply-chain hygiene 對待。</li>
+        </ol>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>來源</th><th>信任姿態</th><th>範例</th><th>維護者</th></tr></thead>
+            <tbody>
+              <tr><td>First-party vendor skills</td><td>預設可信，但 pin version</td><td>google/agents-cli、google/skills、anthropics/skills、stripe/ai</td><td>底層產品團隊</td></tr>
+              <tr><td>Organization-curated skills</td><td>組織內可信，adoption 時 review</td><td>your-org/retail-skills、private finance skills</td><td>內部 domain teams</td></tr>
+              <tr><td>Community skills</td><td>adoption 前 audit，積極 pin</td><td>awesome-agent-skills、SkillsMP、addyosmani/agent-skills</td><td>志願者，維護程度不一</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="conclusion">
+        <h2>9. 結論</h2>
+        <p>Agent Skill 看起來只是含 Markdown 與一些可選 scripts 的資料夾，卻正在重塑 AI Agents 的建構方式。它提供了可測試的 procedural memory，讓 foundation models 記住如何一步步執行任務。</p>
+        <p>透過 progressive disclosure，skills 解決 context rot；單一通用 agent 可以使用大量 specialist workflows，而不被 token budget 嗆住。真正有趣的工作發生在格式周圍：production-like co-loaded evaluation、避免把 context window 當 message bus 的 skill composition、從成功 traces 草擬 skill、用人類 review 取代手寫一切，以及把 institutional knowledge 編碼成版本化、可測試、可治理 library。</p>
+        <p>如果今天開始，建議很簡單：start small，從已經有的知識開始，把 Skills 當 code，衡量你交付的東西；當 Skill 足夠時，不要急著使用 multi-agent architecture。</p>
+      </section>
+
+      <section id="appendix">
+        <h2>Appendix A：實作速查表</h2>
+        <h3>Minimal SKILL.md</h3>
+        <pre><code>---
+name: skill-name
+description: |
+  [What it does in one verb-led sentence.]
+  Use this skill when the user [trigger phrase 1], [trigger phrase 2],
+  or [trigger phrase 3]. Do NOT use for [anti-trigger 1] or [anti-trigger 2].
+version: 1.0.0
+license: MIT
+allowed-tools: [Optional] Read Bash Write
+metadata:
+  author: [Optional] your-handle
+---
+# Skill Name
+
+## When to use
+- [Concrete scenario]
+
+## When NOT to use
+- [Out-of-scope scenario]
+
+## Workflow
+1. [Step]
+2. [Step]
+3. See `references/advanced.md` for [edge case].</code></pre>
+        <div class="checklist">
+          <div class="check-card"><h4>五條規則</h4><p>One skill, one job；description 是 interface；skills 是 dependencies；正確團隊 owns 正確 skill；runtime 應可替換。</p></div>
+          <div class="check-card"><h4>品質原則</h4><p>先自己跑任務、給理由、每一行都要有價值、指令可驗證、重複邏輯放 scripts。</p></div>
+          <div class="check-card"><h4>Do</h4><p>小而具體、重視 description、信任 progressive disclosure、把 deterministic work 放進 scripts、把 Skills 當 code。</p></div>
+          <div class="check-card"><h4>Don't</h4><p>模糊描述、超長 SKILL.md、hard-code secrets、把全域規則塞進 skill、未掃描即安裝第三方 skills。</p></div>
+        </div>
+        <h3>Deployment checklist</h3>
+        <ul>
+          <li>Frontmatter validates（lint passes）。</li>
+          <li>Description 包含 what + when + when-not。</li>
+          <li>Scripts 有 unit tests 並在 CI 通過。</li>
+          <li>Eval suite 達 min-pass threshold。</li>
+          <li>Security scan clean，無 secrets、無不可信 deps。</li>
+          <li>Description 由作者以外的人 review。</li>
+        </ul>
+        <blockquote>System prompt = instinct。AGENTS.md = project README。Tools / MCP = hands。RAG = library。Skills = 經驗同事第一天交給你的 runbook，而且 AI 永遠不會忘記。</blockquote>
+      </section>
+
+      <section id="retail">
+        <h2>Appendix B：零售業 Vertical Skills 案例</h2>
+        <p>兩家零售商即使用同一個 runtime、同類 API，購物體驗仍可能完全不同，因為真正差異來自資深 buyer、merchandiser、category manager 腦中的知識、runbooks 與歷史判斷。Skills 把這些知識變成 customer-facing systems 實際會使用的格式。</p>
+        <figure class="section-figure">
+          <img src="images_cht/Figure 11 Skills-First Retail Architecture.png" alt="Figure 11 Skills-First Retail Architecture">
+          <figcaption>Figure 11：skills-first retail architecture。customer surfaces 在上層，generic agent runtime 在中層，skills 攜帶零售商的 domain expertise。</figcaption>
+        </figure>
+        <h3>代表性 skills library</h3>
+        <ul>
+          <li><strong>project-guidance：</strong>把模糊 query 轉成逐步施工計畫，包含依賴順序與常見錯誤。</li>
+          <li><strong>materials-list：</strong>從 project description 產出 grouped bill-of-materials，補上常被忘記的品項。</li>
+          <li><strong>review-summarize：</strong>將長篇 product reviews 摘要成 pros、cons 與常見用途。</li>
+          <li><strong>delivery-window：</strong>依顧客位置、庫存與 freight network 計算配送選項。</li>
+          <li><strong>return-policy：</strong>編碼退貨規則與例外；若要 action-allowed refund，需更嚴格 review。</li>
+        </ul>
+        <h3>Ownership：誰寫哪個 skill</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Skill family</th><th>Owner team</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td>project-guidance、product-fit</td><td>Trades knowledge / category management</td><td>這些團隊持有 merchandising 與 trade rules，且每週都會更新。</td></tr>
+              <tr><td>materials-list</td><td>Pro merchandising</td><td>Pro segment 的 BOM logic 屬於 Pro team。</td></tr>
+              <tr><td>delivery-window</td><td>Store operations / fulfillment</td><td>real-time inventory 與 freight rules 變動頻繁，應由處理它們的團隊擁有。</td></tr>
+              <tr><td>review-summarize</td><td>Personalization / data science</td><td>最接近 NLP 與 customer feedback signals。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tier</th><th>Capability</th><th>Review</th><th>Examples</th></tr></thead>
+            <tbody>
+              <tr><td>Read-Only</td><td>可查詢或描述資料，不可改狀態</td><td>Domain team approval</td><td>review-summarize、store-locator、project-guidance</td></tr>
+              <tr><td>Draft-Only</td><td>可產出供人 review 的內容，不可送出或提交</td><td>Domain team + format owner</td><td>draft-customer-email、materials-list</td></tr>
+              <tr><td>Action-Allowed</td><td>可對真實系統執行不可逆操作</td><td>Domain team + security/compliance + executive sign-off</td><td>issue-refund、send-customer-message、reserve-inventory</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>競爭者可以取得相同 generic runtime，但不容易複製 company-specific skills library。投資 skills，即使用 generic runtime，也是在建立可持久的組織知識資產。</p>
+      </section>
+
+      <section id="notes" class="footnotes">
+        <h2>附註</h2>
+        <p>本頁根據 `source/Agent Skills_Day_3.md` 與 PDF 圖表整理。11 張 Figure 已重繪為繁體中文圖表，並以 `images_cht/` 作為 HTML 正式引用目錄。</p>
+        <ol>
+          <li><a href="https://codelabs.developers.google.com/getting-started-with-antigravity-skills?utm_campaign=CDR_0xf9030db1_default_b513044940&amp;utm_medium=external&amp;utm_source=blog#0">Antigravity Skills codelab</a></li>
+          <li><a href="https://github.com/anthropics/skills/tree/main/skills/skill-creator">Anthropic skill-creator</a></li>
+          <li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/skills">Hermes Agent skills</a></li>
+          <li><a href="https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/awesome_agent_skills/self-improving-agent-skills">self-improving-agent-skills</a></li>
+          <li><a href="https://adk.dev/skills/">ADK Skills</a></li>
+          <li><a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills">Anthropic Agent Skills engineering post</a></li>
+          <li><a href="https://arxiv.org/abs/2602.12670">SkillsBench</a></li>
+          <li><a href="https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals">Vercel AGENTS.md vs Skills evals</a></li>
+          <li><a href="https://latitude.so/blog/agent-first-comparison-guide-vs-braintrust">Latitude agent evaluation analysis</a></li>
+          <li><a href="https://adk.dev/evaluate/">ADK evaluate</a></li>
+          <li><a href="https://arxiv.org/html/2411.13768v2">Evaluation-Driven Development reference</a></li>
+          <li><a href="https://arxiv.org/abs/2508.16260">MCPVerse</a></li>
+          <li><a href="https://research.trychroma.com/context-rot">Chroma Context Rot</a></li>
+          <li><a href="https://arxiv.org/abs/2406.12045">tau-bench</a></li>
+          <li><a href="https://arxiv.org/abs/2601.06112">ReliabilityBench / Lost in the Middle reference</a></li>
+          <li><a href="https://arxiv.org/abs/2601.17087">Lost in Simulation / Context Rot reference</a></li>
+          <li><a href="https://google.github.io/agents-cli/">Google Agents CLI</a></li>
+          <li>Liu, Zhao, Shang, and Shen (2026), reverse-engineering of Claude Code v2.1.88; companion site ccunpacked.dev</li>
+          <li>Liu et al., "Lost in the Middle" (TACL 2024). <a href="https://arxiv.org/abs/2601.06112">https://arxiv.org/abs/2601.06112</a></li>
+          <li>Chroma Research, "Context Rot" (2025). <a href="https://arxiv.org/abs/2601.17087">https://arxiv.org/abs/2601.17087</a></li>
+          <li><a href="https://developers.googleblog.com/en/developers-guide-to-building-adk-agents-with-skills/">Developer's guide to building ADK agents with skills</a></li>
+          <li><a href="https://github.com/anthropics/skills">anthropics/skills</a></li>
+          <li><a href="https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md">Anthropic skill-creator SKILL.md</a></li>
+          <li><a href="https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/awesome_agent_skills/self-improving-agent-skills">awesome-llm-apps self-improving skills</a></li>
+          <li><a href="https://github.com/karpathy/autoresearch">karpathy/autoresearch</a></li>
+          <li><a href="https://arxiv.org/abs/2305.16291">Voyager</a></li>
+          <li><a href="https://github.com/philschmid/self-learning-skill">self-learning-skill</a></li>
+          <li>Google Agents CLI source repository: <a href="https://github.com/google/agents-cli">https://github.com/google/agents-cli</a></li>
+          <li>Google official skills repository: <a href="https://github.com/google/skills">https://github.com/google/skills</a></li>
+          <li>Google Gemini skills: <a href="https://github.com/google-gemini/gemini-skills">https://github.com/google-gemini/gemini-skills</a></li>
+          <li><a href="https://github.com/anthropics/skills">Anthropic skills public repository</a></li>
+          <li><a href="https://github.com/stripe/ai">Stripe AI skills</a></li>
+          <li><a href="https://github.com/microsoft/skills">Microsoft skills</a></li>
+          <li><a href="https://github.com/VoltAgent/awesome-agent-skills">VoltAgent awesome-agent-skills</a></li>
+          <li><a href="https://skillsmp.com">Skills Marketplace</a></li>
+          <li><a href="https://github.com/addyosmani/agent-skills">addyosmani/agent-skills</a></li>
+        </ol>
+      </section>
+    </article>
+  </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-hint">點擊任意處關閉</div>
+    <img src="" alt="">
+  </div>
+
+  <script>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    document.querySelectorAll('figure.section-figure img').forEach((img) => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.currentSrc || img.src;
+        lightboxImg.alt = img.alt || '';
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+      });
+    });
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImg.src = '';
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') lightbox.click();
+    });
+  </script>
+</body>
+</html>
