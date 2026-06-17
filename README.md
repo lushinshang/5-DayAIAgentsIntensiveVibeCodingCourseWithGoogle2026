@@ -7,8 +7,8 @@ Google」（2026/06/15–06/19）課程的中文學習筆記彙整站。`index.h
 專案的入口首頁（課程介紹 + Day1-5 導覽），每個 `DayN/` 子目錄則放該日白皮書
 的繁體中文長文網頁（依 Day1 的 pipeline 製作）。
 
-**目前狀態（2026-06-16）**：Day1、Day2 已完成並已連結；Day3-5 尚未建立，根目錄
-`index.html` 中對應卡片顯示「即將推出」（灰階、不可點擊）。
+**目前狀態（2026-06-17）**：Day1、Day2、Day3 已完成並已連結；Day4-5 尚未建立，根目錄
+`index.html` 中 Day4-5 對應卡片顯示「即將推出」（灰階、不可點擊）。
 
 ---
 
@@ -24,18 +24,25 @@ Google」（2026/06/15–06/19）課程的中文學習筆記彙整站。`index.h
 │   ├── source/         ← 原始 PDF + 中間產物
 │   ├── pipeline/       ← PDF→Markdown 轉換腳本
 │   └── ...guides/, *.mp4
-└── Day2/
-    ├── README.md       ← Day2 完整 pipeline 紀錄
-    ├── index.html      ← Day2 白皮書中文長文網頁（最終產出）
-    ├── source/         ← 原始 PDF + 中間產物
-    ├── pipeline/       ← PDF→Markdown 轉換腳本
-    ├── images_cht/     ← 8 張中文化圖表
-    ├── antigravity-cli-guide/   ← 學習頻道導讀（deep-guide）
-    ├── mcp-knowledge-guide/     ← 學習頻道導讀（deep-guide）
-    └── *.mp4
+├── Day2/
+│   ├── README.md       ← Day2 完整 pipeline 紀錄
+│   ├── index.html      ← Day2 白皮書中文長文網頁（最終產出）
+│   ├── source/         ← 原始 PDF + 中間產物
+│   ├── pipeline/       ← PDF→Markdown 轉換腳本
+│   ├── images_cht/     ← 8 張中文化圖表
+│   ├── antigravity-cli-guide/   ← 學習頻道導讀（deep-guide）
+│   ├── mcp-knowledge-guide/     ← 學習頻道導讀（deep-guide）
+│   └── *.mp4
+└── Day3/
+    ├── README.md       ← Day3 完整 pipeline 紀錄
+    ├── index.html      ← Day3 白皮書中文長文網頁（最終產出）
+    ├── source/         ← 原始 PDF + 中英文 Markdown + 圖片中間產物
+    ├── pipeline/       ← PDF 解析、圖表擷取、圖表中文化、Podcast 導讀腳本
+    ├── images_cht/     ← 11 張中文化圖表
+    └── podcast-deep-guide/      ← Podcast 深度導讀與英文 SRT
 ```
 
-`DayN/`（N=3~5）尚未建立，建立時請比照 `Day1/`、`Day2/` 的結構。
+`DayN/`（N=4~5）尚未建立，建立時請比照 `Day1/`、`Day2/`、`Day3/` 的結構。
 
 ---
 
@@ -56,7 +63,7 @@ Google」（2026/06/15–06/19）課程的中文學習筆記彙整站。`index.h
 
 ---
 
-## 給下一位 AI 的接續指南：如何新增 Day2-5
+## 給下一位 AI 的接續指南：如何新增 Day4-5
 
 1. **製作該日白皮書網頁**（比照 `Day1/README.md` 的完整 pipeline）：
    - 取得當日白皮書 PDF + Kaggle whitepaper URL + companion podcast（如有）
@@ -101,5 +108,7 @@ Google」（2026/06/15–06/19）課程的中文學習筆記彙整站。`index.h
 
 - **Day1 完整 pipeline 與逐句 prompt 紀錄**：`Day1/README.md`
   （含可重用腳本說明、6 條關鍵決策原則、Day1 熱門分享追蹤待辦）
+- **Day2 完整 pipeline 與學習頻道導讀紀錄**：`Day2/README.md`
+- **Day3 Agent Skills pipeline 與 Podcast 導讀紀錄**：`Day3/README.md`
 - **Kaggle 課程原頁**：
   https://www.kaggle.com/competitions/5-day-ai-agents-intensive-vibecoding-course-with-google/overview
