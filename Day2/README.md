@@ -60,13 +60,26 @@ Day2/
 │       ├── infographic_2.png / infographic_2_mobile.png  ← 五層協定棧總覽
 │       └── infographic_3.png / infographic_3_mobile.png  ← AP2 授權命令 + 握手流程
 ├── Whitepaper Companion Podcast Agent Tools & Interoperability_compressed.mp4
+├── day2-deep-guide/                                       ← 學習頻道：Day 2 直播深度導讀
+│   ├── index.html                                         ← 導讀頁面（deep-guide + ai-mentor-agents + md_to_html）
+│   ├── build_html.py                                      ← HTML 建構腳本
+│   ├── desktop.png / mobile.png                           ← Playwright QA 截圖
+│   └── images/                                            ← 6 張 AI 生成圖（16:9 + 9:16 各 3 組）
+│       ├── protocol-stack.png / protocol-stack-mobile.png ← 四層 Agent 協定棧總覽
+│       ├── token-oil.png / token-oil-mobile.png           ← Token 是新石油
+│       └── boundary-dissolve.png / boundary-dissolve-mobile.png ← 邊界消融與責任
 └── source/                                                ← 所有原始素材集中存放
     ├── Agent Tools & Interoperability_Day_2.pdf           ← 原文 PDF（白皮書正本）
     ├── Agent Tools & Interoperability_Day_2.md            ← docling 解析出的英文 Markdown
     ├── Agent Tools & Interoperability_Day_2_zh.md         ← 繁體中文 Markdown（多代理人翻譯）
     ├── Agent Tools & Interoperability_Day_2_zh.normalized.md ← 中文標點正規化版（供 HTML 轉換用）
     ├── Agent Tools & Interoperability_Day_2_images/       ← 8 張原文圖表 PNG（600 DPI）
-    └── Agent Tools & Interoperability_Day_2_images_cht/  ← 8 張中文化圖（原稿，檔名與原圖相同）
+    ├── Agent Tools & Interoperability_Day_2_images_cht/  ← 8 張中文化圖（原稿，檔名與原圖相同）
+    └── livestream/                                        ← Day 2 直播原始素材
+        ├── DAY 2 Livestream - 5-Days of AI Agents Intensive Vibe Coding Course With Google.en.srt
+        ├── day2-transcript.txt                            ← 去除 SRT 時間戳的純文字逐字稿（888 行）
+        ├── day2-deep-guide.md                             ← 深度導讀 Markdown 草稿
+        └── transcript_fragment.html                       ← 講者識別後的 HTML 片段（60 段）
 ```
 
 ---
@@ -240,6 +253,29 @@ https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2
 - 移除先前多餘的逐字稿底部返回連結
 
 `python3 -m html.parser` 驗證通過。
+
+### 13. Day 2 直播深度導讀（SRT → HTML）
+
+輸入：`source/livestream/DAY 2 Livestream - 5-Days of AI Agents Intensive Vibe Coding Course With Google.en.srt`（3552 行，888 行純文字）
+
+1. 以 `grep` 過濾 SRT 時間戳，產出純文字逐字稿 `source/livestream/day2-transcript.txt`（888 行）
+2. 讀取逐字稿全文，同時啟用 `deep-guide`（敘事層）與 `ai-mentor-agents`（教學層）撰寫導讀文章，存入 `source/livestream/day2-deep-guide.md`，共 5 章節，核心命題：「你的整合程式碼，正在成為技術債。」
+3. Day 2 逐字稿無 `>>` 講者標記（不同於 Day1），改用啟發式規則識別 7 位講者：
+   - Smitha Kohlan（藍色）· Anant Navalgariya（綠色）· Alan（紫色）
+   - Kanchana（橙色）· Mike（青色）· Pierre（粉紅）· Fran Hinkelman（紅色）
+   → `pipeline/build_day2_transcript.py` 產出 60 段帶 badge 的 HTML 片段，存入 `source/livestream/transcript_fragment.html`
+4. `codex_imagegen.py` 生成 6 張 AI 圖（先輸出至 `/tmp/day2-livestream-images/` 再 `cp`）：
+   - `protocol-stack.png / _mobile.png`：四層 Agent 協定棧總覽
+   - `token-oil.png / _mobile.png`：Token 是新石油
+   - `boundary-dissolve.png / _mobile.png`：邊界消融與責任
+5. `day2-deep-guide/build_html.py` 建立 `day2-deep-guide/index.html`：
+   - sticky nav（← 返回 Day 2 主頁 · NxM 問題 · 協定棧 · Token 新石油 · 資料庫轉型 · 邊界消融 · 直播影片 · 原文逐字稿）
+   - 3 個 `<picture>` 響應式資訊圖 + lightbox
+   - 協定棧四層視覺卡片（`.protocol-layer`）
+   - `<video>` 播放器（GitHub Releases URL）
+   - 講者識別逐字稿折疊面板（60 段）
+6. `python3 -m html.parser` 驗證通過，Playwright 桌機（1280×800）與手機（390×844）截圖 QA 通過
+7. `index.html` 學習頻道新增「🎬 Day 2 直播深度導讀」卡片
 
 ---
 
@@ -448,6 +484,26 @@ https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2
     2.參考day1將podcast移出index.html，放到podcast的導讀頁面。改用「https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/Whitepaper.Companion.Podcast.Agent.Tools.Interoperability_compressed.mp4」
 
 40. update readme.md
+
+41. day2 的livestream逐字稿為「DAY 2 Livestream - 5-Days of AI Agents Intensive Vibe Coding Course With Google.en.srt」，影片網址「https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/DAY.2.Livestream.-.5-Days.of.AI.Agents.Intensive.Vibe.Coding.Course.With.Google_compressed.mp4」，參考day1的livestream導讀建立day2的livestream導讀，使用ai-mentor and deepguide skill，逐字稿的形式也要一致
+
+42. update readme
+
+43. livestream的html的影片播放器位置應該在上方，參考day1
+    → `video-section` 從文章底部移至 Hero 正下方（summary-figure 之前），`margin-bottom: 56px`。
+    → `build_html.py` 的 `TRANSCRIPT_FILE` 路徑更新為 `../source/livestream/transcript_fragment.html`。
+
+44. 影片播放器下方的圖片被遮住了，而且圖片全部都一樣？
+    → 確認 6 張 AI 生成圖 MD5 完全相同（Codex CLI fallback 機制抓到同一個 session 舊圖）。
+    → 改用 Day 2 白皮書中文化圖表替代 AI 生成圖：
+       - summary-figure → `images_cht/Figure 1 Ecosystem of Agent Protocols.png`
+       - 協定棧章節 → `images_cht/Figure 2 Steps for Onboarding an MCP Server.png`
+       - Token 章節 → `images_cht/Figure 5 A2A Server and Client Supply and Demand.png`
+       - 邊界章節 → `images_cht/Figure 4 Distributed Multi-Agent Architecture.png`
+    → 移除 `day2-deep-guide/images/` 目錄（含壞圖），圖片改以 `../images_cht/` 相對路徑引用。
+    → section-figure CSS 加 `aspect-ratio: unset; object-fit: contain` 避免白皮書圖被裁切。
+    → Lightbox querySelector 改為 `figure img` 覆蓋所有圖。
+    → 語法驗證通過，Playwright 截圖確認圖片各不相同且正確顯示。
 ```
 
 ---

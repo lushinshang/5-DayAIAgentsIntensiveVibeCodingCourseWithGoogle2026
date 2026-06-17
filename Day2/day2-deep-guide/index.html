@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>你的整合程式碼，正在成為技術債：從協定棧理解 Agent 時代的新基礎設施</title>
+<meta name="description" content="Kaggle × Google 5-Day AI Agents Intensive Course Day 2 直播深度導讀。MCP/A2A/A2UI/AP2 四層協定棧、Token 是新石油、資料庫的 Agent-first 轉型。">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f9f7f4;
+  --text: #1a1a1a;
+  --text-light: #555;
+  --accent: #2d5be3;
+  --accent-soft: #e8eefb;
+  --warn: #c0392b;
+  --warn-soft: #fdf0ef;
+  --tip: #1a7a4a;
+  --tip-soft: #edfaf3;
+  --q-soft: #fdf8ed;
+  --border: #e0ddd8;
+  --nav-bg: rgba(249,247,244,0.95);
+  --font: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--nav-bg);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  height: 56px; display: flex; align-items: center;
+}
+.nav-inner {
+  max-width: 1120px; margin: 0 auto; padding: 0 24px;
+  width: 100%; overflow-x: auto; white-space: nowrap;
+  scrollbar-width: none; display: flex; gap: 6px;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+nav a {
+  display: inline-block; padding: 6px 14px; font-size: 13px;
+  color: var(--text-light); text-decoration: none;
+  border-radius: 20px; transition: background 0.18s, color 0.18s; flex-shrink: 0;
+}
+nav a:hover { background: var(--accent-soft); color: var(--accent); }
+.nav-back {
+  background: var(--accent) !important; color: #fff !important;
+  font-weight: 700;
+}
+.nav-back:hover { background: #1e3fad !important; }
+
+/* PAGE WRAP */
+.page-wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* HERO */
+.hero { padding: 56px 0 40px; max-width: 720px; margin: 0 auto; }
+.hero-tag {
+  display: inline-block; font-size: 12px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent); background: var(--accent-soft);
+  padding: 4px 12px; border-radius: 12px; margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(1.9rem, 4.5vw, 3.2rem); font-weight: 800;
+  line-height: 1.22; color: var(--text); text-wrap: balance; margin-bottom: 20px;
+}
+.hero-meta {
+  font-size: 14px; color: var(--text-light);
+  border-left: 3px solid var(--border); padding-left: 14px; line-height: 1.6;
+}
+
+/* VIDEO */
+.video-section {
+  margin: 0 0 56px;
+}
+.video-inner {
+  background: #1e1e2e; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.18);
+}
+.video-label {
+  background: #1e1e2e; color: #a6adc8;
+  font-size: 13px; padding: 10px 20px;
+  border-bottom: 1px solid #313244;
+}
+.video-label strong { color: #89b4fa; }
+.video-inner video {
+  width: 100%; display: block;
+  max-height: 560px; background: #000;
+}
+
+/* SUMMARY FIGURE */
+figure.summary-figure { margin: 36px 0 48px; padding: 0; }
+figure.summary-figure img {
+  width: 100%; max-width: 700px; display: block; margin: 0 auto;
+  border-radius: 12px; object-fit: contain;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10); cursor: zoom-in;
+}
+
+/* ARTICLE */
+article { max-width: 720px; margin: 0 auto; }
+article h2 {
+  font-size: clamp(1.25rem, 3vw, 1.65rem); font-weight: 700;
+  line-height: 1.3; margin: 56px 0 20px; color: var(--text);
+  text-wrap: balance; padding-bottom: 10px; border-bottom: 2px solid var(--border);
+}
+article p { margin-bottom: 18px; }
+article strong { font-weight: 700; }
+article ul, article ol { margin: 12px 0 20px 24px; }
+article li { margin-bottom: 8px; }
+article code {
+  font-family: "SF Mono","Fira Code","Consolas",monospace;
+  font-size: 0.88em; background: #eeecea;
+  padding: 2px 6px; border-radius: 4px;
+}
+article pre {
+  background: #1e1e2e; color: #cdd6f4;
+  padding: 20px 24px; border-radius: 10px;
+  overflow-x: auto; font-size: 14px; line-height: 1.6; margin: 24px 0;
+}
+article pre code { background: none; padding: 0; color: inherit; }
+hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+/* CALLOUT BOXES */
+.callout {
+  border-radius: 10px; padding: 16px 20px; margin: 24px 0;
+  font-size: 15px; line-height: 1.65;
+}
+.callout-label {
+  font-weight: 700; font-size: 13px; display: block;
+  margin-bottom: 6px; letter-spacing: 0.03em;
+}
+.callout-def { background: var(--accent-soft); border-left: 4px solid var(--accent); }
+.callout-def .callout-label { color: var(--accent); }
+.callout-tip { background: var(--tip-soft); border-left: 4px solid var(--tip); }
+.callout-tip .callout-label { color: var(--tip); }
+.callout-warn { background: var(--warn-soft); border-left: 4px solid var(--warn); }
+.callout-warn .callout-label { color: var(--warn); }
+.callout-think { background: var(--q-soft); border-left: 4px solid #d4a017; }
+.callout-think .callout-label { color: #9a6f00; }
+
+/* SECTION FIGURES */
+figure.section-figure { margin: 32px 0; }
+figure.section-figure img {
+  width: 100%; max-width: 860px; display: block; margin: 0 auto;
+  border-radius: 10px; object-fit: contain;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09); cursor: zoom-in;
+}
+figure.section-figure figcaption {
+  text-align: center; font-size: 13px; color: var(--text-light);
+  margin-top: 10px; line-height: 1.54;
+}
+
+/* FORMULA BLOCK */
+.formula-block {
+  background: #1e1e2e; color: #cdd6f4;
+  border-radius: 12px; padding: 28px 32px; margin: 28px 0; text-align: center;
+}
+.formula-main {
+  font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800;
+  letter-spacing: 0.02em; color: #89b4fa; margin-bottom: 8px;
+}
+.formula-sub { font-size: 14px; color: #a6adc8; }
+
+/* PROTOCOL LAYERS */
+.protocol-stack {
+  display: flex; flex-direction: column; gap: 12px; margin: 24px 0;
+}
+.protocol-layer {
+  display: flex; gap: 16px; align-items: flex-start;
+  background: #fff; border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.protocol-layer-num {
+  font-size: 22px; font-weight: 900; color: var(--accent);
+  min-width: 32px; text-align: center; flex-shrink: 0; line-height: 1;
+  padding-top: 2px;
+}
+.protocol-layer-body { flex: 1; }
+.protocol-layer-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+.protocol-layer-desc { font-size: 14px; color: var(--text-light); line-height: 1.55; }
+
+/* TOKEN TABLE */
+.token-tips {
+  background: #1e1e2e; color: #cdd6f4;
+  border-radius: 12px; padding: 24px 28px; margin: 24px 0;
+}
+.token-tips h4 { color: #89b4fa; font-size: 14px; margin-bottom: 14px; letter-spacing: 0.06em; }
+.token-tips ul { list-style: none; padding: 0; margin: 0; }
+.token-tips li {
+  padding: 6px 0; border-bottom: 1px solid #313244;
+  font-size: 14px; line-height: 1.55; display: flex; gap: 10px;
+}
+.token-tips li:last-child { border-bottom: none; }
+.token-tips .tip-icon { color: #a6e3a1; flex-shrink: 0; }
+
+/* CLOSING QUOTE */
+.closing-quote {
+  border-left: 4px solid var(--accent); background: var(--accent-soft);
+  padding: 20px 24px; border-radius: 0 10px 10px 0;
+  font-size: 1.1rem; line-height: 1.7; margin: 28px 0; font-style: italic;
+}
+
+/* TRANSCRIPT */
+.transcript-section {
+  max-width: 720px; margin: 64px auto 0; padding-top: 40px;
+  border-top: 2px solid var(--border);
+}
+.transcript-section h2 {
+  font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; color: var(--text);
+}
+.transcript-toggle {
+  width: 100%; cursor: pointer; list-style: none;
+  background: #fff; border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 20px;
+  font-size: 14px; color: var(--text-light);
+  transition: background 0.15s; margin-bottom: 0;
+}
+.transcript-toggle:hover { background: var(--accent-soft); }
+details[open] .transcript-toggle { border-radius: 10px 10px 0 0; }
+.transcript-body {
+  background: #fff; border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 10px 10px; padding: 24px;
+  font-size: 14px; line-height: 1.72; color: var(--text);
+}
+.transcript-turn { margin-bottom: 20px; }
+.transcript-turn:last-child { margin-bottom: 0; }
+.spk-badge {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: 12px; border: 1px solid;
+  margin-bottom: 6px; letter-spacing: 0.02em;
+}
+.transcript-turn p {
+  margin: 0; color: var(--text-light); line-height: 1.72;
+}
+
+/* LIGHTBOX */
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 999;
+  background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+  flex-direction: column; gap: 14px;
+}
+.lightbox.is-open { display: flex; }
+.lightbox img {
+  max-width: 92vw; max-height: 88vh; border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5); object-fit: contain;
+}
+.lightbox-hint { color: rgba(255,255,255,0.5); font-size: 13px; }
+
+/* FOOTER */
+footer {
+  margin-top: 64px; padding: 24px 0 0;
+  border-top: 1px solid var(--border);
+  font-size: 13px; color: var(--text-light); text-align: center;
+  max-width: 720px; margin-left: auto; margin-right: auto;
+}
+
+@media (max-width: 640px) {
+  .protocol-layer { flex-direction: column; gap: 8px; }
+  .protocol-layer-num { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-back" href="../index.html">← 返回 Day 2 主頁</a>
+    <a href="#sec-nxm">NxM 問題</a>
+    <a href="#sec-protocols">協定棧</a>
+    <a href="#sec-token">Token 新石油</a>
+    <a href="#sec-database">資料庫轉型</a>
+    <a href="#sec-boundary">邊界消融</a>
+    <a href="#sec-video">直播影片</a>
+    <a href="#transcript">原文逐字稿</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="hero-tag">Day 2 直播深度導讀 · 2026-06-17</span>
+    <h1>你的整合程式碼，正在成為技術債</h1>
+    <p class="hero-meta">
+      Kaggle × Google 5-Day AI Agents Intensive Course — Day 2<br>
+      主題：MCP / A2A / A2UI / AP2 四層協定棧 · Token 是新石油 · Agent-first 資料庫<br>
+      講者：Smitha Kohlan、Anant Navalgariya、Alan、Kanchana、Mike、Pierre、Fran Hinkelman
+    </p>
+  </div>
+
+  <!-- VIDEO SECTION (Hero 正下方，參考 Day 1 做法) -->
+  <div class="video-section" id="sec-video">
+    <div class="video-inner">
+      <div class="video-label"><strong>▶ Day 2 直播錄影</strong> — Agent Tools &amp; Interoperability</div>
+      <video controls preload="metadata">
+        <source src="https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/DAY.2.Livestream.-.5-Days.of.AI.Agents.Intensive.Vibe.Coding.Course.With.Google_compressed.mp4" type="video/mp4">
+        您的瀏覽器不支援影片播放，請直接下載觀看。
+      </video>
+    </div>
+  </div>
+
+  <!-- SUMMARY FIGURE — NxM 複雜度對比 -->
+  <figure class="summary-figure" id="sec-start">
+    <picture>
+      <source media="(max-width: 640px)" srcset="images/nxm-complexity-mobile.png">
+      <img src="images/nxm-complexity.png" alt="MCP 協定將整合複雜度從 O(N×M) 降為 O(N+M)">
+    </picture>
+  </figure>
+
+  <!-- ARTICLE -->
+  <article>
+
+    <!-- Section 1: NxM -->
+    <h2 id="sec-nxm">五個模型、十個工具——恭喜你，欠了五十筆整合債</h2>
+
+    <p>想像一個工程師的日常。他的 Coding Agent 要連 GitHub 拉 Issue、連 BigQuery 跑數據、連 Jira 更新狀態、連自家 API 撈設定，再連 Slack 發通知。五個工具，一個模型，五條客製程式碼。還算好。</p>
+
+    <p>幾個月後，組織決定同時跑 Gemini、Claude，加一個開源模型做比較。工具也從五個長到十個。</p>
+
+    <p>你打開試算表計算了一下：三個模型 × 十個工具 = <strong>三十條整合要維護</strong>。每次有任何一個工具的 API 改版，全部都得跟著動。某個廠商偷偷把參數名稱從 <code>user_id</code> 改成 <code>userId</code>，你下午三點接到的 PagerDuty 警報就能說明問題的規模。</p>
+
+    <div class="formula-block">
+      <div class="formula-main">O(N × M) → O(N + M)</div>
+      <div class="formula-sub">N 個模型 × M 個工具 → 只需 N + M 個標準連接<br>這是 MCP 對 AI 整合複雜度的根本重設</div>
+    </div>
+
+    <p>這不是特例。這是 Day 2 白皮書開宗明義點出的 <strong>NxM 問題</strong>——業界所有 AI 整合工程師都在同一個沼澤裡打滾，只是深度不同。</p>
+
+    <div class="callout callout-def">
+      <span class="callout-label">📌 核心命題</span>
+      NxM 問題的根本，不是工程師不夠勤快，而是整個行業缺少一個共同語言。回想網際網路的誕生：在 TCP/IP 確立之前，不同廠商的電腦根本無法互相溝通。協定的出現，終結了「翻譯大戰」。AI Agent 的現況，幾乎是在重演同一部戲。
+    </div>
+
+    <!-- Section 2: Protocol Stack -->
+    <h2 id="sec-protocols">協定棧：從插頭到合約，四層解決四個問題</h2>
+
+    <p>Day 2 白皮書提出了一套完整的協定棧，解決 Agent 連接世界時的四個不同問題。理解這四層，才能看懂整個 Agent 生態系的設計邏輯。</p>
+
+    <div class="protocol-stack">
+      <div class="protocol-layer">
+        <div class="protocol-layer-num">1</div>
+        <div class="protocol-layer-body">
+          <div class="protocol-layer-title">MCP — 工具連接的 USB-C</div>
+          <div class="protocol-layer-desc">Model Context Protocol。解決「模型連工具」的問題。定義標準介面，讓任何 MCP 相容工具可接上任何 MCP 相容模型，不需客製配對程式碼。複雜度從 O(N×M) 降為 O(N+M)。</div>
+        </div>
+      </div>
+      <div class="protocol-layer">
+        <div class="protocol-layer-num">2</div>
+        <div class="protocol-layer-body">
+          <div class="protocol-layer-title">A2A — Agent 之間的外交語言</div>
+          <div class="protocol-layer-desc">Agent to Agent Protocol。解決「Agent 協作」的問題。已捐贈 Linux 基金會。讓 Agent 透過 Registry 發現彼此、閱讀 Agent Card、非同步委派任務。判斷原則：需要結果用 MCP，需要另一個 Agent 負責一段工作用 A2A。</div>
+        </div>
+      </div>
+      <div class="protocol-layer">
+        <div class="protocol-layer-num">3</div>
+        <div class="protocol-layer-body">
+          <div class="protocol-layer-title">A2UI — 讓 Agent 能驅動你的設計系統</div>
+          <div class="protocol-layer-desc">Agent to UI Protocol。解決「Agent 輸出 UI」的問題。不讓 Agent 生成任意程式碼，而是組合來自 Catalog 的元件，輸出聲明式 JSON 配置。你的設計系統、品牌語言、無障礙設計全部保留，Agent 只決定「需要什麼 UI」。</div>
+        </div>
+      </div>
+      <div class="protocol-layer">
+        <div class="protocol-layer-num">4</div>
+        <div class="protocol-layer-body">
+          <div class="protocol-layer-title">AP2 / UCP — Agent 的採購部門與支付閘道</div>
+          <div class="protocol-layer-desc">Agent Payment Protocol + Universal Commerce Protocol。解決「Agent 執行商業交易」的問題。嚴格的人工簽核授權（mandate）限定條件——最多花多少、買什麼類別、在哪個供應商範圍。Agent 在這個沙箱裡行動，跑不出去。</div>
+        </div>
+      </div>
+    </div>
+
+    <figure class="section-figure" id="fig-protocols">
+      <picture>
+        <source media="(max-width: 640px)" srcset="images/nxm-complexity-mobile.png">
+        <img src="images/nxm-complexity.png" alt="MCP 協定將整合複雜度從 O(N×M) 降為 O(N+M)">
+      </picture>
+      <figcaption>MCP 作為統一標準介面，讓 N 個模型 × M 個工具的整合問題，從 O(N×M) 降為線性的 O(N+M)</figcaption>
+    </figure>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">💡 設計系統的正確心態</span>
+      A2UI 不是在取代設計系統，而是在讓 Agent 能驅動設計系統。你的前端、你的元件庫、你的樣式，全部保留。Agent 學會的是你的 UI 語言，不是自己發明一套。這個邊界很清楚：你的品牌識別是護城河，Agent 幫你讓它更靈活地服務使用者。
+    </div>
+
+    <div class="callout callout-warn">
+      <span class="callout-label">⚠️ MCP 的安全邊界不能事後補</span>
+      MCP 強迫你在設計階段就思考安全邊界。一個資料庫的 MCP 工具，應該只開放 SELECT，完全鎖死 DDL 和 DML。安全不是功能，是架構決策——讓 Agent 操作生產資料庫的讀寫副本，而不是主庫，這類選擇必須在設計 MCP 工具時就做好。
+    </div>
+
+    <!-- Section 3: Token -->
+    <h2 id="sec-token">Token 是新石油——但大多數人還沒意識到</h2>
+
+    <figure class="section-figure">
+      <picture>
+        <source media="(max-width: 640px)" srcset="images/token-oil-mobile.png">
+        <img src="images/token-oil.png" alt="Token 是新石油：從資料到精煉燃料">
+      </picture>
+      <figcaption>資料是原料，Token 才是精煉燃料——模型路由、快取、精簡提示詞、一鍵切斷，是 Agent 時代的省油策略</figcaption>
+    </figure>
+
+    <p>整場 Q&amp;A 裡，有一句話讓人停下來重複讀了幾遍：</p>
+
+    <div class="closing-quote">
+      <p><em>「如果說過去十年的口號是『資料是新石油』，那在 AI Agent 的時代，Token 就是新石油。資料只是原料，Token 才是那個真正驅動引擎的精煉燃料。」</em></p>
+    </div>
+
+    <p>當一個 Agent 持續運行、反覆呼叫工具、與其他 Agent 協作、在 A2UI 生成 UI，每一步都在燃燒 Token。一個設計不良的 Agent 可以在幾小時內燒掉整個月的 API 預算。企業已經開始對員工的 AI 使用設置 Token 配額——這不是暫時管控，而是訊號：<strong>Token 的財務管理，將成為 Agent 時代的核心工程能力</strong>。</p>
+
+    <div class="token-tips">
+      <h4>▸ 省 Token 的四個架構策略</h4>
+      <ul>
+        <li><span class="tip-icon">◆</span> <strong>模型選擇分層</strong>：不是所有任務都需要最強的模型。路由簡單任務給輕量模型，省下的 Token 用在真正需要推理的地方。</li>
+        <li><span class="tip-icon">◆</span> <strong>快取重複呼叫</strong>：重複的工具呼叫、重複的文件讀取，是 Token 浪費的重災區。快取命中 = 零 Token 成本。</li>
+        <li><span class="tip-icon">◆</span> <strong>Prompt 工程仍有效</strong>：要求 Agent 用條列格式回應而不是長段落，可顯著降低輸出 Token 數。工程師使用「請用bullet points」這個簡單技巧節省了大量成本。</li>
+        <li><span class="tip-icon">◆</span> <strong>Kill Switch 要內建</strong>：不是事後加上去的功能，而是架構設計的一部分。ADK 的 <code>max_iterations</code> 參數、Cloud 層的帳單預算上限，都是防護機制的一環。</li>
+      </ul>
+    </div>
+
+    <div class="callout callout-think">
+      <span class="callout-label">🧪 架構思考驗證</span>
+      你的 Agent 系統，有沒有辦法在不停機的情況下，知道「現在的 Token 消耗速率是否異常」？如果沒有，你的 Kill Switch 其實是事後補救而不是預防性設計。
+    </div>
+
+    <!-- Section 4: Database -->
+    <h2 id="sec-database">資料庫，還沒準備好迎接 Agent</h2>
+
+    <p>有一個觀察在整場直播中相對低調，卻值得認真對待：<strong>我們的資料庫，是為人類設計的</strong>。</p>
+
+    <p>它的介面、它的錯誤訊息、它的查詢語言、它的回傳格式——全部都在假設使用者是一個看著螢幕、能理解上下文、會重試的人類。但 Agent 是截然不同的消費者。它沒有人類的風險直覺，它可能在毫秒內發出一百個查詢、它無法自行判斷「這個錯誤代碼代表什麼、我應該退後還是重試」。</p>
+
+    <p>真正的 Agent-first 資料庫架構，意味著：</p>
+    <ul>
+      <li>讓 Agent 可以透過 <strong>SSE（Server-Sent Events）</strong> 直接串流資料，而不必透過外部 orchestration</li>
+      <li>提供 <strong>Agent 專屬的 RBAC</strong>（角色存取控制），而不是讓 Agent 用人類帳號登入</li>
+      <li>回傳的 <strong>Payload 要為 Agent 的理解能力優化</strong>，而不是為人類的閱讀習慣優化</li>
+      <li>內建 <strong>Telemetry</strong>，讓監控系統能追蹤 Agent 的行為模式</li>
+    </ul>
+
+    <div class="callout callout-def">
+      <span class="callout-label">📌 Agent Experience ≠ Developer Experience</span>
+      過去幾十年，資料庫廠商一直在優化「開發者體驗」（DX）。現在，當 Agent 成為資料庫的主要使用者，我們需要開始思考「Agent 體驗」（AX）。這不只是技術問題，而是誰先重新設計好 AX，誰就在 Agent-first 世界取得先機。
+    </div>
+
+    <!-- Section 5: Boundary -->
+    <h2 id="sec-boundary">邊界正在消失，但責任沒有</h2>
+
+    <figure class="section-figure">
+      <picture>
+        <source media="(max-width: 640px)" srcset="images/db-evolution-mobile.png">
+        <img src="images/db-evolution.png" alt="資料庫必須從 Human-first 進化為 Agent-first">
+      </picture>
+      <figcaption>Human-first 資料庫為人類設計，Agent-first 資料庫為 Agent 最佳化：SSE 串流、結構化 JSON、代理 RBAC、內建遙測</figcaption>
+    </figure>
+
+    <p>整場直播的最後，有人問了一個讓所有講者都停下來思考的問題：<strong>下一個 AI 重大突破，會來自更好的基礎模型，還是來自 Agent 自主開發工具？</strong></p>
+
+    <p>答案是：都是，但更重要的問題是，突破的計量單位正在改變。過去我們計算模型的 benchmark 分數。現在我們開始計算整個系統的效能：正確的模型、正確的上下文、正確的時機、正確的工具組合。<strong>「Loop Engineering」</strong>這個新詞出現在直播中——不只優化模型，而是優化整個 Agent 的運行迴圈。</p>
+
+    <p>同時，另一個更深層的變化正在發生：<strong>開發者和消費者之間的邊界，正在消融</strong>。一個從來不是職業工程師的人，靠著 Vibe Coding 工具寫出了一個產品，賣出了十位數的估值。這不是單一事件，而是一個正在加速的趨勢。</p>
+
+    <div class="callout callout-warn">
+      <span class="callout-label">⚠️ 自由度增加，責任感不會自動跟上</span>
+      把你學會的協定，用在保護使用者資料、設計透明的授權機制、內建可觀測性——這才是從 Vibe Coding 走向 Agentic Engineering 的完整路程。協定讓 Agent 能說話，你的設計讓 Agent 說的話值得信任。
+    </div>
+
+    <div class="closing-quote">
+      <p><em>「就像一輛車，你可以開得多快都可以，但路上還有其他人。你有能力做到很多事，但你也有責任去設計好的架構、保護使用者的資料。」</em></p>
+    </div>
+
+    <hr>
+
+  </article>
+
+  <!-- TRANSCRIPT SECTION -->
+  <section class="transcript-section" id="transcript">
+    <h2>原文逐字稿（含講者識別）</h2>
+    <details>
+      <summary class="transcript-toggle">
+        ▸ 展開英文原文逐字稿（共 60 段，含 Smitha / Anant / Alan / Kanchana / Mike / Pierre / Fran 講者識別）
+      </summary>
+      <div class="transcript-body">
+        <div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>Welcome back, everyone, to day two of the Kaggle and Google Five Days, AI Agents intensive course. I'm Smita Kohlan, Senior Developer Relations Engineer at Google Cloud. And I'm here again with Anant Navalgariya. Anant, welcome back. Hi, everyone. Haven't seen you all since yesterday. Thanks for joining and looking forward to taking you to the rest of the course. Good to see everyone again. I see some folks from yesterday already in the chat. And if you're new and just joining us, welcome. Drop in the chat, what was your best takeaway from day one was. We would love to hear it.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>All right, to get started, let's actually do a quick overview. So throughout the week, you will get white papers, companion podcasts, hands-on code labs, daily live streams, and AMAs just like this one, and also an optional capstone project at the end where you can compete for Kaggle certificates, badges, swag, and recognition across Kaggle and Google's social channels. So if you have registered for the course, the content will actually land directly in your inbox. If not, everything is actually going to be on the Kaggle Learner Portal, and it will be announced in Discord as well. Also, before I forget, quick thanks to everyone who put this together, the Google researchers and engineers who wrote the white papers, the speakers joining us this week,</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>and also the amazing Discord moderators who have been answering questions nonstop. They are truly heroes. And before we proceed, Smitha, I wanted to add on something. We have seen a lot of you having a token quota restrictions. And as we communicated, since the free quota is limited and a lot of you will have these issues as you proceed across the code labs. However, even though the course material is no cost and free, all the white papers, the podcasts, et cetera, if you would like to go through all the code labs without hassle, you can choose to upgrade to the paid version if you would like to. The course material is free. However, the free quota is limited.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>So if you would like to make the most, you can choose to do so or do so next week when the quota is refreshed. Awesome. OK. So let's actually get into day two. Yesterday, we covered what an agent actually is and the shift from writing syntax to expressing intent. Today is all about the layer that makes agents actually useful, how they connect to tools, to other agents, and to the rest of the world. So here's the problem. The white paper actually opens with, and it's actually worth thinking about for a second. Say you have a handful of different models, Gemini,</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>or maybe an open source model, or whatever you're using, and you want them to work with a handful of tools like Jira, BigQuery, GitHub, or even your own APIs. The traditional way is to actually wire this up in one custom integration per model to pair. So for example, five models and 10 tools, you would have to write 50 integrations to write and maintain and all of that. But when anyone's tools API actually changes, or multiple integrations can actually break all at once. So that's the technical debt that the protocols that we're going to be talking about today are actually designed to eliminate. The white paper today is really about to tell you how you can get out of that trap.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>It walks through a set of open protocols that actually standardize how agents connect to tools, to other agents, to user interfaces, and even to payment systems. So Anand, do you want to walk us through the white paper in more detail? Yes, thank you, Smitha. And hi, everyone. I hope you've had the chance to go through the white paper, the new white paper for day two. Please bear in mind that the white papers for this iteration are more white coding adjusted and specific. But if you'd like to go through general agent building and especially how agents are built without the white coding aspect, we have also linked in the FAQ the updates</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anant Navalgariya · Google</span><p>to the older white papers from the last iteration with the newest content and tech. So starting off with the white paper for today, the new white paper, which is titled Agent Tools and Interoperability for White Coding. So in yesterday's white paper, we established how the software development lifecycle is shifting from manual syntax translation to expressing pure intent in natural language under the core and architectural formula, agent is equal to model plus harness, where the harness plays a very major role in making all of this happen, especially for AI-assisted coding. In today's white papers, we explored the industry standards</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>that allow our agents to safely talk to the rest of the world. First, as Smitha mentioned, we tackled the N into M prototyping crisis. So if you have N models and M tools, like the 5 and 10, Smitha mentioned, that leads to O and N into M integrations, which is like 15 in this case, but can easily blow it up as you can imagine. And this is especially important when your coding agent, et cetera, connect to lots of external tools and MCP servers. And then later on in the white paper, we showed how the MCP or the model context protocol or MCP acts like the USBC for tool connections, reducing that complexity that N into M complexity to a clean linear O and plus M scale using standard transports</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>like STD input output as well as service and events or SSE. Later on in the second section of the white paper, we also look at the evolution of agent architecture. Just like web applications move from monoliths to microservices, we are moving away from bloated single agent monoliths to distributed multi-agent networks. You also see that in some of the, if you have tried out the code labs and the gravity, it's a multi-agent system behind the scenes and as well as the ambient agents that you can build with multi-agent architecture. We also broke down the agent to agent or A to A protocol. It is an open standard designed to serve as the universal language for specialized agents</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>to coordinate and discover each other by registries and then delegate tasks using machine readable agent cards. We also demonstrated agent to UI or A to UI in short. Personally, I think this is a game changing open source standard that allows agents to output interactive user interfaces dynamically and safely specific to the need of the user instead of having one static interface and using trusted component catalogs instead of just running arbitrary code. Finally, we cover autonomous commerce. We also talk about universal commerce protocol or UCP as it's well known and how it helps agents build shopping carts while the agent payment protocol or AP2 acts as a secure payment gateway applying strict human signed mandates so your agent never overspends</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>or minimize chances of overspending. So yeah, we covered a lot in this white paper. So hopefully you had a chance to play with the code labs and read through the white papers. Off to you, Smitha, to the exciting Q&amp;A. Thank you, Anant. And also same tip as what we mentioned yesterday. If you haven't already, the podcast is actually a really great entry point before you dive into the white paper. With that said, let's head on over into the Q&amp;A. So we have some really amazing expert hosts on the panel today. We have Alan, Kanchana, Mike, and Pierre from Cloud AI. And let's actually now get into the questions.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>Welcome, everyone. How are you guys feeling? Feeling great. Excited to be here. Awesome. So Mike, this question is for you. How is Google Cloud lowering the barrier for developers to integrate open protocols like MCP and A2A, just like we mentioned in the summary, into production cloud stacks? And what do you see as their long-term future? Yeah. Before I answer the question, you thanked everybody else. And I want to thank you, Anant and Smitha, for doing such a great job pulling this together</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#0891b215;color:#0891b2;border-color:#0891b240">Mike · Google Cloud (Data / BigQuery)</span><p>this week. It means a lot to us at Google and the whole community, everything that you've been doing. So in the same way that Google is putting these protocols out there, you're putting a lot of knowledge out there. So thank you for that. I think in the same way, if you go back in time to the origins of the internet, the same way that protocols like TCP and UDP became the ingredients and the standards by which so many things run on top of and everything since, it's very much the same way that we at Google have been trying to invest and work with the rest of the industry to come up with ways to make sure that interoperability is there for all the pieces that you need for agents</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#0891b215;color:#0891b2;border-color:#0891b240">Mike · Google Cloud (Data / BigQuery)</span><p>to be able to work together, interact together, to be able to get to the right tools at the right time. I look at protocols like MCP, and you're going to spend a whole bunch of time on that today. But just like, how do I take care of a simple transaction to A2A, which is, how do I actually ask another agent to take on some work on my behalf and come back and solve a problem, to A2P and stateless MCP and UCP and all of the other pieces that are out there? I think the ways that we're making this easier for developers and actually lowering that barrier of entry is, one, by making these open standards, making sure that they're donated to the right kinds of foundations that can maintain them,</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#0891b215;color:#0891b2;border-color:#0891b240">Mike · Google Cloud (Data / BigQuery)</span><p>to making sure that they are standards, making sure that it's not something that's implemented in a bunch of different ways, but that can be implemented whether you're running things here on Google or whether you're running them elsewhere. Three, we're also integrating them into the product. So whether you're using ADK as agent developer kit, or whether you're using one of the other software developer kits out there in the industry, you will find these same protocols implemented and used in very, very similar ways. Help make sure that you can integrate those into your workflow. And then this is a vibe coding class. And so having things like Agent CLI and other things</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>be very aware of how these different protocols work so that as you're building agents, you're able to build them right into it from scratch. So hopefully that helped answer the question. Can I also jump in and add more? Was that all right? Yeah. I will say underneath the protocols, there's a whole lot of infrastructure and design. And the design is required for the protocol to work at scale. If you're just running on your laptop and you're the only user, perhaps scale isn't a concern. But there's a lot of concerns of running MCP servers at scale, especially at Google's scale. We've done some pretty heroic heavy lifting</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>on the current version of the protocol and helping to design the next version of that protocol to allow for stateless transport and a handful of other affordances at the core transport level. So you as a user, your developer agent just wiring the bits and pieces in may not see all of that. But under the hood, there's a lot of really impressive engineering going into it to make it scale. Oh, I hope everybody has a chance to play around with this because I personally find agent to agent protocol is one of my favorites and all the protocols that are coming along with it. Awesome. All right. Then let's move on to the second question. So this is to do with another one of the protocols and Alan for you. Will A2UI or protocols like A2UI replace traditional app stores</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>with temporary, highly personalized agent generated user interfaces which are rendered done with your demand? Or where do you see like, I can imagine in a mobile app, do you see this being like a customized for each user or do you see like this being more like application specific, not generating across app stores? Probably. It's hard to say. I think that we're moving to a future where all software is somewhat agent. Right. It doesn't have to be generated on the fly all the time. But we're going to get used to interacting with software that fits our needs and our context in the moment a little bit more closely. The UI layer of that, how do I interact with that system will follow a similar trajectory. It will be personalized to me and will remember that I like buttons or I like sliders or I prefer an audio interface or whatever.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>So all of our applications and all of our user interfaces will become more personalized and also more specific to the moment. So if my agent can talk to your agent or my subsystem can talk to your subsystem and fill in two thirds of a form for me, I don't even need to see that form. I just have to say, yes, go ahead and do it. And then I fill in the parts of the form that are necessary for this interaction. So those seem relatively small, but they're going to end up changing how we interact with applications going forward. That's not even super future looking. Some of that is totally happening right now. One of the anecdotes that I talk about a lot is a tracker app on your phone has a UI that is provided for you by the creator of that app. But maybe you don't need all of those buttons and you want half of those buttons or you want to add something else to track or whatever.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>It's very easy to just change the configuration of the UI, all of the same widgets persist. You just change the configuration of the UI and that static app keeps working. That's like the smallest example, but it gives you a hint of where we think we're going with everything being configurable and customizable. What I would be really cool, I really like the idea of personalizing automatic personalization. Maybe you can work on a prototype on this someday, Helen. Imagine keeping track of interactions of what users are doing and then seeing what they like and then customizing your UI proactively. You say, oh, we noticed that you like big search bars, so we have created it for you in this color. I think parts of that are absolutely happening. I've got demos that do bits and pieces of this.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>I'm looking forward to putting them together. If you do link them to it if you have some, otherwise share it later. Cool, thanks a lot. Then to the next question, Smitha. This is for you, Kanjana and Pierre. How should database architectures evolve to natively explore secure read-only MCP servers to reduce their integration complexity? I'm talking about native database, like think about Spanner, SQL or even non-SQL, how should they evolve? I'll start first. So when we talk about MCPs in general, even in the last iteration of the white paper, we talked about security and we talked about trust a lot. And in this paper, we did talk about why it's needed and what are the key components of it with respect to configurations and stuff.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#b4530915;color:#b45309;border-color:#b4530940">Kanchana Patlolla · Google Cloud AI (MCP)</span><p>MCP is kind of becoming the standard. It is a USB-C kind of a protocol for across your databases. So we know that. When I think about how do you make it secure, particularly with respect to, you know, avoiding a DDL, DML kind of transaction, then we need to keep it at different layers. And some of that is very much, you know, protocol based. So, for example, if you are using, say, MCP and in Google's, you have MCP toolbox and MCP toolbox, if you're using. And we talked extensively during the last iteration about it, is how do you prevent it in such a way that it only registers tools that are needed for a select versus giving access to a DDL or a DML? And I've also seen iterations where customers use it for read replicas. Like they don't give access to the production data or they give access to the production read data, not for the right instances.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#b4530915;color:#b45309;border-color:#b4530940">Kanchana Patlolla · Google Cloud AI (MCP)</span><p>We need to be very specific in the architectural choices and make it security native as part of your design of building an MCP based architecture. In one MCP, which is the MCP for all of the databases, we do provide options where you could specify the viewer. Like the endpoint is always the viewer and not the writer or any other segments which could be added. But the security should be front and foremost of your decision making. And you also need to be very specific in how you are defining it as part of your architecture. My perspective is also about a lot of trying to put ourselves in the shoes of an agent. Let's say agents experience, sense the world and interact with it in a different way than we do. So we just need a bit more of introspections. And all these databases have been designed for humans and experience has been optimized for humans as the main consumers. And now that we're moving to an agent-first world</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#b4530915;color:#b45309;border-color:#b4530940">Kanchana Patlolla · Google Cloud AI (MCP)</span><p>where agents might be, let's say, on par users alongside with humans or be the primary users over time, that also means the experience there has to change to make it more friendly for how agents like to do things or agents like to express things. Because they might not be able to have the same sense of risk that humans do or they might not have the same sense of security. Or they might not have the same sense of optimization that humans do. And therefore it is better to try to optimize experience for them and making the agent experience optimized for them. Because there have been lots of people, let's say, or developers that have been focusing on optimizing developer experience. And now when trying to make MCP data connections for agents and so on, then we need to optimize for agent experience here. So obviously things like being able to interact with the database without external processes but using natively service-send events.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#b4530915;color:#b45309;border-color:#b4530940">Kanchana Patlolla · Google Cloud AI (MCP)</span><p>This is a good thing to do there. Be able to create agent-specific role-based access controls. Do some context-aware payloads optimization so that the results can come back from databases that are optimized for agent's views instead of humans. Or built-in telemetries are all things that help towards that path, I say. Right. So putting security for... I took away the following phrases. Putting security first and foremost, which we see a lot into our day four white paper, especially in the context of white coding, security is a big concern. And the second thing is agent... Put yourself in agent's shoes. That's a quote I'm going to do. All right. Thanks a lot.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#db277715;color:#db2777;border-color:#db277740">Pierre · Google DeepMind (A2UI)</span><p>Pierre, now Smita, off to you for the community questions. Awesome. Let's get into the community questions. So the first one we have from Seema. How are Google's standardized data pipelines for autonomous AI collaboration actually reshaping the core skills that an aspiring data analyst needs to remain valuable? And I think this is actually a good one to start with because this is the question I think a lot of folks in adjacent roles are quietly asking themselves right now. So Mike, do you have anything to add here? Yeah, Seema, that was a great question. Thank you for asking that today. I... Everything's changing from the name of our systems to the role. I think even as we talk about all of our pipelines and we talk about all of our systems, we've even started calling it the agentic data cloud where you've got the tools like,</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#db277715;color:#db2777;border-color:#db277740">Pierre · Google DeepMind (A2UI)</span><p>there's a big BigQuery data engineering agent, there's the data science agent, there's all these things that are available now. And when I think about what that means from a role perspective, I think as, as I look at some of my best friends that have been data analysts, data scientists, data engineers, you walk up to this big pile of work with this little shovel and take a whole bunch of manual work to make sense of where that data is coming from, what that data looks like, what are the patterns, how do you make it usable for others? And I feel like this is really changing what your role is from trying to dig into this big pile of data to really becoming more of an architect and really becoming more of somebody that's operating how these and supervising how these systems are coming together and able to do so using some of the things that we've already talked about, talking to things like the agents I mentioned via A2A and treating these data systems as autonomous systems that you can then generate code to get to the data you need, you can generate processes, you can generate data, and equally as important, generate visualization and have some of that visualization come out and be able to</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#db277715;color:#db2777;border-color:#db277740">Pierre · Google DeepMind (A2UI)</span><p>experiment with a variety of formats that instead of taking days or weeks like it might have before can happen in minutes. And that's really empowering for you as an individual to do that and really important for you to experiment. And so I'm really glad, Seema, you're taking this course in order to pick up some of those things. Amazing. Thank you, Mike. And then to kind of add on to that, what do you think this means for someone who's kind of maybe early in their career if you were giving advice to like a junior analyst right now? Like what would you tell them to focus on? Yeah, I mean, I go back to early in my career and I go back to like watching others early in their career. And it was really hard to get access to scale. It was really hard to get access to proprietary, expensive data systems and tools. And it really democratizes access.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#0891b215;color:#0891b2;border-color:#0891b240">Mike · Google Cloud (Data / BigQuery)</span><p>It means that wherever you are, like you can access the same thing that an engineer at Google is using to get access to data or an engineer in these other many other huge organizations. And it really helps you be able to operate in the same way. And in fact, you know, being able to take the course and do these things, it's you're you're not just operating the same way. You're operating with the same knowledge and tools as everybody else. So it's really important to play around. I've been excited recently because I've been looking at things like 80k downloads and trying to troubleshoot some stuff and other things. And even myself, like I used BigQuery agent to go to the public BigQuery download of user agents and get a bunch of details. And there's all kinds of public resources and public tools out there that you using agents can go do in order to get this data and come up with really simple scripts and tools, which a couple of years ago would have been out of work and would have been</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>inaccessible to most folks. And especially also in terms of learning new new tools like writing BigQuery, optimize pipelines and queries. Now you can just use anti-gravity or any other coding agent that just or CLIs and just does it for you. Right. Like you don't have to do the learning curve is much shorter now than it used to be. And you can put that shovel back in the shed and like now focus on operating all these things together. Definitely. Awesome. OK, let's move on to question number two from the community. So we have this from ask me, how can organizations maintain design system governance within dynamically generated A2UI environments while also practically separating tools from collaborative agents along the MCP and A2A boundaries? Alan and Pierre, if you would like to answer this. The first part of that is easy and I need to think more about the second part.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>The first part is. A2A is designed to support your design system. We do ship it with a set of basic components to let you get started and you can use what we're handing you and render some configurable UIs on the fly. But the expectation is that you already have a front end. You already have a design system. You already have a UI that works. Maybe it's on the web, maybe it's on Android, etc. You've got a bunch of components. You've got a bunch of styles. That's the thing that you want the agent to be able to drive. You don't want to have to rebuild your front end to let your agent drive it. You just want the agent to be able to drive your front end. So that's the approach taken by A2UI. And sometimes that's not obvious.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>So I reinforce that message. It is a catalog of your components that establishes a contract between your front end or your design system with the agentic back end. So that part of the question, that's just how it works. The second part of the question is with clear separations between MCP and A2A boundaries. And I think that that's going to be maybe a design thing. I don't know, Pierdo, you want to jump in on that? Yes, like I agree it's a design thing, definitely. And maybe I can also give you a small example about it. Like when I joined Google about two years ago now, there is the opportunity to do usually in the first month sort of experiment capstone project or anything like that. And that was before the protocol existed and I was fighting to generate a UI. So what I did was I just tried to take the Gemini 1.0 family of models from a couple of years ago and just send a prompt and get back some widget to generate Pokemons or these kind of things out of the box.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>And in that case, there was no protocol at that point. And therefore, I just started trying to at times it would just work incredibly well out of the box and at times you just feel catastrophically and nothing would just generate and then you just get some random errors. And then I would start just trying to write some polypriced code to intercept errors, fix the hard code, and that was very, very messy. And that's when obviously then having this protocol like this completely changed the game since it just maps the intent of the agent to JSON and then you have these library of components. And with MCP, obviously you just get superpowers and it's up to the users then to decide if you want it more on the front or the back of the interaction there. Yeah, agreed. And then also on the MCP versus A2A boundary, the framing that I would kind of pull from the white paper is whether the caller actually needs a result or needs maybe like another participating agent to take responsibility.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>If you need a result, such as you need something from a document, you're fetching something, you're reading a role, that's probably MCP. And then if it's actually active collaboration and result that you want to get from another agent, that would be more along the A2A route. So it's two different problems and two different protocols. That's why we see more MCP for design system side and A2A for interaction handling basically. Yeah, the delegate, so I mentioned it was a design thing. I guess the UI that I am interacting with, if I'm interacting with a agent and that agent is doing everything, perhaps the tools under the hood are what matters. But if I'm interacting with an agent and it hands me off to some other agent, or it says, I'm asking somebody else to take responsibility, we'll get back to you later. That's like a user experience design system. That's where I think the boundary is. Great.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>Okay. Let's move on to question number three from Kushal. How do you design an automated safety kill switch to prevent AI agents from getting stuck in an infinite loop and also something which drains API budgets? Thank you. I think this is really practical as well. Especially for people who want to run an agent for many hours these days. Yeah. Yes, Kushal. Thank you. That was an excellent question, particularly because I think it's not just the consumers, more enterprises are feeling this as well. We see this in the news. We see token budgets being cut off. Enterprises giving some restrictions over their employees to make sure they all</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#b4530915;color:#b45309;border-color:#b4530940">Kanchana Patlolla · Google Cloud AI (MCP)</span><p>stay in the budget. So it's not just the agents, it's also everywhere we see that. And Finox itself is a huge practice by itself. When I went to think about, for the last decade, we have been talking, data is the new oil. But in the era of AI agents, the token is the new oil. When you think about data, it's just a raw result. Whereas the token becomes that refined fuel that actually powers the engine. For engine in the sense is agents. So whoever is optimizing their token pipeline is probably going to win. So that is a serious context by itself. And in cost optimization, particularly like here, the question referred to, you know, how do I give a kill switch? Is like, how do I make sure it's suddenly switched off is a good question because we want to avoid problems that causes immediately.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#b4530915;color:#b45309;border-color:#b4530940">Kanchana Patlolla · Google Cloud AI (MCP)</span><p>And I have to say, though, you probably already started looking at ADK agent development kit in our previous iteration. But in there, there are some maximum iterations cap you can specify. So it doesn't go in a loop. It terminates exhaust correctly. And also in agent development kit, you have meta usage data where you could track for anomalies. You could look for, you know, where am I seeing a skew where it's causing problems so you can divert it accordingly. And in Google Cloud, you could specify a billing budget, like when it crosses five, $50, $5, whatever is your amount to cut it off. Like that is kind of a kill switch I would offer. But I would strongly suggest we need to think of this in an architectural point of view, particularly, hey, are you implementing caching? And tomorrow you would learn about probably skills.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#b4530915;color:#b45309;border-color:#b4530940">Kanchana Patlolla · Google Cloud AI (MCP)</span><p>So are you learning about skills? Are you doing batch requests? And one more more important thing, which I normally see is, are you using a high expensive model for all of your transactions versus you probably need a lower cost model for some regular transactions? So there are some architectural choices you need to make, but yes, you do need to have a kill switch so you can switch off the agents as and when it comes. And I'm glad you asked that question because that often gets overlooked when you're so excited and overly like, you know, creating your new iteration. But yes, that needs to be part of your architecture design pattern. And just to add on to that a bit. So one more thing I would say, even going back to the basics, like go back to our prompt engineering, the second iteration of this course and read the prompt engineering, like white paper to see how you can engineer your skills or prompts to be very token efficient.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#b4530915;color:#b45309;border-color:#b4530940">Kanchana Patlolla · Google Cloud AI (MCP)</span><p>Fine tuning or like even just prompt engineering saves, can save a lot of tokens, which can help with minimizing token usage to not require a kill switch. Hopefully that's soon at least. Yeah. Awesome response, Kanchan. I really agree. Tokens are the new oil. And then also on the prompt engineering front, am I the only one who asks my agent to always just talk in bullet points to save up on tokens? Yeah. Okay. We can move on to the final question from the community. So this is from Ritika and she's asking, will the next major AI breakthrough come from better base models or from agents autonomously developing their own tools?</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>Yes. Yeah. It's a really good, that's a really good question because I think it's an, and Alan, I bet we're going to be very similar on this. It's, it's both. It's, it's going to be a combination of, you know, we should expect models to continue to improve. We should expect the capabilities of those models to continue to expand. We should expect to see additional kinds of models coming out in the industry, but we should also expect to see new ways to interact with those models, new ways to build things with those models. I think the question was on agents autonomously developing their own tools. I think more and more like we're going to see reuse matter. We're going to see, you know, as these model capabilities continue to increase cost of these like really premium models gets higher as well.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>And so we're going to see, I think breakthroughs are going to be all over the place, breakthroughs are going to be an efficiency breakthroughs are going to be in knowing when to use the right model at the right time. Breakthroughs. I, you know, I look at like being able to solve the broadest sets of problems, which are going to come not just from the model and not just from the agents, but from the context and the data that we're making available in very usable ways, I think, I think there's a lot of breakthroughs that we're going to see and observe and the message that if you listen to podcasts, if you listen to, you listen to interviews, we're still very early in, in agents and still very early in AI. And so I, you know, I, these breakthroughs are going to come from all directions. Alan, I'm curious to your thought. Yeah. I mean, I think that we're already seeing the feedback loop or the</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>inner loop tightening up. I think, uh, uh, all of the research labs, uh, are using agents in their workflow to improve their workflow, to improve the models. Researchers are working on, uh, trying to get to the next algorithm breakthrough for, uh, efficiency or, you know, to, to attack different angles of, uh, trying to make the models better. All of those individuals are using agents and using these tools. That is a feedback loop. I don't think that the feedback loop is super closed and super tight and fully autonomous. I think that these are tools that humans are using to improve the systems, but that still matters. We are seeing the acceleration continuing because of that. Um, your question was, is it going to come from the model or is it going to come from developing better tools?</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>And I really can't tease those things apart. I think that they are, uh, the processes that we are using to, uh, continue to improve the capability spec. Uh, they're, they're intrinsically released, uh, to, to linked. That's the word I'm thinking of. Awesome. Uh, Kanchena and Pierre, do you have any thoughts on this question as well? They both, uh, Mike and Alan had covered it pretty well. Um, in my point of view, as you know, both of them are saying models are becoming closer and closer to agentic in nature by itself. And the new coin word for this, um, for this week in, uh, S is, um, loop engineering. So when, when I think about, you know, where the evolving comes from, like I'm, I'm overwhelmed. I don't know what others hear.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>So is it harness? Is it loop? Is it model? Is it agent? Um, but one thing I am confident about is the models are going to be, um, more and more very specific in its ability, specialized abilities, like coding, like AI for science, like, you know, other abilities, but the experiences we are going to bring in our consumer or in our enterprise world is more going to be in this engineering loop, harness, architectural pattern, whatever that you might call it, that might be the case, uh, which might come. Um, but I'm so excited for the future just to see this evolving and the era we live in. Amazing times. Definitely. Any last sentences like, uh, from each of our guest speakers, Alan, starting off</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>with you? Uh, I didn't get a question about AP2 or UCP. I expected that to show up. Uh, uh, there's an alphabet soup of all of the protocols. I think it's justified because we have new tools and we have new capabilities and we're trying to figure out how to get work done. Ultimately, all of this is just us trying to establish conventions to get work done so that I can talk to you and you can talk to this other person and we trust those interactions. That's really what our goals are. Um, uh, it is where I spend a lot of my brain power. Nice. Yeah. I think it's, we just selected, uh, like four questions. There were a lot of questions, which we haven't been able to select, but sure</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#db277715;color:#db2777;border-color:#db277740">Pierre · Google DeepMind (A2UI)</span><p>there, Pierre, uh, off to you. Uh, for me, I mean, right now, when we talk about models, we mainly talk about LLMs, which are most common, let's say popular and so on. But one of the main thing that I like most about Google DeepMind that is different from other research labs is that there is still lots of focus on research that is pure, that is not just LLM driven. And I think, uh, from going to that aspect, there is still, they say, there is no wall there. There is still a lot of way to go and a lot of progress to go on models that are known as a autoregressive in nature, but could be diffusion based or JEPA or other architecture like alpha fold and so on that are completely different and also embedding domain knowledge. And I, that's one of the main thing about DeepMind that I really love. And I am really curious to see how this is going to evolve into the agentic world once these models are mature from the research lab.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#db277715;color:#db2777;border-color:#db277740">Pierre · Google DeepMind (A2UI)</span><p>Nice. And especially, um, the, the void models. I'm very excited about that. Uh, that mismatch in IO, which kind of diverge a bit from the tech, uh, typical text to text and like anything, do anything. I find that also very exciting. Just to add onto your point there. Cool. Mike. Yeah. I mean, I was just thinking about the other day with this, with this coming up that I look at this class and I look at folks that are starting to buy code. You've never been developers. And I look at traditional developers are becoming more like. Consumers and consumers are becoming more like developers and like these walls</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#0891b215;color:#0891b2;border-color:#0891b240">Mike · Google Cloud (Data / BigQuery)</span><p>and boundaries are falling down. And that's really, it's really exciting to see. And I think like, look at examples out there. I mean, the author of open claw had never been a professional developer himself. And wrote this product and sold it for a billion dollars and did that. Like there's a lot of opportunity. There's also a lot of realism in all of this. I think, um, as you build things, as you deploy things, don't just use these tools for the sake of building, use them for the sake of securing your product. Use them for the sake of protecting people's data. Use them for, use them for the good of building better products, not just for building products. And I think it's one message that I think is really important in how we build and deploy agents is even though you've now got the ability to do anything with it, just like a car, you can go out and drive it as fast as you want, but you've</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#0891b215;color:#0891b2;border-color:#0891b240">Mike · Google Cloud (Data / BigQuery)</span><p>got to, you know, you've got, you've got some boundaries and some things that you should do because there's others on the road and you've got to interact and do that. So I think like take all this power, you're being handed this week in the course, but apply it responsibly and realize it's, it's really on you to make design patterns and choices and how you build things. As you talk to other agents, as you build these things, like more and more transactions and more and more things are going to happen this way. So like, I'm really excited to see everybody here jumping into it. I was really excited to see these questions. I'm excited to see where the capabilities go. And I'm also excited to see people do it responsibly. Yes. Awesome. Thank you to all the guest speakers for coming on here to answer all these questions.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>Really appreciate the in-depth answers that we got here. Thank you, everyone. Thank you. All right. Moving into the code labs, today's two are really nice pairing because they actually take you from I've heard of MCP to I have MCP servers actually plugged into my coding agent. So Fran's going to walk us through both of them over to you, Fran. Thank you, Smitha. Hi, everyone. Hi, Chad. Another day of code labs. We're already on day two. Can I get some reactions and Chad, if you work through day one code labs, how did they one go?</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>Oh, quite a few, quite a few. I like it. And I saw some good discussions on discord too. Um, if you get stuck, when you work through a codelab, your first instinct should be to prompt anti-gravity for help. Like help is right there where you're already working. And if that doesn't work, discord is a great place to get help and discuss what you've been doing. I'm Fran Hinkelman. I lead the AI DevTools team in Google cloud, DefRel, and I'll guide you through the code labs for day two. We have like Smitha already said, we have two more excellent code labs. The first one we'll look at how to make your agents even more powerful by connecting them to external tools and canonical documentation using MCP. Second, we'll show you how to run the same agentic workflows directly from</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#c0392b15;color:#c0392b;border-color:#c0392b40">Fran Hinkelman · Google Cloud Dev Tools</span><p>your terminal using the anti-gravity CLI. So let's look at the first codelab. So again, the links for the codelabs for day two, you find them in your emails and the discussion post. There's no submission process. Once you're done, we just want you to carefully work through the code labs and learn as much as you can go experiment. So our first codelab shows you how to configure an MCP and anti-gravity. Who knows what MCP stands for? This came up a bunch on the Q and a today already. Give me a thumbs up in the chat. If you've used MCP before. Yes. Model context protocol MCP. So for agents to be truly useful, they need access to real time, accurate</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#c0392b15;color:#c0392b;border-color:#c0392b40">Fran Hinkelman · Google Cloud Dev Tools</span><p>information, if you only rely on the model and the training data, it might be outdated and you get hallucinations. MCP is an open protocol standard that solves this by allowing agents to connect to external API securely. So in this first codelab, you'll configure MCP. You'll configure anti-gravity to use the developer knowledge API in Google cloud. And that makes your genetic workflows much more sustainable and reliable. And then in the second codelab for the day, we will introduce the anti-gravity CLI, the command line interface. If you did yesterday's codelab, I hope you did. I saw a lot of you did. You already know the anti-gravity agent manager where you worked all the time and you also worked with the IDE, but this is all about the CLI, the terminal. UI is great, but sometimes you need to control of the command line. So the anti-gravity CLI, AGY brings all the core genetic tools like planning</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>and tool calling directly to your terminal. In the lab, you'll go through how to install it on your operating system. We'll go through the basics and then you'll work through some really powerful use cases here. So these are the codelab assignments for day two. As I said before, you don't need to submit your codelabs at the end. There's no test or submission required. We just encourage you to work through them, explore, learn as much as you can. Have fun with the day two labs. Back to you, Smitha. Thank you, Fran. Both of those codelabs are amazing. Definitely worth running end to end. And also the developer knowledge MCP server that you just used in one of those codelabs is actually one of over 50 plus Google managed MCP servers.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>So what you got hands on today is actually something that teams are pointing to at production anyway. So once you're done with that codelab, it's also worth checking out a bunch of other codelabs that we're leaving in the description box below, which include the BigQuery MCP server, the maps MCP server, as well as Cloud Runs MCP server. With that said, let's move on to the pop quiz. Amazing. Here's your favorite part of the day, everyone. Moving on to the first question. In traditional ad hoc development, integrating N models with M tools requires O of N into M complexity. So how does the model context portfolio help with this complexity? Your options are A to logarithmically scale it or log N of M to linearly scale it or N plus M to constant complexity scale of O of one or to polynomially scale it. Think back and the answer will be shown in three, two, one.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#2d5be315;color:#2d5be3;border-color:#2d5be340">Smitha Kohlan · Google Cloud DevRel</span><p>And it's B, MCP helps in linearly scaling your N models into M tools integration. Moving on to the second question. What represents the transition from a Swiss army knife or single agent monolith to logically partitioned internal subagents with restricted tools? Your options are A, Cloud Native microservices scaling, B, internal specialization or C, rag context chunking or D, prompt schema validation. So think about it. Your answer will be shown in three, two, one. And it's B, internal specialization and about spec driven development for that. You learn a little bit about this in day five. Stay tuned for that. All right. Next question. So your next question is which protocol developed by Google and donated to the Linux foundation acted as a lingua franca allowing specialized agents to</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#7c3aed15;color:#7c3aed;border-color:#7c3aed40">Alan · Google Cloud AI (A2A / A2UI)</span><p>negotiate brainstorm and delicate tasks to each other. Your options are A, MCP, B, A2A, C, A2UI or D, AP2, which is the agent payment protocol, think back to Alan's conversation and Mike's conversation and the white paper and the answer will be shown in three, two, one. And the correct answer is B, A2A, which allows you to specialize agents to negotiate brainstorm and delegate tasks to each other. All right. Second last question, which, what is the agent to user interface or A2UI protocol? Is it A, an LLM executing raw arbitrary code as Pierre mentioned earlier, a framework agnostic standard for declaring UI intent using trusted components? Or is it C, a tool that translates screenshots into database schemas? Or is it D, a terminal interface utility for command line prompting for GUI? Your answer will be shown in three, two, one, and it's B. It's a framework agnostic standard for declaring UI using trusted components. All right.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anant Navalgariya · Google</span><p>After the last question for the day, what are the respective roles of UCP and AP2 in autonomous procurement? Your options are A, AP2 builds the order. UCP secures and authorizes the financial transactions. You are UCP. B, UCP defines database schema where AP2 connects the MCP server to client. Or C, UCP handles merchant side of things where AP2 manages the payment side of things. Or D, where UCP manages local storage where AP2 manages dynamic browser execution. The correct answer will be shown in three, two, one, and it's C. UCP handles the merchant side of things where AP2 manages the payment side of things. And that brings us to the end of the pop quiz. Awesome. Thank you, Anant. Also, quick wrap up before we sign off.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anant Navalgariya · Google</span><p>Day three assignments will be dropping shortly and tomorrow's topic, agent skills, picks up right where today's left off. We've covered how agents connect to the outside world today. Tomorrow is all about how they manage their inside world. Memory, long context strategies and skillset let agents specialize without bloating every single prompt. Keep the discussion going on Discord. The mods are active. And also as a reminder, questions selected from Discord can win Kaggle swag. So keep that in mind as well and get started on the code labs. If you haven't already, try plugging in one of those MCP servers that we talked about into your agent and see how the output is. Also, if you've missed day one's live stream, it will be linked in the description box below as well. Thank you, everyone.</p></div>
+<div class="transcript-turn"><span class="spk-badge" style="background:#1a7a4a15;color:#1a7a4a;border-color:#1a7a4a40">Anant Navalgariya · Google</span><p>See you tomorrow. Looking forward to your questions. See you tomorrow.</p></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <p>本文整合 Kaggle × Google 5-Day AI Agents Intensive Course Day 2 直播內容，結合 deep-guide 敘事框架與 ai-mentor-agents 教學框架撰寫。</p>
+  </footer>
+
+</div><!-- /page-wrap -->
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-hint">點擊或按 Esc 關閉</span>
+  <img src="" alt="">
+</div>
+
+<script>
+(function(){
+  var lightbox = document.getElementById("lightbox");
+  var lightboxImg = lightbox.querySelector("img");
+  function openLightbox(img){
+    lightboxImg.src = img.currentSrc || img.src;
+    lightboxImg.alt = img.alt;
+    lightbox.classList.add("is-open");
+  }
+  function closeLightbox(){
+    lightbox.classList.remove("is-open");
+    lightboxImg.src = "";
+  }
+  document.querySelectorAll("figure img").forEach(function(img){
+    img.addEventListener("click", function(){ openLightbox(img); });
+  });
+  lightbox.addEventListener("click", closeLightbox);
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeLightbox();
+  });
+})();
+</script>
+
+</body>
+</html>
