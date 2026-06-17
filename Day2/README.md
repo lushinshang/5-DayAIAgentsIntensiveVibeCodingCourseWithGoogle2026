@@ -181,9 +181,16 @@ figure_info = {
 
 ### 8. 嵌入 Podcast
 
-將 `Whitepaper Companion Podcast..._compressed.mp4` 以 `<video controls>` 嵌入頁首，
-導覽列新增 `#podcast` 錨點。檔名含空白與 `&`，`src` 需做完整 URL encoding：
-`Whitepaper%20Companion%20Podcast%20Agent%20Tools%20%26%20Interoperability_compressed.mp4`
+~~初版：將本地 mp4 以 `<video controls>` 嵌入 `index.html`，導覽列新增 `#podcast` 錨點。~~
+
+**最終版（Day2 步驟 39）**：仿照 Day1 模式，將影片播放器移至 `podcast-deep-guide/podcast-deep-guide.html`，
+從 `index.html` 移除 podcast 區塊與導覽列錨點，改以 GitHub Releases URL 串流：
+
+```
+https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/Whitepaper.Companion.Podcast.Agent.Tools.Interoperability_compressed.mp4
+```
+
+好處：頁面可直接分享，不需本地 mp4；主頁保持輕量，深度學習流程集中在導讀頁。
 
 ### 9. 學習頻道與 deep-guide 導讀
 
@@ -201,6 +208,38 @@ figure_info = {
 2. 以 `codex_imagegen.py` 生成資訊圖（16:9 桌機版 + 9:16 手機版各一組）
 3. 手工建立 standalone HTML：綠色主題、sticky nav、`<picture>` 響應式圖片、lightbox
 4. `python3 -m html.parser` 驗證 + Playwright 桌機/手機截圖 QA
+
+### 10. Podcast 深度導讀（SRT → HTML）
+
+輸入：`Whitepaper Companion Podcast Agent Tools & Interoperability.en-orig.srt`（278 段，約 22 分鐘）
+
+1. 以 `deep-guide` skill 輸入完整 SRT 逐字稿，產出 5 段式繁中導讀文章（Markdown）
+2. `normalize_punctuation.py` 標點正規化（2 處）
+3. `codex_imagegen.py` 生成 6 張 AI 圖（輸出至 `/tmp/` 再 `cp`，規避路徑含空格問題）：
+   - `infographic_1.png / _mobile.png`：NxM → N+M 複雜度對比
+   - `infographic_2.png / _mobile.png`：五層協定棧總覽
+   - `infographic_3.png / _mobile.png`：AP2 授權命令 + 握手流程
+4. 手工建立 `podcast-deep-guide.html`：藍色漸層 hero、sticky nav（9 個錨點含返回）、3 組 `<picture>` 響應式資訊圖 + lightbox
+5. `python3 -m html.parser` 驗證通過，Playwright 截圖 QA 通過
+6. `index.html` 學習頻道新增「🎙️ Podcast 深度導讀」卡片（說明含「含英文原文逐字稿」）
+
+### 11. Podcast 導讀補充原文逐字稿
+
+比對 Day1 `podcast-deep-guide.html`，發現 Day1 有原文逐字稿折疊面板，Day2 缺此區塊。補充三處：
+1. CSS：`.transcript-section`、`.transcript-toggle`、`.transcript-inner`、`.transcript-body`
+2. sticky nav 末尾新增「原文逐字稿」錨點
+3. 文章末尾新增 `<section class="transcript-section" id="transcript">`，內含 `<details>` 折疊面板，SRT 278 段合併為 19 個可讀段落
+
+`python3 -m html.parser` 驗證通過。
+
+### 12. Podcast 導讀 Nav 加返回連結
+
+比對 Day1 做法（sticky nav 第一項為高亮返回連結）：
+- sticky nav 第一項新增 `<a class="nav-back" href="../index.html">← 返回 Day 2 主頁</a>`
+- 加 `.nav-back` CSS（藍底高亮，`font-weight: 700`）
+- 移除先前多餘的逐字稿底部返回連結
+
+`python3 -m html.parser` 驗證通過。
 
 ---
 
@@ -404,6 +443,11 @@ figure_info = {
 37. 我要參考day1/podcast的導讀一樣，上一頁放頂端
 
 38. update readme
+
+39. 1.read self readme.md and day1/readme.md
+    2.參考day1將podcast移出index.html，放到podcast的導讀頁面。改用「https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/Whitepaper.Companion.Podcast.Agent.Tools.Interoperability_compressed.mp4」
+
+40. update readme.md
 ```
 
 ---
