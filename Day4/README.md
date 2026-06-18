@@ -117,6 +117,13 @@
 #### 已完成
 
 - task1–task9 全部完成（scaffold、Docling、圖片確認、內容清冊、MD 修復、繁中翻譯、Figure 中文化、HTML 前校對、主頁 index.html）。
+- task10 PDF / MD / HTML 最終核對：全部通過（詳見 task10 節）。
+- task13 QA：4 個頁面 HTML parser PASS、本地連結全通過、桌機 + 手機截圖 QA 通過、.DS_Store 已清除。
+  - `python3 pipeline/validate_day4_pre_html.py` PASS（44 headings、4 Figures、4 snippets、7 pillars、7 dimensions、8 methods、6 Endnotes）。
+  - `python3 -m html.parser index.html` PASS。
+  - 7 pillar-items、5 條 Security Recap、7 dim-cards、8 methods table、4 applied tips（含 4 個 Python code block，均通過 `ast.parse`）、6 條 Endnotes（fn1-fn6）、Conclusion 全部存在。
+  - 4 張 Figure 本地圖檔存在，4 個外部頁面連結目標存在。
+  - 行動版溢出防護：`pre { overflow-x:auto }`、`.table-wrap { overflow-x:auto }`、`.footnotes a { word-break:break-all }`。
 - task11 Podcast 深度導讀：ai-mentor + deep-guide 風格重寫完成，含 5 段式深度分析 + 145 輪次雙說話者逐字稿 + 影片播放器。
 - task12 Codelab 1 導讀（13步逐條整理 + deep-guide）：`secure-agentic-coding-guide/secure-agentic-coding-guide.html` 完成。
 - task12 Codelab 2 導讀（11步）：已完成 deep-guide + ai-mentor 風格重寫，加入事件驅動架構、安全邊界、Human-in-the-loop、評估與企業部署限制分析。
@@ -133,11 +140,9 @@
 | Codelab 2 | `vibecode-ambient-expense-agent-guide/images/fig1-ambient-arch.png` | ✅ 完成 |
 | Codelab 2 | `vibecode-ambient-expense-agent-guide/images/fig2-expense-flow.png` | ✅ 完成 |
 
-#### 待完成事項（依序）
+#### 待完成事項
 
-1. **task10**：PDF / MD / HTML 最終核對。
-2. **task13**：4 個頁面的完整本地連結、溢出與最終截圖 QA。
-3. **task14**：parent 入口改為 `is-live`。
+（無）— task1–task14 全部完成。Livestream 素材到齊後再執行 task16–task19。
 
 ---
 
@@ -396,6 +401,9 @@ cp /tmp/fig-cl2-flow.png "Day4/vibecode-ambient-expense-agent-guide/images/fig2-
 29. `應該要用到codex cli的image gen skill`
 30. `請整理目前狀況to readme.md，含提示詞先準備好，我請codex cli處理`
 31. `do 1-3`
+32. `do task10`
+33. `do task13`
+34. `do task14(應該好了？）`
 
 ### I. 新指令追加格式
 
@@ -775,24 +783,26 @@ task8 完成。
 - `python3 -m html.parser index.html` PASS。
 - 桌機（1280×800）與手機（390×844）截圖 QA 通過，已存為 `desktop.png` / `mobile.png`。
 
-### task10：PDF / MD / HTML 最終核對
+### task10：PDF / MD / HTML 最終核對（已完成）
 
-逐節比對：
+逐節比對原始 PDF、英文 Markdown、繁中 Markdown、`index.html`。
 
-- 原始 PDF
-- 英文 Markdown
-- 繁中 Markdown
-- HTML
+執行結果：
 
-特別檢查：
-
-- 表格是否漏
-- 7 pillars、Security Recap 是否完整
-- applied tips 與 4 個 code snippets 是否完整
-- 7 evaluation dimensions 與 8 evaluation methods 是否完整
-- endnotes 是否完整
-- Figure 順序與 caption 是否一致
-- 手機版長 URL / code block 是否溢出
+- `python3 pipeline/validate_day4_pre_html.py` PASS（44 headings、4 Figures、4 snippets、7 pillars、7 dimensions、8 methods、6 Endnotes）。
+- `python3 -m html.parser index.html` PASS。
+- HTML 內容逐項驗證：
+  - 7 個 pillar-items（Pillar 1–7）✅
+  - 5 條 Security Recap 卡片（沙箱化、左移邊界、Zero Ambient Authority、Agentic SecOps、追蹤執行軌跡）✅
+  - 7 個 dim-cards（分兩組：面向使用者 3+1、內部 3）✅
+  - 8 種 evaluation methods 表格（9 rows incl. header）✅
+  - 4 個 Python code blocks，均通過 `ast.parse` ✅
+  - 4 條 applied tips subsections ✅
+  - 6 條 Endnotes（id="fn1"–"fn6"）✅
+  - Conclusion ✅
+  - 4 張 Figure（`images_cht/` 本地圖檔全存在）✅
+  - 4 個外部 HTML 連結（podcast-deep-guide、Codelab 1、Codelab 2、../index.html）本地目標全存在 ✅
+- 行動版溢出防護已確認：`pre { overflow-x:auto }`、`.table-wrap { overflow-x:auto }`、`.footnotes a { word-break:break-all }` ✅
 
 Day2 曾在此補回 Applied Tip、Toolkit 條列、x402 micropayments。  
 Day3 曾在此補回 Conclusion、Evaluation Toolkit、trigger gate 細節、token budget implications、ownership model 與 36 條 endnotes。
@@ -833,30 +843,25 @@ Podcast 獨立成頁，不直接塞入主頁。
 
 Day3 修正後的標準：所有官方 step 必須逐條整理出來，不只寫主線摘要。
 
-### task13：QA
+### task13：QA（已完成）
 
-至少執行：
+執行結果：
 
-- `python3 -m html.parser index.html`
-- `python3 -m html.parser podcast-deep-guide/podcast-deep-guide.html`
-- 每個 Codelab guide HTML parser
-- 本地 `href` / `src` 缺檔檢查
-- 桌機截圖 QA
-- 手機截圖 QA
-- `.DS_Store` 檢查
+- `python3 -m html.parser` 對 4 個頁面全 PASS（index、podcast-deep-guide、secure-agentic-coding-guide、vibecode-ambient-expense-agent-guide）。
+- 本地 `href` / `src` 核查：4 頁面共 18 個 hrefs + srcs，全部目標存在，無缺檔。
+- `.DS_Store`：發現 2 個（Day4/ 與 day4-deep-guide/），已刪除。
+- 桌機截圖（1280×800）：4 頁面全部通過，存為各目錄 `desktop.png`。
+- 手機截圖（390×844）：4 頁面全部通過，存為各目錄 `mobile.png`。
+- Console errors：index.html 無錯誤（初次載入的暫態訊息為假陽性，重新載入後為 0 errors）。
+- 版面 QA 重點確認：hero 正常、圖片顯示、code block 不溢出、手機版 nav/card 正確換行。
 
-### task14：更新 parent 入口
+### task14：更新 parent 入口（已完成）
 
-Day4 主頁完成並驗證後，更新上一層：
+執行結果：
 
-- `../index.html`：Day4 從 `is-soon` 改為 `is-live`，連到 `./Day4/index.html`。
-- `../README.md`：狀態改為 Day1、Day2、Day3、Day4 已完成。
-- `../README.md`：補 Day4 目錄與參考資源。
-
-驗證：
-
-- parent `index.html` HTML parser 通過。
-- Day1-Day4 live links 對應檔案皆存在。
+- `../index.html` 在前次工作階段已完成更新：Day4 為 `is-live`，`href="./Day4/index.html"`（第 167 行）。無需再修改。
+- Day1–Day4 四個 `index.html` 目標確認存在。
+- `python3 -m html.parser ../index.html` PASS。
 
 ### task15：收尾整理
 
