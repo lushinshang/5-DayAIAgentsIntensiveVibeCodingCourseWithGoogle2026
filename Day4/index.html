@@ -1,1 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vibe Coding 代理程式安全與評估 — Day 4 | 5-Day AI Agents Intensive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:#f8f7f3;color:#202124;font-size:16px;line-height:1.72;letter-spacing:0}
+    a{color:#176b75}
+    /* ── sticky nav ── */
+    .toc{position:sticky;top:0;z-index:100;background:rgba(248,247,243,.96);backdrop-filter:blur(10px);border-bottom:1px solid #ddd8cf;height:56px}
+    .toc-inner{max-width:1160px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none}
+    .toc-inner::-webkit-scrollbar{display:none}
+    .toc a{color:#4a4a4a;text-decoration:none;font-size:13.5px;font-weight:600;padding:6px 11px;border-radius:6px;white-space:nowrap}
+    .toc a:hover{background:#e3efed;color:#0f5961}
+    /* ── hero ── */
+    .hero{background:linear-gradient(135deg,#1a2e31 0%,#176b75 54%,#c2a84b 100%);color:#fff;padding:70px 24px 58px}
+    .hero-inner{max-width:820px;margin:0 auto}
+    .hero-tag{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:16px}
+    h1{font-size:clamp(2.0rem,5vw,3.2rem);line-height:1.18;margin-bottom:18px;text-wrap:balance}
+    .hero-subtitle{font-size:17px;color:rgba(255,255,255,.88);max-width:760px;margin-bottom:16px;line-height:1.65}
+    .hero-authors{font-size:13.5px;color:rgba(255,255,255,.65)}
+    /* ── learning channels ── */
+    .channels-section{padding:32px 24px 8px;background:#f8f7f3;border-bottom:1px solid #ddd8cf}
+    .channels-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+    .channels-inner h3{margin:0 0 16px;font-size:1.15rem;font-weight:800;color:#202124;border-left:3px solid #176b75;padding-left:10px}
+    .channel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:640px){.channel-grid{grid-template-columns:1fr}}
+    .channel-card{display:flex;align-items:flex-start;gap:14px;text-decoration:none;color:#202124;background:#fff;border:1px solid #ded9cf;border-radius:8px;padding:16px;transition:transform .18s,box-shadow .18s,border-color .18s}
+    .channel-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08);border-color:#176b75}
+    .channel-card.soon{opacity:.65;cursor:default}
+    .channel-card.soon:hover{transform:none;box-shadow:none;border-color:#ded9cf}
+    .channel-icon{flex:0 0 34px;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:#e3efed;color:#0f5961;font-size:.78rem;font-weight:800}
+    .channel-info h4{margin:0 0 6px;font-size:1rem;color:#163f44}
+    .channel-info p{margin:0;font-size:.88rem;color:#666;line-height:1.45}
+    .badge-soon{display:inline-block;font-size:11px;font-weight:700;background:#eee;color:#888;border-radius:4px;padding:1px 7px;margin-left:6px;vertical-align:middle}
+    /* ── main layout ── */
+    main{max-width:1160px;margin:0 auto;padding:0 24px 80px}
+    article{max-width:760px;margin:0 auto}
+    section{padding-top:62px}
+    /* ── headings ── */
+    h2{font-size:clamp(1.45rem,3vw,2rem);line-height:1.28;color:#163f44;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #dfe9e7;text-wrap:balance}
+    h3{font-size:1.18rem;color:#176b75;margin:34px 0 12px}
+    h4{font-size:1rem;color:#163f44;margin:24px 0 8px}
+    p{margin-bottom:18px}
+    ul,ol{padding-left:24px;margin:0 0 18px}
+    li{margin-bottom:8px}
+    strong{color:#153f44}
+    /* ── code ── */
+    code{font-family:"SF Mono","Consolas","Monaco",monospace;background:#edf1ee;padding:2px 6px;border-radius:4px;font-size:.88em}
+    pre{background:#1d292a;color:#dbe7e3;border-radius:8px;padding:18px 20px;overflow-x:auto;font-size:13px;line-height:1.55;margin:20px 0}
+    pre code{background:none;padding:0;color:inherit;font-size:inherit}
+    .snippet-caption{font-size:13px;color:#666;font-style:italic;margin-top:8px;margin-bottom:18px;text-align:center}
+    /* ── blockquote ── */
+    blockquote{margin:24px 0;padding:16px 20px;border-left:4px solid #176b75;background:#eef6f4;border-radius:0 8px 8px 0;color:#293635}
+    /* ── callout ── */
+    .callout{margin:24px 0;padding:16px 20px;border-left:4px solid #c2a84b;background:#fff9e7;border-radius:0 8px 8px 0}
+    .callout-title{font-weight:800;color:#866f17;margin-bottom:8px}
+    /* ── pillar cards ── */
+    .pillar-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:14px;margin:20px 0}
+    .pillar-item{background:#fff;border:1px solid #e2ddd3;border-radius:8px;padding:16px 18px}
+    .pillar-label{font-weight:800;color:#163f44;margin-bottom:4px}
+    .pillar-body{font-size:15px;color:#333}
+    /* ── figures ── */
+    figure.section-figure{margin:30px 0;text-align:center}
+    figure.section-figure img{width:100%;max-width:900px;height:auto;border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.12);cursor:zoom-in;background:#fff}
+    figcaption{font-size:13.5px;color:#666;margin-top:10px;line-height:1.52}
+    /* ── security recap checklist ── */
+    .recap-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+    .recap-card{background:#fff;border:1px solid #e1ddd4;border-left:4px solid #176b75;border-radius:0 8px 8px 0;padding:15px 16px}
+    .recap-card h4{margin-top:0;color:#163f44;font-size:.97rem}
+    .recap-card p{font-size:14px;margin-bottom:0}
+    @media(max-width:640px){.recap-grid{grid-template-columns:1fr}}
+    /* ── eval dimension badges ── */
+    .dim-group{margin:20px 0}
+    .dim-group-label{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#888;margin-bottom:10px}
+    .dim-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+    @media(max-width:640px){.dim-cards{grid-template-columns:1fr}}
+    .dim-card{background:#fff;border:1px solid #e2ddd3;border-radius:8px;padding:14px 16px}
+    .dim-card .dim-num{font-size:12px;font-weight:800;color:#176b75;margin-bottom:4px}
+    .dim-card h4{margin:0 0 5px;font-size:.97rem;color:#163f44}
+    .dim-card p{font-size:14px;color:#444;margin-bottom:0}
+    /* ── method table ── */
+    .table-wrap{overflow-x:auto;margin:22px 0}
+    table{width:100%;border-collapse:collapse;font-size:14px;background:#fff}
+    th{background:#163f44;color:#fff;text-align:left;padding:10px 12px;font-weight:700}
+    td{padding:10px 12px;border-bottom:1px solid #e2ddd3;vertical-align:top}
+    tr:nth-child(even) td{background:#f2f0ea}
+    /* ── footnotes ── */
+    .footnotes{font-size:13.5px;color:#555;border-top:1px solid #ddd8cf;margin-top:48px;padding-top:22px}
+    .footnotes ol{padding-left:20px}
+    .footnotes li{margin-bottom:10px}
+    .footnotes a{word-break:break-all;overflow-wrap:anywhere}
+    /* ── lightbox ── */
+    .lightbox{display:none;position:fixed;inset:0;z-index:200;background:rgba(20,24,25,.9);align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+    .lightbox.is-open{display:flex}
+    .lightbox img{max-width:96vw;max-height:92vh;width:auto;height:auto;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,.45);background:#fff}
+    .lightbox-hint{position:absolute;top:18px;right:24px;color:rgba(255,255,255,.76);font-size:14px}
+    /* ── mobile ── */
+    @media(max-width:640px){
+      .hero{padding:48px 18px 40px}
+      .hero-subtitle{font-size:15px}
+      main{padding:0 16px 64px}
+      section{padding-top:48px}
+      .toc-inner{padding:0 14px}
+      pre{font-size:12px;padding:14px}
+      table{font-size:13px}
+    }
+  </style>
+</head>
+<body>
 
+  <nav class="toc">
+    <div class="toc-inner">
+      <a href="../index.html">← 課程首頁</a>
+      <a href="#intro">引言</a>
+      <a href="#security">安全</a>
+      <a href="#pillars">七大支柱</a>
+      <a href="#sandbox">沙箱防禦</a>
+      <a href="#identity">身分信任</a>
+      <a href="#secops">SecOps</a>
+      <a href="#security-recap">安全回顧</a>
+      <a href="#evaluation">評估</a>
+      <a href="#dimensions">評估維度</a>
+      <a href="#methods">評估方法</a>
+      <a href="#tips">實用技巧</a>
+      <a href="#conclusion">結論</a>
+      <a href="#endnotes">附注</a>
+      <a href="#channels">學習頻道</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">5-Day AI Agents Intensive Course with Google · Day 4</div>
+      <h1>Vibe Coding 代理程式安全與評估</h1>
+      <p class="hero-subtitle">透過持續信任與嚴謹評估，將 AI 模型轉化為安全、高度對齊的企業代理程式。本白皮書提供七大安全支柱架構，以及七個評估維度、八種評估方法的完整框架。</p>
+      <p class="hero-authors">Sokratis Kartakis・Aron Eidelman・Wafae Bakkali・Meltem Subasioglu</p>
+    </div>
+  </header>
+
+  <section id="channels" class="channels-section">
+    <div class="channels-inner">
+      <div class="channel-group">
+        <h3>學習頻道</h3>
+        <div class="channel-grid">
+          <a class="channel-card" href="podcast-deep-guide/podcast-deep-guide.html">
+            <div class="channel-icon">PC</div>
+            <div class="channel-info">
+              <h4>Podcast 深度導讀</h4>
+              <p>從確定性藍圖的崩潰、七大安全支柱到評估的玻璃盒哲學——22 分鐘 Podcast 的完整深度解析，附英文逐字稿。</p>
+            </div>
+          </a>
+          <a class="channel-card" href="secure-agentic-coding-guide/secure-agentic-coding-guide.html">
+            <div class="channel-icon">CL</div>
+            <div class="channel-info">
+              <h4>Codelab 1：Secure Agentic Coding</h4>
+              <p>用 Antigravity IDE 與 TDD 建立 ADK 2.0 購物助理，落實 STRIDE 威脅建模、Pre-commit Hook 與 Agent 自修復迴圈。</p>
+            </div>
+          </a>
+          <a class="channel-card" href="vibecode-ambient-expense-agent-guide/vibecode-ambient-expense-agent-guide.html">
+            <div class="channel-icon">CL</div>
+            <div class="channel-info">
+              <h4>Codelab 2：Ambient Expense Agent</h4>
+              <p>事件驅動的費用審批 Ambient Agent：ADK 2.0 圖形工作流、PII 遮蔽、Pub/Sub 觸發與 LLM-as-judge 評估。</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <article>
+
+      <!-- ── 致謝 ── -->
+      <section id="ack" style="padding-top:48px">
+        <p style="font-size:14px;color:#666">
+          <strong>內容貢獻者：</strong>Priya Pandey、Antonio Gulli、Reah Miyara 與 Sita Lakshmi Sangameswaran<br>
+          <strong>策展與編輯：</strong>Anant Nawalgaria　<strong>設計師：</strong>Michael Lanning
+        </p>
+        <blockquote style="margin-top:24px">
+          透過持續信任與嚴謹評估，將 AI 模型轉化為安全、高度對齊的企業代理程式，比以往任何時候都更重要。
+        </blockquote>
+      </section>
+
+      <!-- ── 引言 ── -->
+      <section id="intro">
+        <h2>引言</h2>
+        <p>軟體工程正經歷自高階程式語言問世以來最重大的轉型。最深刻的變化，是從撰寫程式碼轉向表達意圖，並信任智慧系統將意圖轉化為可運作的軟體。<sup><a href="#fn1">1</a></sup> 這個新典範涵蓋一整個光譜：從隨性的「vibe coding」——開發者以自然語言描述需求，並接受 AI 產生的任何內容——到嚴謹的「agentic engineering」，也就是讓 AI 在精心設計的約束內擔任實作引擎。<sup><a href="#fn2">2</a></sup></p>
+        <p>這種高速、意圖驅動的開發雖然大幅加速創新，卻也瓦解了傳統的信任典範。在確定性軟體中，信任是二元的：程式碼能編譯、測試能通過、靜態憑證有效。但在代理式系統中，一支自主運作的數位工作團隊具備環境式自主行動能力，可以執行生成的程式碼、存取敏感的內部 API，並動態修改正式環境。</p>
+        <p>若要在企業中落實 vibe coding，我們必須沿著兩條不同的軸線重新定義信任：安全與評估。</p>
+        <ul>
+          <li><strong>安全</strong>告訴你代理程式是否留在邊界內，確保它安全運作且不具惡意意圖。</li>
+          <li><strong>評估</strong>告訴你在該邊界內發生的事，是否真的值得發布。</li>
+        </ul>
+        <p>一個以 vibe coding 建構的代理程式可能通過所有安全檢查，卻仍從根本上誤解開發者意圖、忽略專案慣例，或在無形中降低使用者體驗。本白皮書提供 2026 年涵蓋這兩方面的完整框架：建立保護非確定性代理程式所需的嚴格「安全防護框架」，並打開「玻璃盒」，嚴謹衡量其內部推理的品質、效率與對齊程度。</p>
+      </section>
+
+      <!-- ── 安全 ── -->
+      <section id="security">
+        <h2>安全：邁向安全代理式開發的演進</h2>
+        <p>正如 Google Cloud 的一份 Mandiant 特別報告所指出：「攻擊者已不再只是使用大型語言模型撰寫釣魚內容，而是開始部署能夠重寫程式碼的自適應工具。」<sup><a href="#fn3">3</a></sup> 廣泛的威脅情報趨勢顯示，攻擊者正持續調整初始存取途徑，以利用這個新典範。<sup><a href="#fn4">4</a></sup></p>
+        <p>意圖驅動的開發大幅加速創新，卻也帶來前所未有的安全弱點。我們不再只是保護 Web 應用程式免受傳統攻擊；我們還必須保護一支非人類工作團隊，而它具備環境式自主行動能力，可以執行生成的程式碼、存取敏感的內部 API，並動態修改正式環境。</p>
+        <p>傳統軟體測試與安全模型仰賴確定性邏輯。然而，在代理式系統中，代理程式可能持有有效的存取權杖，卻以未對齊的意圖自主運作。一項關鍵認知是：原始 AI 模型本身不是代理程式。只有當模型被包覆在「執行框架」中——這套支撐架構賦予它狀態、工具執行能力、回饋迴路與可強制執行的約束——它才會成為代理程式。要保護這個新典範，我們必須把焦點從保護程式碼語法，轉向保護這套執行框架。</p>
+        <p>在這種流動、非確定性的環境中，靜態身分是一道薄弱的邊界。信任不能再是代理程式部署時只需通過一次的關卡；它必須根據執行期脈絡持續取得、驗證並動態強制執行。我們將這種持續保證定義為「有效信任」（Effective Trust）——一項橫跨代理程式供應鏈、身分、執行期行為與脈絡關聯，持續接受評估的指標。</p>
+        <p>為了建立持續的有效信任，並保護 vibe coding 混沌的現實環境，我們設計了一套分層的縱深防禦架構。如下圖所示，這個框架以嚴格的七大支柱基礎基線為根基，向上延伸至高速執行控制，最上層則是主動式代理防禦機制。</p>
+
+        <figure class="section-figure">
+          <img src="images_cht/Figure 1 Secure Vibe Coding Agent Framework.png"
+               alt="圖 1：安全 Vibe Coding 代理程式框架。這個分層架構區分了安全託管自主代理程式所需的基礎安全控制（七大支柱），以及保護其動態程式碼執行與執行期行為所需的高速、意圖驅動防禦。">
+          <figcaption>圖 1：安全 Vibe Coding 代理程式框架。這個分層架構區分了安全託管自主代理程式所需的基礎安全控制（七大支柱），以及保護其動態程式碼執行與執行期行為所需的高速、意圖驅動防禦。</figcaption>
+        </figure>
+
+        <p>以下各節將逐層拆解這個架構，首先從基線安全防護框架開始。</p>
+      </section>
+
+      <!-- ── 七大支柱 ── -->
+      <section id="pillars">
+        <h2>基礎：代理程式安全的七大支柱架構</h2>
+        <p>在傳統企業環境中，安全是確定性的。應用程式仰賴可預測的程式碼語法，而存取則由靜態的「Identity-as-a-Perimeter」模型治理，例如 Role-Based Access Control（RBAC）。代理式環境從根本上顛覆了這個模型，組織必須轉向「Context-as-a-Perimeter」模型。</p>
+        <p>我們將基線架構劃分為七個不同支柱，建立任何自主系統都必須具備、用以構成安全執行框架的基礎：</p>
+
+        <ul class="pillar-list">
+          <li class="pillar-item">
+            <div class="pillar-label">Pillar 1 — Infrastructure &amp; Networking</div>
+            <div class="pillar-body">Cloud Infrastructure Engineers 必須保護基礎環境，防範上游污染與容器逃逸。執行期隔離在短暫存在的核心層級沙箱中，例如 gVisor。嚴格的網路出口治理可確保代理程式生成的資料只經由經授權的離線快取或明確的內部 proxy 傳輸。</div>
+          </li>
+          <li class="pillar-item">
+            <div class="pillar-label">Pillar 2 — Data</div>
+            <div class="pillar-body">Data Architects 面臨的威脅，是代理程式從 context window 洩漏敏感資訊，或攝取遭污染的 RAG 資料。靜態資料使用 Customer-Managed Encryption Keys（CMEK）保護，傳輸中的資料則透過 mutual TLS（mTLS）保護。長期記憶儲存系統——尤其是 Vector Databases——必須強制執行嚴格的租戶分區，以防止 Cross-Tenant Vector Poisoning。</div>
+          </li>
+          <li class="pillar-item">
+            <div class="pillar-label">Pillar 3 — Model</div>
+            <div class="pillar-body">AI Engineers 必須保護核心應用邏輯，防範顛覆模型指令的語意攻擊。代理程式的 system instructions 與 prompt templates 就是新的原始碼，必須視為高度敏感、經密碼學證明的產物。</div>
+          </li>
+          <li class="pillar-item">
+            <div class="pillar-label">Pillar 4 — Application &amp; Runtime</div>
+            <div class="pillar-body">代理程式開發者必須在代理程式執行邏輯與使用工具時保護其自主性。部署 LLM 防火牆動態過濾 prompt 與回應，搭配在特定生命週期節點執行的確定性「hooks」。集中式 Agent Gateways 治理 Agent-to-Agent（A2A）編排，防止未經授權的橫向移動。</div>
+          </li>
+          <li class="pillar-item">
+            <div class="pillar-label">Pillar 5 — Identity and Access Management（IAM）</div>
+            <div class="pillar-body">Identity Administrators 的任務，是以密碼學方式精確驗證與系統互動的實體。主要風險是「Confused Deputy」問題。為每個代理程式指派獨特的密碼學身分（SPIFFE IDs），存取控制仰賴 Attribute-Based Access Control（ABAC）與 Just-In-Time（JIT）權杖權限下縮。</div>
+          </li>
+          <li class="pillar-item">
+            <div class="pillar-label">Pillar 6 — Observability &amp; Security Ops</div>
+            <div class="pillar-body">Security Operations 團隊必須對抗「不可見的失敗」——代理程式悄悄連鎖陷入無限推理迴圈。部署自主 SecOps 三位一體機制：Blue Team 使用 OpenTelemetry 與 Agent Behavioural Analytics（ABA），Red Team 主動模擬多跳攻擊，Green Team 則在偵測到異常時執行「Stateful Quarantines」。</div>
+          </li>
+          <li class="pillar-item">
+            <div class="pillar-label">Pillar 7 — Governance</div>
+            <div class="pillar-body">Governance and Compliance Officers 必須確保自主決策符合嚴格的法規標準。代理式治理需遵循 EU AI Act，針對高風險自主代理程式進行 Algorithmic Impact Assessments。運用可觀測性與身分支柱建立不可竄改的稽核軌跡，並以強制性的「Logic Reviews」取代簡單的核准按鈕。</div>
+          </li>
+        </ul>
+
+        <p>這套七大支柱架構提供了讓 AI 模型安全升級為可運作企業代理程式所需的通用基線。</p>
+      </section>
+
+      <!-- ── 沙箱與供應鏈防禦 ── -->
+      <section id="sandbox">
+        <h2>沙箱與供應鏈防禦（Pillars 1 &amp; 4）</h2>
+        <p>vibe coding 的核心機制，仰賴即時將人類意圖動態轉化為可執行邏輯。以 vibe coding 建構的代理程式很少能在第一次嘗試時便寫出完美程式碼，意圖驅動開發的現實是一個高速反覆的迭代循環：代理程式撰寫腳本、加以執行、讀取錯誤日誌，再自主重寫邏輯，直到符合使用者的 vibe。</p>
+
+        <h3>短暫型沙箱與狀態管理</h3>
+        <p>為了安全駕馭這個高速的「vibe loop」，任何由 skill 生成的程式碼，都必須先在短暫存在且與網路隔離的沙箱中執行。用來執行不受信任程式碼或呼叫工具的子代理程式，必須在經過強化的環境中運作，例如專用容器、虛擬機器，或 gVisor 這類核心層級環境。</p>
+        <p>這些沙箱必須主動阻擋對原始主機的直接存取，並在每次執行之間完全重設狀態，確保即使遭入侵的邏輯也無法持續存在。</p>
+
+        <h3>降低幻覺套件風險</h3>
+        <p>代理式程式碼生成帶來一種非常特定且危險的供應鏈弱點：大型語言模型經常幻覺出根本不存在的軟體套件。惡意行為者會主動監看這類幻覺，預先以完全相同的虛假名稱發布惡意軟體。</p>
+        <p>根據 Wiz 對 vibe coding 的研究，攻擊者正積極利用語言模型容易幻覺出相依套件名稱的傾向——Wiz 將這種技術稱為「slopsquatting」。<sup><a href="#fn5">5</a></sup> 代理程式應只能從經審核的供應商或企業內部套件登錄庫取得相依套件，並強制執行嚴格的密碼學版本鎖定。CI/CD pipelines 必須在任何產物進入正式環境前，自動驗證 Software Bill of Materials（SBOM）項目與數位簽章。</p>
+
+        <h3>網路出口治理與非互動式存取</h3>
+        <p>vibe coding 的常見失敗模式，是代理程式不慎嘗試將未驗證的程式碼推送至正式環境，或將敏感資料外洩。只依賴核准網域的 allowlist 並不足夠——allowlist 無法保護代理程式免受隱藏在第三方網頁中的間接 prompt injections。</p>
+        <p>代理程式必須限制為只能使用非互動式網際網路存取，強制透過離線快取或專用、預先淨化的網頁爬取服務取得外部資訊。</p>
+      </section>
+
+      <!-- ── 應用程式邏輯 ── -->
+      <section id="app-logic">
+        <h2>Vibe Coding 特有議題：保護應用程式邏輯（Pillar 4）</h2>
+        <p>vibe coding 本質上優先追求立即可用的功能，而非安全設計，因此生成的應用程式經常帶有嚴重的結構性缺陷。</p>
+
+        <h3>應用程式弱點</h3>
+        <p>開發者使用 AI 快速建立應用程式時，產出的程式碼通常會以兩種可預測的方式失敗：過度信任瀏覽器，以及讓後端門戶大開。AI 生成通常走阻力最小的路徑，在前端處理敏感操作——將 API 金鑰、密碼驗證與使用者 session flags 放到用戶端。此外，資料庫列層級安全等基本機制常被略過，導致私人使用者資料完全暴露於公開網際網路。</p>
+
+        <h3>協調 IDE 摩擦與 CI/CD 強制執行</h3>
+        <p>「shifting left」應透過 IDE 中的 Developer Advisory Linters 實作，提供即時指引；不容妥協的安全強制措施，則交由 CI/CD pipeline 中的確定性檢查執行。將 Static Application Security Testing（SAST）與 Software Composition Analysis（SCA）整合至 pipeline，可確保所有生成的應用程式邏輯在進入正式環境前，都經過確定性掃描。</p>
+
+        <h3>MCP 偽裝與脈絡式授權</h3>
+        <p>代理程式愈來愈仰賴 Model Context Protocol（MCP）等工具協調框架，以便在執行期探索並連線至外部或企業內部伺服器。偽造或遭入侵的伺服器可以冒充合法 MCP 工具，藉此注入載荷或要求過多權限。</p>
+        <p>組織必須在運作中的代理程式前方部署執行期 LLM 防火牆，動態攔截 prompt injections。集中式 Agent Gateway 必須評估 Contextual Authorisation——動態驗證代理程式的工具呼叫請求是否與開發者的原始意圖完全一致。</p>
+      </section>
+
+      <!-- ── 身分與信任 ── -->
+      <section id="identity">
+        <h2>身分、信任與高風險行動（Pillar 5）</h2>
+        <p>開發者經常使用模糊或高度抽象的自然語言生成程式碼，因此產生的代理式工作流程本來就涵蓋廣泛。若賦予這些自主代理程式共用且長效的服務身分，將形成難以管理的內部威脅向量。組織必須為每個代理程式指派獨特的密碼學身分，例如 SPIFFE IDs。</p>
+
+        <h3>Confused Deputy 與委派身分</h3>
+        <p>即使具有唯一身分，以 vibe coding 建構的代理程式仍很容易受到 Confused Deputy 問題影響。這種情況發生於 prompt injection：惡意指令藏在開源儲存庫中，誘使權限過高的代理程式代替攻擊者執行未授權命令。代理程式絕不能成為存取權限的最終裁決者，必須改用明確標記為代理程式用途的專用身分進行驗證。</p>
+
+        <h3>零環境權限與 JIT 權限下縮</h3>
+        <p>架構必須強制執行 Zero Ambient Authority。執行某個「vibe」的代理程式，絕不能繼承開發者完整的環境管理權限。系統應改用 Just-In-Time（JIT）token downscoping：取得全新且受到高度限制的憑證，明確限縮至該腳本實際需要的資料來源，並在任務結束的當下立即失效。</p>
+
+        <h3>引導式確認、MFA 挑戰與 Vibe Diff</h3>
+        <p>高風險行動——例如修改正式環境資料庫、執行金融轉帳或變更 IAM 設定——需要明確驗證。系統必須實作結構化、能感知脈絡的 elicitation，並搭配兩道不同的安全邊界：</p>
+        <ul>
+          <li><strong>Cryptographic Hardware MFA：</strong>系統應強制要求實體多因素驗證挑戰，例如要求開發者觸碰硬體 USB security key，以密碼學方式核准執行。</li>
+          <li><strong>Vibe Diff（意圖與執行差異說明）：</strong>在關鍵工具執行前，Evaluator Quorum 會攔截請求，並將複雜的生成程式碼重新翻譯成淺白英文摘要，確保操作者在提供明確的密碼學同意前，真正理解自己正在授權的內容。</li>
+        </ul>
+      </section>
+
+      <!-- ── Red/Blue/Green ── -->
+      <section id="secops">
+        <h2>Red、Blue 與 Green Security Teaming（Pillar 6）</h2>
+        <p>在 vibe coding 環境中，應用程式邏輯以前所未有的速度生成、執行與丟棄。攻擊面具有非確定性並由自然語言驅動，因此傳統人工安全營運根本無法擴展至足以跟上這個速度。若要保護自主系統，安全營運本身也必須代理化，因此需要部署由 AI 驅動且持續運作的 Red、Blue、Green 三位一體機制。</p>
+
+        <h3>隱形載荷與儲存庫污染</h3>
+        <p>威脅行為者可以將零寬 Unicode 字元或 homoglyphs 直接插入程式碼庫。Knostic 警告，這些「隱形載荷藏在眼前，卻能避開人工審查」。代理程式操控與複製程式碼的速度遠快於人類開發者，因此單一隱藏載荷可能在任何人察覺前「於數分鐘內擴散至數百個檔案」。<sup><a href="#fn6">6</a></sup></p>
+
+        <h3>Red Team（Agent Attacker）：注入對抗性 Vibes</h3>
+        <p>組織必須部署 Virtual Red-Teaming Agents，主動注入「Adversarial Vibes」。這包括動態設計精密的角色扮演式 jailbreaks，並將隱藏的惡意指令埋入大量 RAG 脈絡區塊或虛構論壇貼文中。Red Team 會主動測試目標企業代理程式是否受到污染脈絡干擾。</p>
+
+        <h3>Blue Team（Agent Defender）：行為分析</h3>
+        <p>自動化 Blue Team 擔任主動監控支柱，使用 Agent Behavioural Analytics（ABA），為預期執行路徑建立基線，並偵測 AI 特有的異常。它會持續監控代理程式的 Runtime Agent Bill of Materials（AgBOM）——這是一份動態清單，列出代理程式在任一毫秒當下正在使用的工具、模型與資料來源。</p>
+
+        <h3>Green Team（Agent Fixer）：隔離與自動重構</h3>
+        <p>Blue Team 偵測到代理程式遭入侵時，自動化 Green Team 改為透過 SOAR playbooks 執行「Stateful Quarantine」——平順地撤銷代理程式對特定工具的存取權，凍結其對外界採取行動的能力，同時完整保留短期記憶以供鑑識分析。Green Team 還會執行 Auto-Refactoring，自主重寫不安全的 vibe coding 腳本以修補弱點，再直接於開發者的 IDE 中提供安全的替代程式碼。</p>
+
+        <h3>整合三位一體機制</h3>
+        <p>Red、Blue、Green 三位一體機制會在執行期分三個不同階段，動態調整主要代理程式的行為：</p>
+        <ul>
+          <li><strong>Planner Phase：</strong>主要代理程式設計工作流程時，由專門的 threat-modelling skill 協助評估計畫，在代理程式開始實際執行前先找出邏輯缺陷與政策違規。</li>
+          <li><strong>Evaluator Phase：</strong>Evaluator quorum 審查預定的執行軌跡；同時，Agent Defender（Blue）驗證 AgBOM，並監控語意脈絡是否發生意圖漂移。</li>
+          <li><strong>Executor Phase：</strong>Executor 執行權限下縮後的行動時，Agent Fixer（Green）監控真實世界中的工具執行，準備在代理程式遇到錯誤或觸發安全約束時，立即協調 stateful quarantine 或啟動 auto-refactoring loop。</li>
+        </ul>
+      </section>
+
+      <!-- ── 可觀測性 ── -->
+      <section id="observability">
+        <h2>可觀測性：稽核代理程式的心智（Pillars 6 &amp; 7）</h2>
+        <p>若要有效保護並評估以 vibe coding 建構的代理程式，我們必須承認一項基本原則：<strong>看不見的事物就無法加以保護。</strong>在代理式系統中，「成功」狀態可能只是掩蓋代理程式的內部邏輯已悄悄連鎖陷入幻覺迴圈的情況。這會帶來 Denial of Wallet（DoW）攻擊的重大風險：攻擊者蓄意觸發無限且運算成本高昂的 API 迴圈，刻意耗盡組織的雲端與 LLM 帳務預算。</p>
+
+        <h3>追蹤「Vibe 軌跡」與內容掃描</h3>
+        <p>透過 OpenTelemetry 等標準遙測框架，企業可以將 API 呼叫、工具輸入／輸出、RAG 檢索結果及 token latency 等各種信號，彙整為完整的 Vibe 軌跡。追蹤這條軌跡，需要記錄從使用者初始 prompt 到編譯後 Abstract Syntax Tree（AST）之間巨大的認知跳躍。</p>
+
+        <h3>衡量意圖漂移與信任衰減</h3>
+        <p>可觀測性平台必須監控 Runtime Agent Bill of Materials（AgBOM）——這是一份持續更新的文件，呈現代理程式在任一毫秒當下的作用範圍。Trust Decay 原則指出，當代理程式的內部思維鏈追逐偏離原始人類 vibe 的子目標時，信任便會流失。</p>
+
+        <h3>Checkpoints 與 Stateful Circuit Breakers</h3>
+        <p>代理程式執行任何程式碼庫修改前，系統都必須建立版本控制 checkpoint。當 Agent Behavioural Analytics 依據 AgBOM 評估 Vibe 軌跡時，任何偵測到的不穩定狀況都會立即降低動態 Agent Trust Score。如果分數跌破預先定義的門檻，自動化「circuit breaker」就會觸發，利用版本控制 checkpoint 立即回復變更。</p>
+      </section>
+
+      <!-- ── 安全回顧 ── -->
+      <section id="security-recap">
+        <h2>安全重點回顧</h2>
+        <p>對於要將這些概念投入實際運作的開發者而言，保護 vibe coding 架構的關鍵，是放棄隱含信任並實作以下實務基線：</p>
+
+        <div class="recap-grid">
+          <div class="recap-card">
+            <h4>將 Vibe Loop 沙箱化</h4>
+            <p>一律在核心層級、與網路隔離的沙箱中執行動態生成的腳本。納入最新的 SCA，主動掃描幻覺產生或有弱點的相依套件。</p>
+          </div>
+          <div class="recap-card">
+            <h4>將邊界左移</h4>
+            <p>強制使用可信來源與經過驗證的內部登錄庫。在 IDE 層級阻擋不安全生成可作為第一道建議性措施，但仍應仰賴 CI/CD pipeline 多個節點中的嚴格確定性檢查。</p>
+          </div>
+          <div class="recap-card">
+            <h4>強制執行 Zero Ambient Authority</h4>
+            <p>絕不授予代理程式「Global Key」。強制使用委派的使用者身分與 Just-In-Time（JIT）高度受限 tokens。面對高風險行動，應以強制性的 Vibe Diff 取代盲目核准按鈕。</p>
+          </div>
+          <div class="recap-card">
+            <h4>部署 Agentic SecOps</h4>
+            <p>部署 Virtual Red-Teaming Agents 注入「Adversarial Vibes」，持續對架構進行壓力測試。利用 Agent Behavioural Analytics 監控動態 Runtime AgBOM，並授權 Green Team 即時自動重構弱點。</p>
+          </div>
+          <div class="recap-card" style="grid-column:1 / -1">
+            <h4>追蹤執行軌跡</h4>
+            <p>記錄代理程式的 API 呼叫、工具輸入與推理步驟。安全團隊必須持續監控這些執行日誌以偵測非預期行為，並在代理程式偏離預定任務時，利用版本控制 checkpoints 回復存取狀態。</p>
+          </div>
+        </div>
+
+        <p>實作這些安全控制，有助於讓以 vibe coding 建構的代理程式在安全、治理完善的邊界內運作。然而，<strong>安全的代理程式不一定有效。</strong>安全只能確保代理程式不會執行惡意或未授權的行動；但我們要如何明確證明，它確實達成了使用者細緻的意圖？</p>
+      </section>
+
+      <!-- ── 評估 ── -->
+      <section id="evaluation">
+        <h2>評估：協調意圖驅動代理式系統的品質</h2>
+        <p>以 vibe coding 建構的代理程式可能通過所有安全檢查，卻仍誤解開發者意圖、忽略專案慣例，或破壞不相關的功能。安全告訴你代理程式是否留在邊界內；評估則告訴你，在該邊界內發生的事是否值得發布。</p>
+        <p>以下各節圍繞三個問題展開：為什麼 vibe coding 的評估不同於其他軟體評估、要評估什麼，以及如何評估。下圖概述每一層；白皮書其餘部分將逐一詳述。</p>
+
+        <figure class="section-figure">
+          <img src="images_cht/Figure 2 Vibe Coding Agent Evaluation Framework.png"
+               alt="圖 2：vibe coding 代理程式評估框架。">
+          <figcaption>圖 2：vibe coding 代理程式評估框架。</figcaption>
+        </figure>
+
+        <p>有兩個領域刻意不納入本框架的範圍，兩者都值得專門探討：一是不可驗證輸出的主觀評估；二是將使用者修正回饋至模型、執行框架或評估套件（eval suite），以推動改進的回饋迴路。</p>
+
+        <h3>為什麼 vibe coding 代理程式的評估不同</h3>
+        <p>評估 vibe coding 代理程式，既不同於評估確定性軟體，也不同於評估客服代理程式或研究代理程式。它有三項獨特之處：</p>
+        <ul>
+          <li><strong>規格不足落差（Underspecification Gap）：</strong>傳統軟體測試堅定假設完整、嚴格的規格已經存在。vibe coding 則正好相反：使用者的自然語言 prompt 本來就不夠明確。評估的首要任務，是判斷代理程式是否成功跨越這道落差，重建出正確但未明說的規格。</li>
+          <li><strong>使用者通常無法驗證輸出：</strong>非技術使用者無法逐行審查 600 行程式碼。在這類代理程式中，「代理程式認為自己成功」與「程式碼實際正確」之間的落差，比其他任何代理程式類別都大。</li>
+          <li><strong>工作階段採反覆迭代，而程式碼庫就是狀態：</strong>每個回合都會修改真實檔案。早期的不良決策會層層累積。評估必須涵蓋多回合對話的完整發展軌跡，而且對象是一個具有自身慣例、相依關係與歷史的動態程式碼庫。</li>
+        </ul>
+      </section>
+
+      <!-- ── 評估維度 ── -->
+      <section id="dimensions">
+        <h2>評估項目：七個維度</h2>
+        <p>vibe coding 代理程式的評估可分成七個維度，並歸為兩組。面向使用者的維度，是開發者能直接感受到的部分；內部維度，則描述代理程式在使用者看不見之處所做的事。此外，安全與負責任的 AI 是橫向議題，會與多個維度交會，因此必須與各維度一併評估。</p>
+
+        <figure class="section-figure">
+          <img src="images_cht/Figure 3 Evaluation Dimensions for Vibe Coding Agents.png"
+               alt="圖 3：vibe coding 代理程式的評估維度。">
+          <figcaption>圖 3：vibe coding 代理程式的評估維度。</figcaption>
+        </figure>
+
+        <div class="dim-group">
+          <div class="dim-group-label">面向使用者的維度</div>
+          <div class="dim-cards">
+            <div class="dim-card">
+              <div class="dim-num">維度 1</div>
+              <h4>意圖滿足（Intent satisfaction）</h4>
+              <p>代理程式建出的，是使用者真正想要的東西，而不只是字面上說出的內容嗎？這是最難評估的維度，因為意圖通常未明說、具有歧義，而且經常在工作階段中途改變。</p>
+            </div>
+            <div class="dim-card">
+              <div class="dim-num">維度 2</div>
+              <h4>功能正確性（Functional correctness）</h4>
+              <p>程式碼能否建置、執行並通過測試？這是底線，而非上限。它容易衡量，卻也容易被操弄：刪除或 mock 測試，就能讓紅燈轉綠，卻沒有真正修好任何問題。</p>
+            </div>
+            <div class="dim-card">
+              <div class="dim-num">維度 3</div>
+              <h4>視覺與行為正確性（Visual and behavioural correctness）</h4>
+              <p>對於生成 Web 應用程式或 UI 的代理程式而言，真正的成品是渲染後的輸出，而不是程式碼。頁面的外觀與行為不是正確，就是不正確。</p>
+            </div>
+            <div class="dim-card">
+              <div class="dim-num">維度 4</div>
+              <h4>成本與效率（Cost and efficiency）</h4>
+              <p>包括 token 花費、實際經過時間延遲（wall-clock latency）、tool-call 次數與迭代次數：代理程式收斂前，使用者必須提出多少次修正？</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dim-group">
+          <div class="dim-group-label">內部維度</div>
+          <div class="dim-cards">
+            <div class="dim-card">
+              <div class="dim-num">維度 5</div>
+              <h4>程式碼品質與慣例符合度（Code quality and convention matching）</h4>
+              <p>程式碼是否符合專案的慣用寫法、模式與慣例？即使在局部上正確，一份通過測試卻違反程式碼庫風格的 diff，仍是 vibe coding 的失敗。</p>
+            </div>
+            <div class="dim-card">
+              <div class="dim-num">維度 6</div>
+              <h4>軌跡品質（Trajectory quality）</h4>
+              <p>代理程式採取的路徑是否合理：是否先讀取相關檔案、是否連貫安排修改順序、每一步是否選擇正確的工具或 skill？正確輸出若來自不良推理，也只是脆弱的成功。</p>
+            </div>
+            <div class="dim-card" style="grid-column:1 / -1">
+              <div class="dim-num">維度 7</div>
+              <h4>自我修復行為（Self-repair behaviour）</h4>
+              <p>當建置失敗、測試出錯，或使用者說「不對，不是那樣」時，代理程式會恢復，還是讓失敗繼續擴大？在多回合工作階段中，恢復品質的影響會持續累積。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 評估方法 ── -->
+      <section id="methods">
+        <h2>如何評估：八種方法</h2>
+        <p>這七個維度無法全用相同方式衡量。沒有任何單一方法能涵蓋全部，因此正式環境的流程會結合多種方法。下圖概述各種評估方法，以及每種方法建議使用的維度。</p>
+
+        <figure class="section-figure">
+          <img src="images_cht/Figure 4 Evaluation Methods and Recommended Dimensions.png"
+               alt="圖 4：評估方法與建議使用的維度。">
+          <figcaption>圖 4：評估方法與建議使用的維度。</figcaption>
+        </figure>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>方法</th>
+                <th>建議維度</th>
+                <th>代表工具</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>自動化功能測試</strong></td>
+                <td>維度 2、5（規則可查部分）</td>
+                <td>pytest, jest, eslint, mypy</td>
+              </tr>
+              <tr>
+                <td><strong>資安與安全性評估</strong></td>
+                <td>橫向（與各維度交會）</td>
+                <td>Snyk, Semgrep, git-secrets, red-team suites</td>
+              </tr>
+              <tr>
+                <td><strong>LLM-as-judge / Agent-as-judge</strong></td>
+                <td>維度 1、5、6</td>
+                <td>Gemini 評分 rubric, agent trace judge</td>
+              </tr>
+              <tr>
+                <td><strong>瀏覽器型測試</strong></td>
+                <td>維度 3</td>
+                <td>Playwright scripts, 截圖比較</td>
+              </tr>
+              <tr>
+                <td><strong>軌跡檢查</strong></td>
+                <td>維度 6、7</td>
+                <td>OpenTelemetry traces, trace-replay tools</td>
+              </tr>
+              <tr>
+                <td><strong>人工審查</strong></td>
+                <td>維度 1、5、安全 &amp; RAI</td>
+                <td>結構化標註佇列</td>
+              </tr>
+              <tr>
+                <td><strong>線上評估</strong></td>
+                <td>依抽樣比例涵蓋所有維度</td>
+                <td>動態尾端取樣（Dynamic Tail-Based Sampling）</td>
+              </tr>
+              <tr>
+                <td><strong>標準化基準測試</strong></td>
+                <td>認知能力校準</td>
+                <td>Vibe Code Bench, SWE-bench Verified, LiveCodeBench, Kaggle SAE</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>標準化基準測試與 Kaggle Agent Exams</h3>
+        <p>自訂評估框架能處理 vibe coding 的開放式本質，而標準化測試則能將特定認知能力，從客製化企業環境的雜訊中隔離出來。</p>
+        <ul>
+          <li><strong>標準化測試的作用：</strong>Vibe Code Bench 評估從零到一的 Web app 生成，SWE-bench Verified 評估真實 GitHub repos 上的程式碼變更，LiveCodeBench 則為程式碼生成提供抗污染信號。</li>
+          <li><strong>Kaggle Agent Exams（SAE）與 Zero-Setup Evaluation：</strong>Kaggle Standardised Agent Exams（SAE）透過 SKILL.md 檔案，以輕量 API 整合方式部署，使代理程式能自主向 Kaggle 註冊、取得考題、在自己的沙箱環境中執行多步驟邏輯，並立即將分數發布至即時公開 leaderboard。</li>
+          <li><strong>取捨：過度擬合與真實世界意圖：</strong>代理程式可能經過高度最佳化，在靜態 Kaggle datasets 上取得頂尖分數，面對正式環境中混亂且相互矛盾的人類意圖時，卻徹底失敗。標準化考試應嚴格用於認知校準，不能取代客製化意圖評估。</li>
+        </ul>
+
+        <h3>可觀測性：評估的先決條件</h3>
+        <p>若要評估代理程式的內部推理，開發者必須能看見它。可觀測性是玻璃盒評估（Glass Box evaluation）的絕對先決條件；沒有可觀測性，代理程式的失敗只會呈現為無法解釋的單一事件。</p>
+        <ul>
+          <li><strong>追蹤思考：</strong>現代代理程式可觀測性仰賴 OpenTelemetry 捕捉非確定性流程。<code>agent.session spans</code> 捕捉整個任務持續時間，<code>agent.think spans</code> 記錄採取行動前的內部推理，<code>agent.tool spans</code> 則記錄環境互動的具體 arguments 與 latencies。</li>
+          <li><strong>追蹤成本：</strong>可觀測性提供細粒度資料，用以計算真正的營運成本。團隊可以彙整 span attributes，精確衡量 token 消耗、推論延遲與自我修復迴圈的成本。</li>
+          <li><strong>動態尾端取樣：</strong>tail-based dynamic sampling 讓 collector 在 trace 完成後評估整條 trace，捨棄例行成功案例，同時保留含有錯誤或過多自我修復迴圈的 traces。</li>
+        </ul>
+      </section>
+
+      <!-- ── 實用技巧 ── -->
+      <section id="tips">
+        <h2>vibe coding 代理程式評估的實用技巧</h2>
+
+        <h3>將工作階段開頭當作意圖評分規準</h3>
+        <p>vibe coding 沒有可供測試的規格；使用者意圖未明說，且會隨回合演變。最接近規格的內容，是前一至兩則使用者訊息。將它們視為評分規準：從工作階段開頭自動推導評估標準，再依據這些標準評分後續每個回合。這是大規模評估維度 1（意圖滿足）的唯一實際方法。</p>
+
+        <pre><code>from google import genai
+
+client = genai.Client(vertexai=True, project="...", location="us-central1")
+
+# Derive criteria from the user's opening turns
+opening = " ".join(session.user_messages[:2])
+criteria = client.models.generate_content(
+    model="gemini-3-pro",
+    contents=f"Produce 3-5 acceptance criteria for: {opening}. Return JSON.",
+).parsed["criteria"]
+
+# Score every agent turn against the derived criteria
+score = client.models.generate_content(
+    model="gemini-3-pro",
+    contents=f"Does this output satisfy {criteria}? Score 1-5 with rationale."
+    f"Output: {agent_response}",
+).parsed</code></pre>
+        <p class="snippet-caption">程式碼片段 1：從工作階段開頭推導意圖滿足的驗收標準。</p>
+
+        <h3>評估渲染後的成品，而不是程式碼</h3>
+        <p>在 vibe coding 中，使用者評斷的是輸出，而不是 diff。讓多模態模型檢視渲染後的頁面，可以找出程式碼層級評估完全遺漏的問題：行動版版面損壞、對比度過低而不符無障礙要求、按鈕狀態錯誤。將此方法與 Playwright assertions 搭配使用：judge 找出視覺與設計問題，assertions 則找出失效的互動功能。</p>
+
+        <pre><code>from google import genai
+from google.genai import types
+
+client = genai.Client(vertexai=True, project="...", location="...")
+
+result = client.models.generate_content(
+    model="gemini-3-pro",
+    contents=[
+        "Score this rendered web app against the spec on layout_match, styling, "
+        "and interactive_correctness (1-5 each). Return JSON.",
+        user_spec,
+        types.Part.from_bytes(data=screenshot_bytes, mime_type="image/png"),
+    ],
+)</code></pre>
+        <p class="snippet-caption">程式碼片段 2：以多模態方式評估渲染後 Web application 的版面與互動正確性。</p>
+
+        <h3>評估工作階段收斂情形，而不是單回合準確率</h3>
+        <p>vibe coding 工作階段本來就是多回合互動。真正相關的問題不是「第 4 回合正確嗎？」，而是「使用者最後是否收斂至自己想要的結果？」能在少數回合內收斂的工作階段，就是成功案例。中途遭放棄的工作階段，是最具資訊價值的失敗案例，遠比單回合錯誤更值得關注。Cloud Trace 會將透過 ADK 與 Agent Engine 儀表化的 vibe coding 工作階段，呈現為單一 trace tree。</p>
+
+        <pre><code>from google.cloud import trace_v2
+
+trace = trace_v2.TraceServiceClient().get_trace(
+    name=f"projects/{project}/traces/{session_id}"
+)
+
+def session_outcome(trace):
+    return {
+        "converged": trace.last_turn.user_signal == "satisfied",
+        "turns_to_converge": trace.user_correction_count,
+        "abandoned": trace.last_user_action == "close",
+        "cost_to_converge": trace.total_token_cost_usd,
+    }</code></pre>
+        <p class="snippet-caption">程式碼片段 3：透過 Google Cloud Trace 追蹤多回合工作階段的收斂情形，並計算總 token 成本。</p>
+
+        <h3>將使用者修正意見發掘為帶標籤的失敗資料</h3>
+        <p>使用者每一句「不對，不是那樣」，都是一筆帶有標籤的失敗樣本，而 vibe coding 會大量產生這類資料。將它們分群，就能看見代理程式的系統性缺口，速度遠快於建立合成失敗基準測試。</p>
+
+        <pre><code>from google import genai
+from sklearn.cluster import KMeans
+
+client = genai.Client(vertexai=True, project="...", location="...")
+
+corrections = [
+    t.user_message
+    for trace in traces
+    for t in trace.turns
+    if t.is_correction
+]
+
+emb = client.models.embed_content(
+    model="text-embedding-005",
+    contents=corrections,
+)
+vectors = [e.values for e in emb.embeddings]
+
+clusters = KMeans(n_clusters=8).fit(vectors)
+# clusters.labels_ is the prioritized list of failure modes for the next iteration</code></pre>
+        <p class="snippet-caption">程式碼片段 4：將使用者修正意見分群為依優先順序排列的失敗模式類別。</p>
+      </section>
+
+      <!-- ── 結論 ── -->
+      <section id="conclusion">
+        <h2>結論</h2>
+        <p>從語法走向意圖，並非對未來的預測，而是軟體開發當下的現實。截至 2026 年，軟體生產的瓶頸已從根本上轉移。我們不再等待人手輸入 boilerplate；我們等待的是人類心智界定邊界、評估輸出並保護執行環境。</p>
+        <p>要從隨性的 vibe coding 邁向嚴謹的 agentic engineering，就必須放棄隱含信任。原始 AI 模型只是一具引擎；只有包覆在健全的執行框架內，才能成為企業可用的代理程式。組織實作七大支柱安全架構——強制執行嚴格的沙箱隔離、contextual ABAC 與代理式 Red/Blue/Green teaming——便能安全控制自主行動的影響範圍。</p>
+        <p>然而，安全本身只能證明代理程式沒有造成傷害。將這些安全控制與嚴謹的評估框架結合——衡量意圖滿足、軌跡品質、視覺正確性等所有面向——工程領導者才能有信心地證明代理程式確實交付了價值。</p>
+        <p>生成大致上已是解決完備的問題。<strong>驗證、安全與架構判斷，才是新的專業技藝。</strong>在這個新時代蓬勃發展的團隊，將會是那些把 AI 當作高速實作引擎，同時維持嚴格紀律，產出世界真正能夠信賴之軟體的團隊。</p>
+      </section>
+
+      <!-- ── Endnotes ── -->
+      <section id="endnotes">
+        <div class="footnotes">
+          <h3 style="color:#444;font-size:1rem;margin-bottom:12px">附注</h3>
+          <ol>
+            <li id="fn1">DORA. "State of AI-assisted Software Development." 2025. <a href="https://dora.dev/research/2025/" target="_blank" rel="noopener">https://dora.dev/research/2025/</a></li>
+            <li id="fn2">Wiz Research. "From Prompts to Production: The Technical Guide to Secure Vibe Coding." 2026. <a href="https://www.wiz.io/lp/the-technical-guide-to-secure-vibe-coding" target="_blank" rel="noopener">https://www.wiz.io/lp/the-technical-guide-to-secure-vibe-coding</a></li>
+            <li id="fn3">Mandiant. "AI risk and resilience: A Mandiant special report." 2026. <a href="https://cloud.google.com/security/resources/ai-risk-and-resilience" target="_blank" rel="noopener">https://cloud.google.com/security/resources/ai-risk-and-resilience</a></li>
+            <li id="fn4">Mandiant. "M-Trends 2026 Executive Edition." 2026. <a href="https://services.google.com/fh/files/misc/m-trends-2026-executive-edition-en.pdf" target="_blank" rel="noopener">https://services.google.com/fh/files/misc/m-trends-2026-executive-edition-en.pdf</a></li>
+            <li id="fn5">Wiz Research. "From Prompts to Production: The Technical Guide to Secure Vibe Coding." 2026. <a href="https://www.wiz.io/lp/the-technical-guide-to-secure-vibe-coding" target="_blank" rel="noopener">https://www.wiz.io/lp/the-technical-guide-to-secure-vibe-coding</a></li>
+            <li id="fn6">Knostic, "AI Coding Agent Security: Threat Models and Protection Strategies"</li>
+          </ol>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- ── lightbox ── -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-hint">點擊或按 Esc 關閉</span>
+    <img src="" alt="">
+  </div>
+
+  <script>
+    (function(){
+      var lightbox = document.getElementById("lightbox");
+      var lightboxImg = lightbox.querySelector("img");
+      function openLightbox(img){
+        lightboxImg.src = img.currentSrc || img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add("is-open");
+      }
+      function closeLightbox(){ lightbox.classList.remove("is-open"); lightboxImg.src = ""; }
+      document.querySelectorAll("figure.section-figure img").forEach(function(img){
+        img.addEventListener("click", function(){ openLightbox(img); });
+      });
+      lightbox.addEventListener("click", closeLightbox);
+      document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeLightbox(); });
+    })();
+  </script>
+</body>
+</html>
