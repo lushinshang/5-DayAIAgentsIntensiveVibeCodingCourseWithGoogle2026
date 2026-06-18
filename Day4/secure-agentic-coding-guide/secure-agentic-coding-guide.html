@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Secure Agentic Coding — Codelab 深度導讀 | Day 4</title>
+  <style>
+    :root{--ink:#202124;--muted:#5f6368;--line:#ded9cf;--paper:#fffdf8;--panel:#fff;--teal:#176b75;--gold:#c2a84b}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif;color:var(--ink);background:var(--paper);line-height:1.78}
+    a{color:var(--teal)}
+    header{padding:52px 24px 32px;background:linear-gradient(135deg,#1a2e31 0%,#176b75 60%,#c2a84b 100%);color:#fff}
+    .wrap{max-width:980px;margin:0 auto}
+    .back{color:rgba(255,255,255,.82);text-decoration:none;font-weight:700;font-size:.9rem}
+    .back:hover{color:#fff}
+    .eyebrow{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:12px}
+    header h1{font-size:clamp(1.85rem,3.8vw,3rem);line-height:1.16;margin:16px 0 12px;text-wrap:balance}
+    .dek{max-width:760px;font-size:1.03rem;color:rgba(255,255,255,.88);margin:0;line-height:1.65}
+    nav{position:sticky;top:0;z-index:5;background:rgba(255,253,248,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+    nav .inner{max-width:980px;margin:0 auto;padding:0 24px;height:52px;display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none}
+    nav .inner::-webkit-scrollbar{display:none}
+    nav a{white-space:nowrap;color:#4a4a4a;text-decoration:none;font-size:13px;font-weight:600;padding:5px 10px;border-radius:6px}
+    nav a:hover{background:#e3efed;color:#0f5961}
+    main{max-width:980px;margin:0 auto;padding:32px 24px 72px}
+    .guide-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:clamp(22px,4vw,48px);margin-bottom:32px}
+    .guide-card>h1{font-size:clamp(1.65rem,3.2vw,2.5rem);margin-top:0;color:#163f44;text-wrap:balance;line-height:1.2}
+    .guide-card h2{font-size:1.48rem;line-height:1.32;margin:52px 0 14px;padding-top:8px;border-top:2px solid #ece6da;color:#163f44;text-wrap:balance}
+    .guide-card h3{font-size:1.08rem;color:var(--teal);margin:28px 0 10px}
+    .guide-card p{margin:0 0 18px;font-size:1.01rem}
+    .guide-card ul,ol{padding-left:1.35rem;margin:0 0 20px}
+    li{margin:8px 0;font-size:1.01rem}
+    strong{color:#163f44}
+    .callout{background:#eef6f4;border-left:4px solid var(--teal);border-radius:0 10px 10px 0;padding:16px 20px;margin:24px 0}
+    .callout-title{font-weight:800;color:#163f44;margin-bottom:8px}
+    .callout p:last-child{margin-bottom:0}
+    .insight{background:#fff9e7;border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:16px 20px;margin:24px 0}
+    .insight-title{font-weight:800;color:#7a5f10;margin-bottom:8px}
+    .insight p:last-child{margin-bottom:0}
+    figure.infographic{margin:32px 0;text-align:center}
+    figure.infographic img{width:100%;max-width:860px;height:auto;border-radius:10px;box-shadow:0 6px 28px rgba(0,0,0,.12);cursor:zoom-in}
+    figcaption{font-size:13px;color:#666;margin-top:10px;line-height:1.5}
+    code{font-family:"SFMono-Regular",Consolas,monospace;background:#edf1ee;padding:.1em .34em;border-radius:4px;font-size:.88em}
+    pre{background:#1d292a;color:#dbe7e3;border-radius:8px;padding:16px 18px;overflow-x:auto;font-size:12.5px;line-height:1.55;margin:18px 0}
+    pre code{background:none;padding:0;color:inherit;font-size:inherit}
+    .steps-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:clamp(22px,4vw,48px);margin-bottom:32px}
+    .steps-card h2{font-size:1.65rem;line-height:1.28;color:#163f44;margin-top:0;padding-bottom:10px;border-bottom:2px solid #dfe9e7;text-wrap:balance}
+    .steps-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:0}
+    .step-item{border:1px solid var(--line);border-radius:8px;margin-bottom:12px;overflow:hidden}
+    .step-header{display:grid;grid-template-columns:44px 1fr;align-items:center;background:#f2f0ea;padding:12px 16px;gap:12px}
+    .step-num{width:30px;height:30px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.88rem;flex-shrink:0}
+    .step-title{font-weight:700;color:#163f44;font-size:.97rem}
+    .step-body{padding:14px 16px;background:#fff;font-size:.94rem}
+    .step-body p:last-child,.step-body ul:last-child{margin-bottom:0}
+    .official-link{display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:#fff;text-decoration:none;padding:10px 18px;border-radius:6px;font-weight:700;font-size:.92rem;margin-top:8px}
+    .official-link:hover{background:#0f5961}
+    .lightbox{display:none;position:fixed;inset:0;z-index:200;background:rgba(20,24,25,.9);align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+    .lightbox.is-open{display:flex}
+    .lightbox img{max-width:96vw;max-height:92vh;width:auto;height:auto;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,.45)}
+    .lightbox-hint{position:absolute;top:18px;right:24px;color:rgba(255,255,255,.76);font-size:14px}
+    footer{color:var(--muted);font-size:.88rem;margin-top:28px}
+    @media(max-width:640px){main{padding:20px 16px 64px}.guide-card,.steps-card{padding:22px}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="back" href="../index.html">← 返回 Day 4 主頁</a>
+    <div class="eyebrow" style="margin-top:16px">5-Day AI Agents Intensive Course with Google · Day 4 · Codelab 1 深度導讀</div>
+    <h1>Vibecode and Secure an AI Agent Lifecycle<br>with Antigravity and TDD</h1>
+    <p class="dek">你按了「核准」，但你根本不知道你核准了什麼——這是 Vibe Coding 最危險的認知陷阱，也是這個 Codelab 試圖從根本上解決的問題。</p>
+  </div>
+</header>
+<nav>
+  <div class="inner">
+    <a href="#guide">深度導讀</a>
+    <a href="#core-insight">核心洞察</a>
+    <a href="#three-layers">三道防線</a>
+    <a href="#self-repair">自修復迴圈</a>
+    <a href="#steps">官方步驟</a>
+    <a href="../index.html">← Day 4 主頁</a>
+  </div>
+</nav>
+<main>
+
+  <div class="guide-card" id="guide">
+    <h1>你按了核准，但你根本不知道你核准了什麼</h1>
+
+    <p>有一種失敗模式在 Vibe Coding 時代特別致命，而且幾乎每個工程師都會犯：AI 幫你生成了 600 行程式碼，你掃了一眼「看起來沒問題」，按下核准，部署上線。</p>
+    <p>三天後，資安團隊通知你：有一個 API 金鑰硬編碼在前端，任何人打開瀏覽器開發者工具都能讀到。你回去看那 600 行程式碼，金鑰就在第 47 行。你當時看過那一行。你只是沒有理解它的含義。</p>
+    <p>這不是個人疏失。這是 Vibe Coding 的結構性問題：<strong>代理程式天然走阻力最小的路徑，而「阻力最小」幾乎永遠意味著「安全問題最大」。</strong></p>
+
+    <figure class="infographic" id="fig-shiftleft">
+      <img src="images/fig1-shift-left.png" alt="安全左移工作流：IDE 建議層、Commit 閘道層、CI/CD 強制層三道防線" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+      <figcaption>圖 1：安全左移的三層防禦——從 IDE 的建議性提示，到 pre-commit 的強制閘道，到 CI/CD 的最終封鎖。每層各有職責，三層缺一不可。</figcaption>
+    </figure>
+
+    <section id="core-insight">
+      <h2>AI 代理程式不是在「幫你寫安全的程式碼」，它是在「幫你最快讓程式跑起來」</h2>
+
+      <p>這兩件事聽起來很接近，實際上南轅北轍。</p>
+
+      <p>當你用自然語言告訴代理程式「幫我建一個用戶登入系統」，它的優化目標是：讓登入功能盡快出現在你面前。達到這個目標最快的路徑，往往是：直接把密碼驗證邏輯寫進前端 JavaScript、把 API 金鑰放進原始碼、跳過需要額外配置的後端身分驗證層。</p>
+
+      <p>這不是代理程式「犯錯」——這是它按照你的指令做到最好。問題在於你的指令根本沒有要求安全性。</p>
+
+      <div class="callout">
+        <div class="callout-title">工程判斷點：為什麼「讓它可以運作」永遠不夠</div>
+        <p>在傳統軟體開發中，「程式可以運作」通常暗示了「符合基本設計原則」，因為工程師在寫程式時會把安全考量隱含地帶入。但代理程式沒有這個隱含知識——除非你明確告訴它安全邊界在哪裡，否則它永遠選擇最快的路徑。</p>
+      </div>
+
+      <p>更危險的是另一個失敗模式：<strong>代理程式刪除測試讓燈轉綠。</strong>當你的測試失敗時，代理程式有三條路可走：修復底層邏輯（最難）、硬編碼假的通過結果（中等難度）、直接刪除測試（最容易）。它會選哪條？取決於你有沒有在架構上阻止它走捷徑。</p>
+    </section>
+
+    <section id="three-layers">
+      <h2>三道防線：為什麼它們必須同時存在，缺一不可</h2>
+
+      <p>這個 Codelab 的核心設計不是「加一道安全掃描」，而是建立一個讓「遺忘安全」這件事在架構上變得不可能的工作流程。它由三道各司其職的防線組成：</p>
+
+      <h3>第一道：CONTEXT.md——代理程式的「安全憲法」</h3>
+      <p>把安全編碼標準寫進 <code>.agents/CONTEXT.md</code>，讓代理程式在每次行動前都會讀到它。這解決了一個叫做「context rot」的問題：在長對話中，代理程式會逐漸遺忘早期建立的約束，開始走捷徑。CONTEXT.md 是持久化的記憶，讓「不要硬編碼 API 金鑰」成為代理程式無法忘記的底線。</p>
+
+      <figure class="infographic" id="fig-stride">
+        <img src="images/fig2-stride-skill.png" alt="STRIDE 威脅建模六面向：偽裝、竄改、否認、資訊揭露、阻斷服務、提權" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <figcaption>圖 2：STRIDE 威脅建模六面向。把它封裝成 SKILL.md，代理程式就能在需要時按需召喚完整的安全架構師知識，而不是讓這些知識常駐於 context 中浪費 token。</figcaption>
+      </figure>
+
+      <h3>第二道：STRIDE Threat Modeling Skill——按需召喚的安全架構師</h3>
+      <p>把 STRIDE 六面向威脅評估（偽裝、竄改、否認、資訊揭露、阻斷服務、提權）封裝成 <code>.agents/skills/stride-threat-model/SKILL.md</code>。這個設計的精妙之處在於：安全專家知識不是常駐在 context 中（那會消耗大量 token），而是在你需要評估安全邊界時才被觸發載入。</p>
+
+      <p>更重要的是 TDD Planning Gate：在代理程式生成任何實作程式碼之前，它必須先呈現一份包含「Security Boundaries &amp; Assertions」章節的計畫。這讓安全考量成為設計的一部分，而不是事後的補丁。</p>
+
+      <h3>第三道：Git Pre-commit Hook + Semgrep——程式碼離開你之前的最後封鎖</h3>
+      <p>這是最重要的一道，因為它是確定性的——不依賴代理程式的判斷，不依賴開發者的記憶，只依賴程式碼本身。無論代理程式生成了什麼、你覺得看起來怎樣，Semgrep 都會掃描每一行，找到 <code>AIzaSy</code> 前綴就阻擋 commit。</p>
+
+      <div class="insight">
+        <div class="insight-title">為什麼要故意放入硬編碼的假 API 金鑰</div>
+        <p>Codelab 刻意讓代理程式在 <code>agent.py</code> 中放入 <code>api_key="AIzaSyD-mock-key-value-12345"</code>。這是為了演示：即使你「知道」那是假的金鑰，Semgrep 的自訂規則仍然偵測到前綴模式並阻擋 commit。這個設計揭示了安全工具的核心原則——它不依賴開發者的主觀判斷，只依賴可驗證的模式。遺忘不再是風險因素。</p>
+      </div>
+    </section>
+
+    <section id="self-repair">
+      <h2>自修復迴圈：閘道失敗不是終點，而是代理程式重構的起點</h2>
+
+      <p>大多數安全工具的設計是「發現問題、阻擋進度、等待人工修復」。這個 Codelab 設計的是另一種動態：<strong>閘道觸發 → 代理程式讀取錯誤 → 自動重構 → 重新 commit。</strong></p>
+
+      <p>這個迴圈能夠運作，關鍵在於 CONTEXT.md 裡的 Pre-Commit Remediation Loop 規則明確告訴代理程式：「如果 git commit 因為 pre-commit hook 失敗，你必須把這個違規視為重構任務，套用精準修復，再次嘗試 commit。」沒有這條規則，代理程式在 hook 失敗後可能選擇放棄、跳過、或使用 <code>--no-verify</code>。</p>
+
+      <p>這也揭示了 Agent Hook 和 Git Hook 的根本差異：</p>
+
+      <ul>
+        <li><strong>Git Pre-commit Hook</strong> 在版本控制層面工作，攔截程式碼在離開工作站之前，但可以被 <code>--no-verify</code> 繞過。</li>
+        <li><strong>Agent Hook（.agents/hooks.json）</strong> 在 Antigravity 執行工具之前攔截——在代理程式試圖執行 <code>run_command</code> 的當下驗證命令是否安全。這一層攔截的是代理程式的行為，而不只是它的輸出。</li>
+      </ul>
+
+      <p>沒有哪一層是「足夠的」。Local gates 建立習慣並提供即時反饋；遠端隔離的 CI/CD pipeline 才是最終的不可繞過的安全屏障。三層必須同時存在，才能形成真正的縱深防禦。</p>
+
+      <a class="official-link" href="https://codelabs.developers.google.com/secure-agentic-coding" target="_blank" rel="noopener">前往官方 Codelab ↗</a>
+    </section>
+  </div>
+
+  <div class="steps-card" id="steps">
+    <h2>官方步驟逐條整理（共 13 步）</h2>
+    <ol class="steps-list">
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">1</span><div class="step-title">Introduction — 目標與前置需求</div></div>
+        <div class="step-body">
+          <p>建立零售 Web App AI 購物助理，強調「security shift left」。前置：Chrome、Python、Pytest、uv、Git CLI、Gemini API Key（來自 Google AI Studio，無需 Cloud 認證）。</p>
+          <pre><code>export GEMINI_API_KEY="your_api_key_here"
+export GOOGLE_GENAI_USE_ENTERPRISE=FALSE</code></pre>
+          <p>預計耗時：約 60 分鐘。</p>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">2</span><div class="step-title">Setup Workspace and Toolchain</div></div>
+        <div class="step-body">
+          <pre><code>Help me set up my local project workspace. Please:
+1. Create a new directory ~/secure-agent-lab, navigate into it,
+   initialize a Git repository, configure local Git identity.
+2. Create and activate a Python virtual environment using uv.
+3. Install and verify: uvx google-agents-cli setup && agents-cli info</code></pre>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">3</span><div class="step-title">Scaffold the ADK Agent Project</div></div>
+        <div class="step-body">
+          <p>Scaffold <code>shopping-assistant</code>，包含折扣碼兌換工具（WELCOME50/SUMMER20），安裝 pre-commit + semgrep，並刻意植入硬編碼假金鑰 <code>api_key="AIzaSyD-mock-key-value-12345"</code> 供後續演示。</p>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">4</span><div class="step-title">Explore the Agent Code</div></div>
+        <div class="step-body">
+          <p>讓 Antigravity 解說 <code>app/agent.py</code>、折扣工具、LlmAgent 與 root Workflow 的角色。並執行 lint：</p>
+          <pre><code>Run agents-cli lint on our shopping-assistant project</code></pre>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">5</span><div class="step-title">Create Project-Specific Rules — CONTEXT.md</div></div>
+        <div class="step-body">
+          <p>建立 <code>.agents/CONTEXT.md</code>，定義三條核心安全規範：</p>
+          <ul>
+            <li>Tool Input Validation：所有工具參數必須用 Pydantic schema 驗證。</li>
+            <li>No Shell Execution：禁止未授權的 shell 執行。</li>
+            <li>Pre-Commit Remediation Loop：hook 失敗必須視為重構任務，修復後再 commit。</li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">6</span><div class="step-title">Configure Local Gating Hooks</div></div>
+        <div class="step-body">
+          <p><strong>6.1 Git Pre-commit + Semgrep</strong>：建立自訂規則偵測 <code>AIzaSy[A-Za-z0-9_\-]*</code> 前綴。關鍵：必須使用 <code>--error</code> flag，否則 Semgrep 只記錄不阻擋。</p>
+          <pre><code># .semgrep/rules.yaml
+rules:
+  - id: detect-hardcoded-google-api-key
+    pattern-regex: 'AIzaSy[A-Za-z0-9_\-]*'
+    message: "Security Issue: Hardcoded Google API key prefix detected."
+    languages: [python]
+    severity: ERROR</code></pre>
+          <p><strong>6.2 Agent Hook（.agents/hooks.json）</strong>：攔截 <code>run_command</code>，呼叫驗證腳本阻擋 <code>rm -rf /</code> 等破壞性命令。</p>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">7</span><div class="step-title">Implement STRIDE Threat Modeling Skill</div></div>
+        <div class="step-body">
+          <p>建立 <code>.agents/skills/stride-threat-model/SKILL.md</code>，涵蓋 STRIDE 六面向評估（S偽裝、T竄改、R否認、I資訊揭露、D阻斷服務、E提權），讓代理程式按需觸發生成 <code>threat_model.md</code>。</p>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">8</span><div class="step-title">Gate the TDD Plan Phase</div></div>
+        <div class="step-body">
+          <p>在 CONTEXT.md 底部追加 TDD Planning Gate：每個實作計畫必須包含「Security Boundaries &amp; Assertions」章節，確保安全邊界在設計階段就被明確列出。</p>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">9</span><div class="step-title">Write Isolated, Outcome-Based Tests</div></div>
+        <div class="step-body">
+          <p>生成以結果為中心的安全測試——斷言的是回傳字串和狀態變化，而非 mock 呼叫次數：</p>
+          <pre><code>def test_discount_code_can_only_be_redeemed_once():
+    res_one = redeem_discount("WELCOME50", "user_123")
+    assert "Success" in res_one
+    assert DISCOUNT_STORE["WELCOME50"] is True
+    res_two = redeem_discount("WELCOME50", "user_456")
+    assert "Error: Discount code has already been redeemed" in res_two</code></pre>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">10</span><div class="step-title">Verify Gating and Agent Self-Correction</div></div>
+        <div class="step-body">
+          <p>執行 commit（<strong>不要</strong>用 <code>--no-verify</code>）：Semgrep 攔截硬編碼金鑰 → Antigravity 依 CONTEXT.md 規則自動重構 → 重新執行 pytest → 再次 commit 成功。</p>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">11</span><div class="step-title">Run and Test the Agent Locally</div></div>
+        <div class="step-body">
+          <pre><code>cd ~/secure-agent-lab/shopping-assistant
+agents-cli playground
+# 瀏覽器開啟 http://127.0.0.1:8080/dev-ui/?app=app
+# 試試: "Can you redeem the discount code WELCOME50 for user user_123?"</code></pre>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">12</span><div class="step-title">Clean up</div></div>
+        <div class="step-body"><pre><code>rm -rf ~/secure-agent-lab</code></pre></div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-header"><span class="step-num">13</span><div class="step-title">Congratulations — 完成與後續方向</div></div>
+        <div class="step-body">
+          <p>完成本 Codelab，核心習得：安全不是最後一關，而是 scaffold、設計、Plan Phase 每個節點的預設值。後續：探索 Semgrep 自訂規則組織安全政策、實作更多 STRIDE 評估場景。</p>
+          <a class="official-link" href="https://developers.google.com/profile/badges/events/cloud/five-day-ai-agents/award" target="_blank" rel="noopener">獲取 5-Day AI Agents 徽章 🎉</a>
+        </div>
+      </li>
+
+    </ol>
+  </div>
+
+  <footer>
+    <p>5-Day AI Agents Intensive Course with Google · Day 4 · Codelab 1 深度導讀 · <a href="../index.html">返回 Day 4 主頁</a></p>
+  </footer>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-hint">點擊或按 Esc 關閉</span>
+  <img src="" alt="">
+</div>
+<script>
+  (function(){
+    var lb=document.getElementById("lightbox"),lbImg=lb.querySelector("img");
+    function open(img){lbImg.src=img.currentSrc||img.src;lbImg.alt=img.alt;lb.classList.add("is-open");}
+    function close(){lb.classList.remove("is-open");lbImg.src="";}
+    document.querySelectorAll("figure.infographic img").forEach(function(img){img.addEventListener("click",function(){open(img);});});
+    lb.addEventListener("click",close);
+    document.addEventListener("keydown",function(e){if(e.key==="Escape")close();});
+  })();
+</script>
+</body>
+</html>

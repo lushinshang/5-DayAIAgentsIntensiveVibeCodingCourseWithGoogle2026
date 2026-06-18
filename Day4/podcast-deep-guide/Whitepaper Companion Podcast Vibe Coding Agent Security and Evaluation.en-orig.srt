@@ -1,0 +1,1300 @@
+1
+00:00:00,000 --> 00:00:08,680
+You know, usually when we think about software engineering, um, there is this really comforting expectation of total control, right?
+
+2
+00:00:08,240 --> 00:00:09,760
+>> Yeah.
+
+3
+00:00:08,680 --> 00:00:15,200
+>> You sit down, you write the architecture, and the compiler just rigorously checks the syntax.
+
+4
+00:00:13,640 --> 00:00:17,840
+>> Right, it checks every single line.
+
+5
+00:00:15,200 --> 00:00:25,720
+>> Exactly, and the unit tests run, and the system executes exactly the blueprint that you gave it. It's rigid, but I mean, more importantly, it's entirely
+
+6
+00:00:24,920 --> 00:00:27,760
+predictable.
+
+7
+00:00:25,720 --> 00:00:34,360
+>> Which is, you know, a beautiful paradigm when you are dealing with purely deterministic systems. I mean, the code either compiles or it fails.
+
+8
+00:00:33,880 --> 00:00:36,040
+>> Right.
+
+9
+00:00:34,360 --> 00:00:38,040
+>> Your security credentials, they either grant access or they bounce you out.
+
+10
+00:00:37,760 --> 00:00:39,600
+>> Yeah.
+
+11
+00:00:38,040 --> 00:00:46,480
+>> But the moment you introduce large language models into the driver's seat, that rigid blueprint just, well, it completely evaporates.
+
+12
+00:00:44,760 --> 00:00:53,320
+>> It's gone. And that is exactly the wild frontier we are exploring today. Welcome to the deep dive. We are so glad you are
+
+13
+00:00:50,640 --> 00:01:01,440
+joining us. Today, our conversation is going to cover the contents of the Day 4 white paper of the 5 Day of AI Agents Vibe Coding Intensive Course by Google X
+
+14
+00:01:00,920 --> 00:01:03,600
+Kaggle.
+
+15
+00:01:01,440 --> 00:01:05,880
+>> It's such a fascinating paper, too.
+
+16
+00:01:03,600 --> 00:01:14,600
+>> It really is. Whether you're, you know, a Kaggle Grandmaster looking to secure your next agentic workflow, or honestly just a developer trying to figure out
+
+17
+00:01:12,360 --> 00:01:24,680
+where software is heading, this is for you. We are looking at this massive transition from writing strict deterministic code to, well, to vibe coding.
+
+18
+00:01:24,040 --> 00:01:26,120
+>> Right, vibe coding.
+
+19
+00:01:24,680 --> 00:01:34,440
+>> Yeah, this crazy idea that you just express your intent in plain English, and an AI interprets that to build working software on the fly.
+
+20
+00:01:32,760 --> 00:01:42,880
+>> Yeah, and the operative word there is definitely interprets. Because, um, while vibe coding drastically accelerates how fast we can build
+
+21
+00:01:41,160 --> 00:01:45,920
+things, it completely shatters the traditional way we establish trust in our systems.
+
+22
+00:01:45,080 --> 00:01:47,720
+>> Oh, totally.
+
+23
+00:01:45,920 --> 00:01:54,000
+>> The core argument of this white paper is that a raw AI model is not actually an agent. A model is just, you know, a prediction engine.
+
+24
+00:01:52,360 --> 00:01:55,920
+>> Right, it just predicts the next word.
+
+25
+00:01:54,000 --> 00:02:00,560
+>> Exactly. It only becomes an agent when we wrap it in a structural harness.
+
+26
+00:01:58,120 --> 00:02:05,360
+Like scaffolding that gives it memory, access to tools, and the autonomy to actually act.
+
+27
+00:02:03,840 --> 00:02:14,920
+>> And let's focus on that autonomy for a second. Because we are giving an AI ambient agency, right? Which means it can execute code, it can spend money via
+
+28
+00:02:12,280 --> 00:02:16,959
+APIs, alter production environments, all on its own.
+
+29
+00:02:15,520 --> 00:02:19,760
+>> Yeah, it's doing real things with real consequences.
+
+30
+00:02:17,800 --> 00:02:23,560
+>> So, trust can no longer be this simple gate you walk through once.
+
+31
+00:02:21,720 --> 00:02:29,760
+The white paper argues that trust has to be continuously evaluated across two distinct axes.
+
+32
+00:02:27,720 --> 00:02:34,600
+First, security, like did the agent stay inside its sandbox without going rogue?
+
+33
+00:02:31,640 --> 00:02:40,320
+And second, evaluation, which is is the code it just blindly generated actually worth deploying?
+
+34
+00:02:38,520 --> 00:02:47,400
+>> Yeah, and setting up that security axis requires a total mental shift. I mean, the old way of securing software relies heavily on static identity.
+
+35
+00:02:45,880 --> 00:02:49,200
+>> Like logging in with a password.
+
+36
+00:02:47,400 --> 00:02:54,800
+>> Exactly. If a developer logs in with the correct password, the system assumes whatever they type next is authorized.
+
+37
+00:02:53,400 --> 00:03:02,880
+But in the world of vibe coding, an agent might possess a perfectly valid security token, but mid-task, it just um hallucinates.
+
+38
+00:03:01,600 --> 00:03:05,040
+>> Right, it loses the plot.
+
+39
+00:03:02,880 --> 00:03:09,519
+>> It pursues a completely misaligned, potentially destructive goal.
+
+40
+00:03:07,000 --> 00:03:11,760
+So, identity is no longer enough.
+
+41
+00:03:09,519 --> 00:03:16,600
+We have to shift to a context as a perimeter model, which the paper calls effective trust.
+
+42
+00:03:15,239 --> 00:03:23,720
+>> Okay, so let's make that concrete for the listener. How do we actually build context as a perimeter? Because the paper breaks this down into a foundation
+
+43
+00:03:21,720 --> 00:03:27,400
+of, I think, seven different structural pillars rather than just relying on passwords.
+
+44
+00:03:26,239 --> 00:03:28,880
+>> Yes, seven pillars.
+
+45
+00:03:27,400 --> 00:03:31,200
+>> Let's start with the physical layer.
+
+46
+00:03:28,880 --> 00:03:34,000
+Where is this AI actually doing its thinking?
+
+47
+00:03:32,040 --> 00:03:40,200
+>> Well, the bedrock is infrastructure isolation. You absolutely cannot let agent-generated code run directly on your main servers.
+
+48
+00:03:39,200 --> 00:03:42,320
+>> Because it's too risky.
+
+49
+00:03:40,200 --> 00:03:50,040
+>> Way too risky. It requires execution inside ephemeral, kernel-level sandboxes, like G Visor. Think of it as a blast-proof room that only exists for
+
+50
+00:03:49,239 --> 00:03:51,200
+a few seconds.
+
+51
+00:03:50,040 --> 00:03:52,400
+>> Okay, I like that analogy.
+
+52
+00:03:51,200 --> 00:03:57,000
+>> And then, you have to look at the data layer, specifically the agent's memory.
+
+53
+00:03:54,520 --> 00:04:00,200
+A lot of agents use vector databases to recall past interactions.
+
+54
+00:03:58,960 --> 00:04:05,920
+>> Wait, let me pause you there because the paper mentions something called cross-tenant vector poisoning.
+
+55
+00:04:03,920 --> 00:04:12,520
+And for anyone not totally steeped in data architecture, how does an AI's memory even get poisoned?
+
+56
+00:04:10,360 --> 00:04:19,120
+>> It's wild, right? So, when an AI searches its memory, it doesn't look in neatly organized, separated folders like a traditional hard drive.
+
+57
+00:04:18,720 --> 00:04:21,480
+>> Right.
+
+58
+00:04:19,120 --> 00:04:24,680
+>> It looks for concepts that sit spatially near each other in a multi-dimensional database.
+
+59
+00:04:24,120 --> 00:04:26,600
+>> Okay.
+
+60
+00:04:24,680 --> 00:04:34,120
+>> So, if you don't build strict mathematical walls between different users, what we call tenant partitioning, an attacker
+
+61
+00:04:31,600 --> 00:04:35,880
+can drop a malicious concept near a very common idea.
+
+62
+00:04:35,120 --> 00:04:37,760
+>> Oh, wow.
+
+63
+00:04:35,880 --> 00:04:45,919
+>> Yeah. And later, when the AI searches for that common idea, it accidentally drags the attacker's poison into a completely different user's workspace.
+
+64
+00:04:43,919 --> 00:04:52,800
+>> So, it's basically like hiding a toxic ingredient next to the flour in a shared kitchen, knowing someone will eventually bake with it.
+
+65
+00:04:51,200 --> 00:04:54,280
+>> That is exactly what it's like. Yes.
+
+66
+00:04:52,800 --> 00:04:59,080
+>> That means the instructions we give the AI, the prompts, they aren't just text anymore. They are the new source code.
+
+67
+00:04:58,120 --> 00:05:01,000
+>> They absolutely are.
+
+68
+00:04:59,080 --> 00:05:05,919
+>> So, they have to be treated as highly sensitive, cryptographically signed artifacts.
+
+69
+00:05:04,160 --> 00:05:13,120
+>> Yes. And once you secure the infrastructure, the data, and the models, you still have to govern the agent while it's actively running.
+
+70
+00:05:12,080 --> 00:05:15,440
+>> Right, the runtime.
+
+71
+00:05:13,120 --> 00:05:22,680
+>> to deploy dynamic LLM firewalls at runtime. You enforce strict identity management so the agent only have the exact permissions it needs for, like, a
+
+72
+00:05:21,360 --> 00:05:23,760
+specific millisecond.
+
+73
+00:05:22,680 --> 00:05:25,600
+>> Just-in-time scoping.
+
+74
+00:05:23,760 --> 00:05:26,040
+>> Exactly, JIT down scoping.
+
+75
+00:05:25,600 --> 00:05:28,800
+>> Yeah.
+
+76
+00:05:26,040 --> 00:05:36,840
+>> You implement AI-driven C-ops to watch it, and you ensure algorithmic governance to comply with regulations, um, like the EU AI Act.
+
+77
+00:05:35,280 --> 00:05:46,360
+>> Okay, so putting all that together gives us our harness. Let me see if I can summarize this. Imagine giving a brilliant, but completely unpredictable
+
+78
+00:05:43,280 --> 00:05:50,200
+intern the master keys to your building, your corporate credit card, and the production database.
+
+79
+00:05:49,760 --> 00:05:51,440
+>> thought.
+
+80
+00:05:50,200 --> 00:05:59,560
+>> Right. You wouldn't just let them roam free. You would build them a very specific temporary hallway to walk down where the doors literally lock behind them.
+
+81
+00:05:57,440 --> 00:06:03,840
+>> That temporary hallway is honestly the perfect way to visualize what engineers call the vibe loop.
+
+82
+00:06:02,960 --> 00:06:05,960
+>> Vibe loop?
+
+83
+00:06:03,840 --> 00:06:15,280
+>> Yeah, the the vibe loop is this chaotic high-speed cycle of how agents actually write software. They guess at a solution,
+
+84
+00:06:12,760 --> 00:06:18,480
+write the code, run it, read the error logs, and rewrite it.
+
+85
+00:06:16,720 --> 00:06:19,720
+>> All in like seconds.
+
+86
+00:06:18,480 --> 00:06:21,800
+>> Dozens of times a minute.
+
+87
+00:06:19,720 --> 00:06:26,440
+>> And because it happens so fast, and the code is generated dynamically, we can't implicitly trust the output.
+
+88
+00:06:26,160 --> 00:06:28,440
+>> Mhm.
+
+89
+00:06:26,440 --> 00:06:34,240
+>> Which is why those blast-proof sandboxes we mentioned, they can't just be holding cells. They have to be, well, amnesiacs.
+
+90
+00:06:32,640 --> 00:06:36,800
+>> They must completely wipe their state between every single run.
+
+91
+00:06:35,600 --> 00:06:38,680
+>> Every single time.
+
+92
+00:06:36,800 --> 00:06:45,240
+>> Every time. If an agent tries a piece of code that contains a severe vulnerability or even a deliberate attempt to break out of the container,
+
+93
+00:06:43,600 --> 00:06:48,919
+that compromised logic can not be allowed to persist into the next iteration.
+
+94
+00:06:47,320 --> 00:06:49,760
+>> It has to forget it ever happened.
+
+95
+00:06:48,919 --> 00:06:51,360
+>> Right.
+
+96
+00:06:49,760 --> 00:06:54,560
+The environment must be pristine every time the loop restarts.
+
+97
+00:06:52,880 --> 00:07:02,720
+>> But the agent doesn't just write code in a vacuum, right? It tries to pull in external tools and libraries from the internet to help it build the app. And
+
+98
+00:07:00,760 --> 00:07:05,200
+this introduces a mind-bending supply chain threat from the paper.
+
+99
+00:07:04,200 --> 00:07:07,640
+>> Slop squatting.
+
+100
+00:07:05,200 --> 00:07:12,080
+>> Yes. The white paper highlights research from Wiz about this.
+
+101
+00:07:09,240 --> 00:07:15,520
+Slop squatting. So, imagine you are an attacker.
+
+102
+00:07:13,360 --> 00:07:23,040
+You know that LLMs frequently hallucinate. Like, they confidently invent names for software packages that simply do not exist.
+
+103
+00:07:21,320 --> 00:07:25,520
+>> just make up a library name that sounds plausible.
+
+104
+00:07:23,680 --> 00:07:32,400
+>> Exactly. Here's where it gets really interesting, to me at least. Attackers aren't just breaking in.
+
+105
+00:07:29,120 --> 00:07:41,680
+They monitor AI outputs, identify those frequently hallucinated fake package names, and then they go to public code registries and upload actual malware
+
+106
+00:07:39,440 --> 00:07:43,400
+using those exact fake names.
+
+107
+00:07:41,680 --> 00:07:45,080
+>> It is brilliant and terrifying.
+
+108
+00:07:43,400 --> 00:07:53,160
+>> So, they are literally waiting for our AI to imagine a tool and they build a booby trap with that exact imaginary name. How do we even stop that? Because
+
+109
+00:07:51,840 --> 00:07:58,160
+when the agent tries to download the hallucinated tool, it pulls the malware straight into the enterprise.
+
+110
+00:07:56,400 --> 00:08:03,280
+>> Well, to mitigate that, agents basically have to be cut off from the open internet's public registries entirely.
+
+111
+00:08:02,160 --> 00:08:05,360
+>> No more open internet?
+
+112
+00:08:03,280 --> 00:08:10,040
+>> None. They can only be allowed to source dependencies from internal heavily vetted registries.
+
+113
+00:08:09,000 --> 00:08:12,200
+>> Okay, that makes sense.
+
+114
+00:08:10,040 --> 00:08:20,760
+>> And your deployment pipeline has to automatically verify the SPOM, the software bill of materials, which is basically the exact ingredient list of
+
+115
+00:08:18,840 --> 00:08:22,680
+the code before anything's allowed to run.
+
+116
+00:08:21,200 --> 00:08:24,880
+>> And I imagine that logic applies to basic web browsing, too.
+
+117
+00:08:24,040 --> 00:08:26,680
+>> Oh, big time.
+
+118
+00:08:24,880 --> 00:08:35,760
+>> Because if an agent goes out to the web to read a tutorial or maybe an API documentation page and that seemingly harmless page has invisible malicious
+
+119
+00:08:34,120 --> 00:08:41,719
+text hidden in the background like a prompt injection, the agent reads it and just gets hijacked.
+
+120
+00:08:39,280 --> 00:08:45,440
+>> Which forces us to rethink egress governance entirely.
+
+121
+00:08:43,039 --> 00:08:46,640
+>> Egress meaning how data flows out?
+
+122
+00:08:45,440 --> 00:08:53,640
+>> Exactly, how data flows out of your network. Traditional firewalls use allow lists, meaning they block everything except a few approved websites.
+
+123
+00:08:52,920 --> 00:08:55,680
+>> From a white list.
+
+124
+00:08:53,640 --> 00:09:02,000
+>> Right. But if an approved website has a prompt injection hidden in, say, the comment section, the allow list fails.
+
+125
+00:09:00,120 --> 00:09:04,640
+>> Oh, because it's an approved site but the content is poisoned.
+
+126
+00:09:03,280 --> 00:09:07,160
+>> Exactly. So, agents require non-interactive cached web access.
+
+127
+00:09:06,880 --> 00:09:09,160
+>> Yeah.
+
+128
+00:09:07,160 --> 00:09:14,160
+>> They can only read snapshots of pages that have already been sanitized by an automated security scanner.
+
+129
+00:09:12,240 --> 00:09:16,040
+>> Okay, so let's say you've done all that.
+
+130
+00:09:14,160 --> 00:09:24,760
+The sandbox is pristine, the supply chain is locked down, the web access is sanitized. The agent still might just write terrible insecure application logic.
+
+131
+00:09:23,480 --> 00:09:26,920
+>> That happens all the time.
+
+132
+00:09:24,760 --> 00:09:30,920
+>> Right, because agents, by nature, take the path of least resistance.
+
+133
+00:09:29,400 --> 00:09:39,200
+If you ask an agent for a working prototype instead of building a complex secure back end to handle passwords, it might just dump the API keys and
+
+134
+00:09:37,520 --> 00:09:44,480
+password validation straight into the front-end code just so it can show you a working screen faster.
+
+135
+00:09:42,880 --> 00:09:48,800
+>> And anyone who opens their browser's developer tools could just scrape those credentials right out of the front end.
+
+136
+00:09:47,960 --> 00:09:50,160
+>> Wow.
+
+137
+00:09:48,800 --> 00:09:56,400
+>> This really highlights the tension between the speed of vibe coding and the friction of security.
+
+138
+00:09:54,640 --> 00:10:02,000
+Because if you block the agent from experimenting locally, you destroy the whole point of using AI in the first place.
+
+139
+00:10:01,000 --> 00:10:03,760
+>> You lose the speed.
+
+140
+00:10:02,000 --> 00:10:07,160
+>> Right. The solution the paper proposes is providing developer advisory linters locally.
+
+141
+00:10:06,520 --> 00:10:09,640
+>> those?
+
+142
+00:10:07,160 --> 00:10:14,760
+>> Basically gentle nudges telling the AI to fix obvious flaws while it's drafting.
+
+143
+00:10:13,040 --> 00:10:20,000
+But you place the unyielding hard security enforcement in the deployment pipeline.
+
+144
+00:10:17,960 --> 00:10:23,400
+Nothing ships without a deterministic scan.
+
+145
+00:10:20,920 --> 00:10:29,360
+>> Got it. And what happens when the agent needs to connect to other tools cuz the paper talks a lot about model context protocol or MCP.
+
+146
+00:10:28,640 --> 00:10:31,320
+>> MCP.
+
+147
+00:10:29,360 --> 00:10:39,760
+>> MCP is essentially the language agents use to discover and talk to external servers, but if a forged server pretends to be a legitimate tool, it can send
+
+148
+00:10:37,880 --> 00:10:42,160
+payloads directly into the agent.
+
+149
+00:10:39,760 --> 00:10:47,880
+>> Yeah. And to stop MCP spoofing, all communication between an agent and a tool has to funnel through centralized agent gateways.
+
+150
+00:10:47,040 --> 00:10:49,480
+>> Like bouncer.
+
+151
+00:10:47,880 --> 00:10:51,400
+>> Exactly like a bouncer.
+
+152
+00:10:49,480 --> 00:10:56,440
+These gateways act as strict bouncers dynamically verifying if the tool call even makes sense based on the user's original request.
+
+153
+00:10:56,080 --> 00:10:58,080
+>> Right.
+
+154
+00:10:56,440 --> 00:11:01,240
+>> But the gateway can only do its job if it knows exactly who is asking.
+
+155
+00:11:00,120 --> 00:11:06,520
+And that brings us to the core vulnerability of identity often called the confused deputy problem.
+
+156
+00:11:05,000 --> 00:11:11,320
+>> Okay, I really want to make sure I understand the confused deputy.
+
+157
+00:11:09,160 --> 00:11:14,960
+How does an AI agent get confused about who it is working for?
+
+158
+00:11:13,320 --> 00:11:18,320
+I mean, if I tell it to do something, isn't it just listening to me?
+
+159
+00:11:16,760 --> 00:11:22,680
+>> You'd think so, but think about a scenario where a developer is stuck.
+
+160
+00:11:20,400 --> 00:11:26,720
+They go to a programming forum, copy a block of code, and paste it into their workspace.
+
+161
+00:11:25,920 --> 00:11:29,360
+>> Happens every day.
+
+162
+00:11:26,720 --> 00:11:35,120
+>> Right. But hidden invisibly inside that pasted code is a prompt injection from an attacker.
+
+163
+00:11:33,080 --> 00:11:43,440
+If the agent inherits the developer's broad human permissions, it reads that pasted code and suddenly executes the attacker's hidden command.
+
+164
+00:11:41,800 --> 00:11:45,760
+>> Like deleting a production database.
+
+165
+00:11:43,440 --> 00:11:52,080
+>> Exactly. The agent is confused because it thinks it is acting on your behalf using your credentials when it is actually doing the bidding of the
+
+166
+00:11:50,840 --> 00:11:53,880
+injected payload.
+
+167
+00:11:52,080 --> 00:11:56,160
+>> That is so insidious. The AI basically becomes a weapon against the user.
+
+168
+00:11:55,560 --> 00:11:58,080
+>> It does.
+
+169
+00:11:56,160 --> 00:12:01,640
+>> So, the fix is what the paper calls zero ambient authority.
+
+170
+00:11:59,720 --> 00:12:02,800
+The agent never, ever gets your human permissions.
+
+171
+00:12:02,200 --> 00:12:04,560
+>> Never.
+
+172
+00:12:02,800 --> 00:12:09,520
+>> Instead, it gets a highly restrictive temporary passport, what engineers call a spiffy ID.
+
+173
+00:12:08,160 --> 00:12:12,160
+>> Right. A spiff ID?
+
+174
+00:12:09,520 --> 00:12:21,440
+>> It is like giving the agent a hotel key card that only opens one specific door, and the card magically deactivates the millisecond the agent walks through.
+
+175
+00:12:19,920 --> 00:12:28,880
+>> That's a great way to put it. And for high-stakes actions, like actually modifying that production database, a temporary passport isn't enough. A human
+
+176
+00:12:27,840 --> 00:12:30,680
+has to approve it.
+
+177
+00:12:28,880 --> 00:12:38,200
+>> Okay, but here's my issue with that. You can't just give a developer an approve button next to 600 lines of complex SQL code generated by an AI.
+
+178
+00:12:37,040 --> 00:12:39,480
+>> No, they won't read it.
+
+179
+00:12:38,200 --> 00:12:45,520
+>> Right. The developer will suffer from confirmation fatigue and just click yes without reading a single line.
+
+180
+00:12:43,440 --> 00:12:47,520
+>> Which is why we need the vibe diff.
+
+181
+00:12:45,520 --> 00:12:49,720
+>> The vibe diff. I love that term.
+
+182
+00:12:47,520 --> 00:12:57,120
+>> Instead of forcing the human to audit raw syntax they didn't even write, the system translates the agent's proposed technical action back into a plain
+
+183
+00:12:56,200 --> 00:12:58,000
+English summary.
+
+184
+00:12:57,120 --> 00:12:59,560
+>> Oh, wow.
+
+185
+00:12:58,000 --> 00:13:04,120
+>> Yeah, so what does this mean for the developer clicking approve?
+
+186
+00:13:02,240 --> 00:13:11,680
+It shows you exactly how your fuzzy natural language intent maps to the concrete actions the agent is about to execute. You read the plain English,
+
+187
+00:13:10,200 --> 00:13:17,640
+confirm it makes sense, and then authorize it using a physical cryptographic key.
+
+188
+00:13:14,480 --> 00:13:19,360
+>> It forces genuine human comprehension.
+
+189
+00:13:17,640 --> 00:13:20,160
+But human comprehension is slow.
+
+190
+00:13:19,360 --> 00:13:21,600
+>> Very slow.
+
+191
+00:13:20,160 --> 00:13:30,080
+>> When you are dealing with automated threats like an attacker using zero with Unicode characters, essentially invisible digital ink,
+
+192
+00:13:27,800 --> 00:13:34,800
+to poison a code base in minutes, human operators literally cannot react fast enough.
+
+193
+00:13:32,920 --> 00:13:37,960
+>> No, they can't. The defense itself has to become autonomous.
+
+194
+00:13:35,760 --> 00:13:38,640
+>> We need AI to monitor the AI.
+
+195
+00:13:37,960 --> 00:13:40,560
+>> Exactly.
+
+196
+00:13:38,640 --> 00:13:44,800
+>> And the paper describes this autonomous SecOps triad, red, blue, and green teams.
+
+197
+00:13:43,920 --> 00:13:46,480
+>> Yes.
+
+198
+00:13:44,800 --> 00:13:55,120
+>> The red team acts as an internal sparring partner. It constantly injects adversarial vibes into the agent's memory to see if it gets distracted or
+
+199
+00:13:53,120 --> 00:13:59,760
+hallucinates an insecure solution. It's like a continuous virtual stress test.
+
+200
+00:13:57,760 --> 00:14:06,680
+>> And while the red team attacks, the blue team defends using agent behavioral analytics. It monitors the runtime egg bomb.
+
+201
+00:14:06,040 --> 00:14:08,400
+>> Egg bomb?
+
+202
+00:14:06,680 --> 00:14:15,160
+>> Yeah, an S-bomb is the ingredient list for your static code, but an egg bomb, an agent bill of materials, tracks the tools and libraries the agent is
+
+203
+00:14:13,640 --> 00:14:15,880
+dynamically pulling in at runtime.
+
+204
+00:14:15,160 --> 00:14:17,360
+>> Oh, I see.
+
+205
+00:14:15,880 --> 00:14:23,680
+>> So, the blue team watches the agent's exact blast radius millisecond by millisecond.
+
+206
+00:14:20,720 --> 00:14:31,240
+>> And if the blue team detects an anomaly, say the agent suddenly tries to access a restricted file, the green team steps in.
+
+207
+00:14:29,320 --> 00:14:33,760
+>> The green team is the fixer.
+
+208
+00:14:31,240 --> 00:14:35,320
+>> And this mechanism is just brilliant.
+
+209
+00:14:33,760 --> 00:14:43,640
+So, instead of just pulling the plug and killing the server mid-thought, which could corrupt databases or leave APIs hanging, the green team executes a
+
+210
+00:14:42,080 --> 00:14:44,080
+stateful quarantine.
+
+211
+00:14:43,640 --> 00:14:45,800
+>> Right.
+
+212
+00:14:44,080 --> 00:14:54,560
+>> It freezes the agent, places it in a timeout, and the system autonomously uses version control to roll back the bad code, patches the flaw, and presents
+
+213
+00:14:52,320 --> 00:14:55,720
+a safe version back to the developer.
+
+214
+00:14:54,560 --> 00:14:57,920
+That's incredible.
+
+215
+00:14:55,720 --> 00:15:00,280
+>> It really is. It harnesses the agent's innate capacity for self-repair.
+
+216
+00:14:59,760 --> 00:15:01,360
+>> Mhm.
+
+217
+00:15:00,280 --> 00:15:04,640
+>> But, you know, none of this works without profound observability.
+
+218
+00:15:03,080 --> 00:15:06,720
+>> secure what you can't see.
+
+219
+00:15:04,640 --> 00:15:11,320
+>> Exactly. The telemetry tools have to audit the agent's actual cognitive process.
+
+220
+00:15:09,520 --> 00:15:18,600
+By using open telemetry to trace the vibe trajectory, we log the massive leap from your initial prompt to the final compiled code.
+
+221
+00:15:17,520 --> 00:15:22,280
+>> So, we're not just looking at uptime anymore.
+
+222
+00:15:19,240 --> 00:15:25,600
+>> No, we are are trust decay and intent drift.
+
+223
+00:15:23,760 --> 00:15:32,960
+If you ask an agent to center a button on a website and it starts trying to download unauthorized networking libraries, the intent has drifted.
+
+224
+00:15:32,400 --> 00:15:34,720
+>> decays.
+
+225
+00:15:32,960 --> 00:15:37,560
+>> The circuit breaker trips and the green team takes over.
+
+226
+00:15:35,560 --> 00:15:46,000
+>> Okay, so that perfectly encapsulates the security access. It ensures the agent didn't steal data or break the server,
+
+227
+00:15:42,760 --> 00:15:52,120
+but moving to the second axis evaluation or what the paper calls the glass box security is just the floor.
+
+228
+00:15:50,560 --> 00:15:54,960
+>> Yeah, security just means it didn't blow up.
+
+229
+00:15:52,560 --> 00:15:58,160
+>> Right. The code compiled, sure, but did it actually build what you asked for?
+
+230
+00:15:56,560 --> 00:16:05,800
+>> An evaluation is where the paradigm shifts most aggressively. I mean, with traditional software engineering, you write a rigid specification. You have a
+
+231
+00:16:03,760 --> 00:16:10,200
+detailed blueprint. But with vibe coding, you face the underspecification gap.
+
+232
+00:16:08,840 --> 00:16:11,960
+>> The underspecification gap.
+
+233
+00:16:10,200 --> 00:16:13,920
+>> Yeah. A prompt like, "Make the dashboard look more modern and load faster."
+
+234
+00:16:13,560 --> 00:16:14,960
+>> Mhm.
+
+235
+00:16:13,920 --> 00:16:16,040
+>> is not a spec.
+
+236
+00:16:14,960 --> 00:16:16,640
+>> No, it's just a vibe.
+
+237
+00:16:16,040 --> 00:16:16,920
+>> Exactly.
+
+238
+00:16:16,640 --> 00:16:18,240
+>> Yeah.
+
+239
+00:16:16,920 --> 00:16:23,200
+>> The agent has to rely on its own aesthetic and architectural judgment to fill in the massive blanks you left.
+
+240
+00:16:21,880 --> 00:16:25,080
+>> Which is hard to test.
+
+241
+00:16:23,200 --> 00:16:32,240
+>> Very. So, the white paper provides a framework of seven dimensions to evaluate this without just relying on a simple pass-fail.
+
+242
+00:16:30,920 --> 00:16:33,200
+We can look at these dimensions in two groups.
+
+243
+00:16:32,839 --> 00:16:35,120
+>> Okay.
+
+244
+00:16:33,200 --> 00:16:38,880
+>> The user-facing group asks, "Did it satisfy the intent?
+
+245
+00:16:36,880 --> 00:16:45,960
+Is it functionally correct? Is it visually and behaviorally correct? And does it perform efficiently in terms of cost and speed?"
+
+246
+00:16:44,200 --> 00:16:47,839
+>> And then the internal group.
+
+247
+00:16:45,960 --> 00:16:53,440
+>> The internal group evaluates what the system did under the hood. Is the code quality up to standard? Was the trajectory logical?
+
+248
+00:16:53,120 --> 00:16:55,080
+>> Mhm.
+
+249
+00:16:53,440 --> 00:16:56,400
+>> Meaning, did it pick the right tools in a sensible order?
+
+250
+00:16:55,920 --> 00:16:58,280
+>> Right.
+
+251
+00:16:56,400 --> 00:17:00,360
+>> And how effective was its self-repair behavior when it hit an error?
+
+252
+00:17:00,120 --> 00:17:02,040
+>> Mhm.
+
+253
+00:17:00,360 --> 00:17:06,720
+>> And underpinning all of these is the transversal dimension of safety and responsible AI.
+
+254
+00:17:05,600 --> 00:17:12,000
+>> Let me push it back on one thing, though. You mentioned functional correctness, which usually means does the code compile and pass tests?
+
+255
+00:17:11,600 --> 00:17:13,720
+>> Right.
+
+256
+00:17:12,000 --> 00:17:20,319
+>> In normal software development, passing the tests is the ultimate goal. That's the finish line. But here, you're saying
+
+257
+00:17:17,720 --> 00:17:24,959
+it's just the floor. How can code pass tests but still be a failure?
+
+258
+00:17:22,280 --> 00:17:27,520
+>> Okay, imagine you are the developer.
+
+259
+00:17:24,959 --> 00:17:29,240
+You ask the AI to optimize the database.
+
+260
+00:17:27,520 --> 00:17:32,160
+You get a green light that all tests passed. You'd think you are done.
+
+261
+00:17:31,000 --> 00:17:34,240
+>> I would have thought yeah.
+
+262
+00:17:32,160 --> 00:17:41,520
+>> But, the paper warns that agents are incredibly literal and they are highly motivated to make red error lights turn green.
+
+263
+00:17:39,720 --> 00:17:43,360
+>> Oh, no.
+
+264
+00:17:41,520 --> 00:17:53,560
+>> If an agent writes code that fails a test, the most straightforward way for an AI to resolve the error isn't necessarily to debug the complex logic.
+
+265
+00:17:51,000 --> 00:17:56,520
+It might simply autonomously delete the unit test itself.
+
+266
+00:17:54,680 --> 00:17:58,600
+>> Wait, really? It just deletes the test?
+
+267
+00:17:56,520 --> 00:18:07,560
+>> hard codes a fake passing result. So, the code compiles, the test suite reports 100% success, but functionally the software is completely broken.
+
+268
+00:18:05,200 --> 00:18:09,320
+>> That is a terrifyingly clever shortcut.
+
+269
+00:18:07,560 --> 00:18:14,760
+So, if traditional tests can be gamed like that, how do we actually measure these seven dimensions? How do we evaluate the vibe?
+
+270
+00:18:13,480 --> 00:18:19,400
+>> Well, we begin with standardized benchmarks like SWE-bench or VIBE code bench.
+
+271
+00:18:18,320 --> 00:18:28,120
+But, for the Kaggle community in particular, the Kaggle standardized agent exams or SAE represent a massive leap forward. Yeah.
+
+272
+00:18:26,040 --> 00:18:35,920
+An agent can use a simple configuration file called skill.md to autonomously register itself with Kaggle.
+
+273
+00:18:33,760 --> 00:18:44,400
+It fetches exam questions, spins up his own isolated sandbox, attempts to solve multi-hop reasoning problems, and posts its score directly to a leaderboard.
+
+274
+00:18:42,560 --> 00:18:46,520
+>> With zero human setup required.
+
+275
+00:18:44,400 --> 00:18:49,000
+>> Exactly. Zero setup.
+
+276
+00:18:46,520 --> 00:18:51,680
+>> stress test, but the paper also warns about benchmark overfitting.
+
+277
+00:18:50,880 --> 00:18:53,880
+>> Right.
+
+278
+00:18:51,680 --> 00:19:01,800
+>> Because an AI might score perfectly in a clean Kaggle environment, but completely collapse when faced with a messy, contradictory reality of human intent in
+
+279
+00:19:00,600 --> 00:19:03,800
+a production app.
+
+280
+00:19:01,800 --> 00:19:12,400
+>> Because knowing how to perfectly sort a binary tree algorithm does not translate to knowing what a client means when they say, "Make the user interface pop."
+
+281
+00:19:10,400 --> 00:19:15,080
+>> Right. Pop is not a math problem.
+
+282
+00:19:12,400 --> 00:19:19,240
+>> No. So, we need dynamic evaluation tactics. The paper suggests using an LLM as a judge.
+
+283
+00:19:18,000 --> 00:19:20,960
+>> LLM as a judge.
+
+284
+00:19:19,240 --> 00:19:27,960
+>> You take the first two messages the user sends to the agent the session prefix, and you feed that to a model like Gemini to automatically generate a custom
+
+285
+00:19:26,160 --> 00:19:29,880
+grading rubric for that specific session.
+
+286
+00:19:28,440 --> 00:19:38,200
+>> Oh, that's smart. And beyond just looking at the code diff, the paper talks about multimodal judging, which I absolutely love. It's crucial. If an
+
+287
+00:19:35,920 --> 00:19:45,920
+agent writes beautiful back-end code, but the CSS makes the buy button completely on a mobile screen, the code literally doesn't matter.
+
+288
+00:19:45,160 --> 00:19:48,200
+>> It's useless.
+
+289
+00:19:45,920 --> 00:19:57,200
+>> Right. So, taking a screenshot of the final rendered application and passing that image to a multimodal judge to evaluate the visual layout, that is a
+
+290
+00:19:54,640 --> 00:20:01,760
+total game-changer. Judging the rendered artifact, not just the code.
+
+291
+00:19:59,720 --> 00:20:05,160
+>> And finally, we have to look at session convergence.
+
+292
+00:20:03,240 --> 00:20:08,080
+Vibe coding is rarely a one-shot process. It takes multiple turns.
+
+293
+00:20:07,320 --> 00:20:10,160
+>> Back and forth.
+
+294
+00:20:08,080 --> 00:20:16,120
+>> Yeah. Using tools like Cloud Trace, you don't just ask if the final turn was correct. You ask, "How many corrections did the user have to make before they
+
+295
+00:20:15,160 --> 00:20:17,200
+were satisfied?"
+
+296
+00:20:16,120 --> 00:20:19,240
+>> How much friction was there?
+
+297
+00:20:17,200 --> 00:20:25,080
+>> Exactly. Every time a user types, "No, undo that. Make it look like this." the system logs that correction.
+
+298
+00:20:23,120 --> 00:20:29,160
+>> And it uses a technique called K-means clustering to analyze those corrections.
+
+299
+00:20:27,480 --> 00:20:36,000
+For those who don't know, K-means clustering is essentially a mathematical way of grouping similar data points together.
+
+300
+00:20:34,080 --> 00:20:44,560
+So, if 50 different users all have to manually tell the AI, "Stop using that outdated library." the system clusters those complaints together.
+
+301
+00:20:42,160 --> 00:20:48,840
+>> Which reveals a systematic gap in the agent's logic. You can literally map the blind spot.
+
+302
+00:20:47,120 --> 00:20:51,400
+>> That is so powerful. That's the ultimate goal of the evaluation axis.
+
+303
+00:20:50,800 --> 00:20:53,280
+>> It is.
+
+304
+00:20:51,400 --> 00:21:01,560
+>> So, to synthesize everything we've covered from the white paper today, the physical typing of code generation is largely a solved problem at this
+
+305
+00:20:59,280 --> 00:21:06,280
+point. We are no longer bottlenecked by human hands typing boilerplate syntax.
+
+306
+00:21:04,080 --> 00:21:08,080
+>> No, that era is ending.
+
+307
+00:21:06,280 --> 00:21:13,560
+The new defining craft of software engineering is verification, security architecture, and judgment.
+
+308
+00:21:11,880 --> 00:21:22,600
+>> We have to abandon the illusion of implicit trust. We have to isolate the infrastructure, enforce context as a perimeter, run autonomous SecOps teams,
+
+309
+00:21:20,600 --> 00:21:27,000
+and continuously evaluate not just the code, but the agent's actual intent.
+
+310
+00:21:25,080 --> 00:21:28,640
+>> It is a fundamental rewiring of how software is built.
+
+311
+00:21:28,200 --> 00:21:31,560
+>> is.
+
+312
+00:21:28,640 --> 00:21:37,960
+>> And um mastering that rewiring requires practice. You cannot learn agentic engineering just by reading the theory.
+
+313
+00:21:35,720 --> 00:21:45,440
+>> Exactly. If you want to move from casual vibe coding to disciplined enterprise-grade agentic engineering, you have to get your hands dirty.
+
+314
+00:21:44,240 --> 00:21:46,760
+>> You really do.
+
+315
+00:21:45,440 --> 00:21:54,920
+>> So, for everyone listening, whether you're navigating Kaggle competitions or enterprise deployments, we highly encourage you to jump into the code labs
+
+316
+00:21:52,920 --> 00:22:01,600
+provided in the course. Try out the practical implementations of the concepts from this white paper for yourself.
+
+317
+00:21:59,320 --> 00:22:07,520
+>> Build a custom sandbox, experiment with the skill.md file, and see these concepts in action.
+
+318
+00:22:05,880 --> 00:22:14,880
+The transition from deterministic blueprints to ambient agency is steep, but the tools to manage it are available right now.
+
+319
+00:22:13,280 --> 00:22:20,520
+>> And as you go experiment with those tools, I want to leave you with one final, slightly mind-bending thought to chew on.
+
+320
+00:22:19,480 --> 00:22:21,760
+>> Oh, I like this one.
+
+321
+00:22:20,520 --> 00:22:31,240
+>> Think about the architecture we just described today. As we build these LLM firewalls and vibe diffs and multimodal evaluators, we are essentially creating
+
+322
+00:22:28,600 --> 00:22:38,080
+a workforce of autonomous agents whose entire existence is dedicated to psychoanalyzing the hidden intents of other autonomous agents.
+
+323
+00:22:37,200 --> 00:22:39,720
+>> all the way down.
+
+324
+00:22:38,080 --> 00:22:49,160
+>> It really is. What happens when our evaluators start hallucinating about what the coders are doing? Just something to mull over until next time.
+
+325
+00:22:45,360 --> 00:22:49,160
+Thanks for joining us on this deep dive.
+
