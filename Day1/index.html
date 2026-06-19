@@ -291,7 +291,7 @@ footer.notes a{color:var(--accent);}
 <p>這種轉變並非一夕之間發生。它始於 Autocomplete（編輯器中簡單的 token 預測）；接著是能完成整個函式的行內程式碼建議（Inline Code Suggestions）；隨後，基於對話的介面讓開發者能用自然語言描述功能並取得可運作的實作；而現在，完全自主的 Agents 可以複製 Repo、規劃跨檔案修改、在沙箱環境中執行、跑測試，最後提交 PR——整個過程不需要人類輸入任何一行程式碼。</p>
 <p>每一代技術在保留前代成果的同時，也不斷拉高單一工程師所能達到的成就上限。</p>
 <figure class="section-figure">
-<img src="The New SDLC With Vibe Coding_Day_1_images/Figure 1 From Autocomplete to Autonomy.png" alt="Figure 1 From Autocomplete to Autonomy">
+<img src="images_cht/Figure 1 From Autocomplete to Autonomy.png" alt="Figure 1 From Autocomplete to Autonomy">
 <figcaption>圖 1：從 Autocomplete 到 Autonomy（自主化）</figcaption>
 </figure>
 <p>這對軟體開發生命週期（SDLC）的影響極為深遠。從需求收集、部署到維護，每一個階段都正在被 AI 能力重塑。然而，這種轉變並非單一且簡單的。其光譜的一端是隨性的「Vibe Coding」（開發者給 AI 下 prompt 並直接接受任何回傳的結果），另一端則是嚴謹的「Agentic Engineering」（AI 在精心設計的限制條件、測試和回饋循環系統中，作為強大的實作引擎，而人類仍保留對架構、正確性與品質的監督權）。</p>
@@ -312,7 +312,7 @@ footer.notes a{color:var(--accent);}
 <h3>AI Agents：快速複習</h3>
 <p>AI Agent 是一個軟體系統，它能感知目標、規劃達成步驟、透過工具採取行動、觀察結果，並不斷迭代，直到達成目標或達到停止條件。相較於 Chatbot 產生回應後就等待下一個 Prompt，Agent 則會執行自己的循環。您在最頂層給它一個目標，接著它會在每個步驟中自行決定下一步該做什麼。</p>
 <figure class="section-figure">
-<img src="The New SDLC With Vibe Coding_Day_1_images/Figure 2 The Agent Loop - Perceive, plan, act, observe, iterate.png" alt="Figure 2 The Agent Loop - Perceive, plan, act, observe, iterate">
+<img src="images_cht/Figure 2 The Agent Loop - Perceive, plan, act, observe, iterate.png" alt="Figure 2 The Agent Loop - Perceive, plan, act, observe, iterate">
 <figcaption>圖 2：Agent 循環——感知、規劃、行動、觀察、迭代。</figcaption>
 </figure>
 <p>不論簡單或複雜，每個 Agent 都由五個部分組成。2025 年 11 月發表的《Introduction to Agents》白皮書對各個部分進行了深入探討，在此我們提供一個精簡版本：</p>
@@ -351,7 +351,7 @@ footer.notes a{color:var(--accent);}
 </div>
 <blockquote class="pullquote">區別不在於你是否使用 AI，而在於產出如何被驗證。</blockquote>
 <figure class="section-figure">
-<img src="The New SDLC With Vibe Coding_Day_1_images/Figure 3 The Vibe Coding to Agentic Engineering Spectrum.png" alt="Figure 3 The Vibe Coding to Agentic Engineering Spectrum">
+<img src="images_cht/Figure 3 The Vibe Coding to Agentic Engineering Spectrum.png" alt="Figure 3 The Vibe Coding to Agentic Engineering Spectrum">
 <figcaption>圖 3：從 Vibe Coding 到 Agentic Engineering 的光譜</figcaption>
 </figure>
 
@@ -375,7 +375,7 @@ footer.notes a{color:var(--accent);}
 <p>動態 Context（Dynamic context）是根據需求載入的：由任務比對觸發的技能指令、在執行期間檢索的工具結果、從 RAG 管線中獲取的文件，以及視窗化的 Session 歷史記錄。動態 Context 非常有效率，因為 Agent 只有在需要該資訊時才需要支付 Token 成本。</p>
 <p>關於哪些內容屬於靜態 Context，哪些屬於動態 Context 的設計決策，是一個真正的工程權衡。太多的靜態 Context 會浪費 Token 並稀釋關鍵訊號。太少則意味著 Agent 會遺忘關鍵規則。最優秀的系統會將這個邊界視為一等架構決策（first-class architectural decision），並像其他任何設定一樣進行審查和版本控制。</p>
 <figure class="section-figure">
-<img src="The New SDLC With Vibe Coding_Day_1_images/Figure 4 Context Engineering - Static vs. Dynamic.png" alt="Figure 4 Context Engineering - Static vs. Dynamic">
+<img src="images_cht/Figure 4 Context Engineering - Static vs. Dynamic.png" alt="Figure 4 Context Engineering - Static vs. Dynamic">
 <figcaption>圖 4：Context Engineering——靜態 vs. 動態，什麼放哪裡？</figcaption>
 </figure>
 <p>管理動態 Context 最強大的模式是「Agent Skills」（Agent 技能）：這是結構化、可移植的程序性知識套件，Agent 只有在任務需要時才會載入。</p>
@@ -401,7 +401,7 @@ footer.notes a{color:var(--accent);}
 <p>軟體開發生命週期已經歷過一次重大的變革。在過去的二十年中，大多數企業從循序漸進的瀑布式流程轉向迭代模型：Agile Sprint、持續整合（CI）、DevOps 管線和快速發佈週期。這一轉變縮短了回饋循環，使測試更接近開發，並使部署成為一個持續的過程，而不是每季一次的大事。</p>
 <p>AI 極大地壓縮了這個週期，但壓縮的幅度並不均勻：以前需要數週才能完成的實作（implementation）現在幾小時內就能完成，而需求分析、架構設計和驗證則依然固執地維持著人類的速度。其結果並不是舊版 SDLC 的加速版。這是一個截然不同的工作流程，各個階段之間的邊界變得模糊，迭代週期從數週縮短到數分鐘，且開發者的角色也從主要的實作者轉變為系統設計師與品質仲裁者。</p>
 <figure class="section-figure">
-<img src="The New SDLC With Vibe Coding_Day_1_images/Figure 5 Traditional SDLC vs. AI-Driven SDLC.png" alt="Figure 5 Traditional SDLC vs. AI-Driven SDLC">
+<img src="images_cht/Figure 5 Traditional SDLC vs. AI-Driven SDLC.png" alt="Figure 5 Traditional SDLC vs. AI-Driven SDLC">
 <figcaption>圖 5：傳統 SDLC vs. AI 驅動的 SDLC——相同的階段，不同的瓶頸，不同的比例。</figcaption>
 </figure>
 <p>關於變革速度的說明：上述按階段呈現的圖景反映了截至 2026 年中 AI 驅動的 SDLC 狀態。它變化得非常快。早期跡象表明，壓縮效應將蔓延到實作之外：團隊已經在嘗試開發者直接從規格書跳到審查的工作流程，而 AI Agent 則在背景處理實作、測試和部署。本節中劃定的邊界在 12 個月後可能看起來會有所不同。但隨著機器承擔更多實作工作，人類的判斷力、品味以及驗證 AI 產出的技能將維持不變。</p>
@@ -448,7 +448,7 @@ footer.notes a{color:var(--accent);}
 </ul>
 <p>工廠經理不會親手組裝每一個小零件。他們設計裝配線並確保品質管制。現代開發者則是設計開發系統，並確保其產出符合要求的標準。成功關鍵在於給予 Agent 成功準則，而非一步一步的指令，然後讓它們進行迭代。</p>
 <figure class="section-figure">
-<img src="The New SDLC With Vibe Coding_Day_1_images/Figure 6 The Factory Model Developer designs the system to agents produce the code to tests verify the output.png" alt="Figure 6 The Factory Model">
+<img src="images_cht/Figure 6 The Factory Model Developer designs the system to agents produce the code to tests verify the output.png" alt="Figure 6 The Factory Model">
 <figcaption>圖 6：工廠模型——開發者設計系統，Agent 產出程式碼，測試驗證結果。</figcaption>
 </figure>
 <p>這引出了一個驅動本文後半段的問題：工廠裡的核心機器是什麼？在裝配線內實際工作的 Agent 本身，到底長得像什麼樣子？</p>
@@ -465,7 +465,7 @@ footer.notes a{color:var(--accent);}
 </div>
 <p>原始模型並非 Agent。只有當 harness 賦予它狀態、工具執行、回饋迴圈和強制約束力時，它才會成為 Agent。開發者在與 Claude Code、Cursor、Codex、Antigravity、Aider 或 Cline 協作時所體驗到的行為，主要取決於 harness 的運作，而不單純是底層使用了哪種模型。</p>
 <figure class="section-figure">
-<img src="The New SDLC With Vibe Coding_Day_1_images/Figure 7 Harness Anatomy - Agent = Model + Harness.png" alt="Figure 7 Harness Anatomy - Agent = Model + Harness">
+<img src="images_cht/Figure 7 Harness Anatomy - Agent = Model + Harness.png" alt="Figure 7 Harness Anatomy - Agent = Model + Harness">
 <figcaption>圖 7：Harness 剖析——Agent = Model + Harness。</figcaption>
 </figure>
 
@@ -521,7 +521,7 @@ footer.notes a{color:var(--accent);}
 <h2>開發者角色的演變：協奏者與編排者</h2>
 <p>隨著 AI 承擔越來越多實作工作，開發者的角色正在以既令人興奮又令人迷惘的方式轉變。我們認為，將開發者在其中流暢切換的兩種模式想像為「協奏者（conductor）」與「編排者（orchestrator）」是很有幫助的。</p>
 <figure class="section-figure">
-<img src="The New SDLC With Vibe Coding_Day_1_images/Figure 8 Conductor vs. Orchestrator (Two modes of working with AI Agents).png" alt="Figure 8 Conductor vs. Orchestrator">
+<img src="images_cht/Figure 8 Conductor vs. Orchestrator (Two modes of working with AI Agents).png" alt="Figure 8 Conductor vs. Orchestrator">
 <figcaption>圖 8：指揮者 vs. 編排者——與 AI Agent 協作的兩種模式。</figcaption>
 </figure>
 
@@ -588,7 +588,7 @@ uvx google-agents-cli setup
 <p>當評估 AI 對軟體開發生命週期（SDLC）的影響時，討論往往始於也終於開發者速度（velocity）：我們能多快寫出程式碼？然而，對於工程主管來說，更關鍵的指標是整體擁有成本（Total Cost of Ownership, TCO）。</p>
 <p>為了理解 AI 輔助開發的真實成本，我們必須檢視不同的工作流如何將財務與營運負擔在資本支出（CapEx，即建置某樣東西的預期前期投資）與營運費用（OpEx，即運作、修復和維護它的持續成本）之間轉移。至關重要的是，在 AI 時代，OpEx 在很大程度上受到 token 經濟（token economy）的支配。</p>
 <figure class="section-figure">
-<img src="The New SDLC With Vibe Coding_Day_1_images/Figure 9 The Economics of AI Development.png" alt="Figure 9 The Economics of AI Development">
+<img src="images_cht/Figure 9 The Economics of AI Development.png" alt="Figure 9 The Economics of AI Development">
 <figcaption>圖 9：AI 開發的經濟學——在累積整體擁有成本的曲線中，交叉點之後，每個功能的 Vibe Coding 成本會比 Agentic Engineering 高出 3 到 10 倍。</figcaption>
 </figure>
 
