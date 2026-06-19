@@ -10,15 +10,23 @@ Google」（2026/06/15–06/19）課程的中文學習筆記彙整站。`index.h
 **目前狀態（2026-06-19）**：Day1–Day5 全部完成並已連結。
 根目錄 `index.html` 中 Day1–Day5 卡片全部為 `is-live`（可點擊）。課程五天白皮書中文學習頁製作完成。
 
-**近期更新紀錄（2026-06-19）**：
+**近期更新紀錄（2026-06-19 第二批）**：
+- **Day3 直播導讀 HTML 全面優化**：修正逐字稿 402 turns 講者 badge（全錯 → 7 位正確著色）；移除白皮書中文圖（11 張）；補寫 3 個 ai-mentor `callout-think` 深度段落（語意重疊才是 Context Rot 真因、Pass@K vs Trajectory Consistency、Meta-Skills 跨模型安全盲區）。
+- **Day4 直播導讀 HTML 全面優化**：修正 7 處 Markdown `**text**` 未渲染問題；移除白皮書中文圖（4 張）；補寫 2 個 is-mentor 深度段落（三層確定性防禦、Effective Trust UEBA 類比）。
+- **Day3/Day4 生圖規劃**：建立 `day3-deep-guide/README.md`（圖 A-E）與 `day4-deep-guide/README.md`（圖 F-J），含完整生圖逐字稿與 session prompt 留存，待後續生圖工具執行。
+- **Day1–Day5 Codelab 導讀圖片整合**：從各 Day source codelabs HTML 提取官方 Google CDN 圖片 URL，插入對應的 codelab guide 導讀 HTML（Day3 `antigravity-skills-guide` 3 張、Day5 `agent-runtime-deploy-guide` 3 張、Day5 `vibecode-frontend-guide` 4 張）；並修復 Day5 兩個 guide 中所有因本地路徑不存在而被 `onerror` 靜默隱藏的圖片。
+
+**近期更新紀錄（2026-06-19 第一批）**：
+- **全域目錄架構標準化重構**：統一了 Day 1 ~ Day 5 的一級子目錄配置。完成了 Day 1 `images_cht/` 更名與 HTML 圖片參照修正；Day 2/3/5 原始 PDF 及 Podcast 資源歸位至 `source/` 和 `source/podcast/`；清理重複字幕與隱藏檔案，使五天的目錄結構高度一致。
 - Day5 主頁（`Day5/index.html`）製作完成，主題：規格驅動生產級開發（SDD）。
 - 已將根目錄 `index.html` 的 Day5 卡片從 `is-soon` 改為 `is-live`，連結至 `./Day5/index.html`。
 - Day5 學習頻道三頁均已完成：Podcast 深度導讀、Codelab 1（Agent Runtime 部署）、Codelab 2（Vibecode 前端）。
 - Day5 包含：1 張中文化 Figure（imagegen text-localization）、7 個 Snippets、17 條 Endnotes，以及 7 張已生成並通過桌機／手機 QA 的繁中資訊圖。
-- Day1–Day5 都具備首頁 → Day 頁、Day 頁 → 首頁的雙向導覽；Day5 回程會定位至首頁的 Day5 卡片。
+- Day1–Day5 都具備首頁 → Day 頁、Day 頁 → 首頁 the 雙向導覽；Day5 回程會定位至首頁的 Day5 卡片。
 
 **舊紀錄（2026-06-17）**：
 - 已確認根目錄 `index.html` 的 Day3 卡片為 live link，連到 `./Day3/index.html`。
+- 已補齊 Day3 直播深度導讀（`day3-deep-guide/index.html`），整合 402 輪 7 位講者識別之雙語摺疊逐字稿。
 - 已在 `Day2/index.html` 與 `Day3/index.html` 的 sticky 目錄列最前方補上
   `../index.html` 回首頁連結，文字為「← 返回課程首頁」；Day1 原本已有同樣連結。
 - 已建立 `Day4/README.md`、`source/`、`pipeline/`、`images_cht/`、
@@ -34,30 +42,43 @@ Google」（2026/06/15–06/19）課程的中文學習筆記彙整站。`index.h
 ├── README.md          ← 本檔案（專案總覽 + 接續指南）
 ├── index.html         ← 入口首頁：Kaggle 課程介紹（中文）+ Day1-5 導覽卡片
 ├── Day1/
-│   ├── README.md       ← Day1 完整 pipeline 紀錄
+│   ├── README.md       ← Day1 完整 pipeline 紀錄 (含異動紀錄)
 │   ├── index.html      ← Day1 白皮書中文長文網頁（最終產出）
+│   ├── images_cht/     ← 9 張已壓縮的課程圖表 (標準化改名)
 │   ├── source/         ← 原始 PDF + 中間產物
+│   │   ├── The New SDLC With Vibe Coding_Day_1_images_Origin/  ← 原始英文圖片
+│   │   ├── livestream/ ← 直播原始素材
+│   │   └── podcast/    ← Podcast 原始字幕
 │   ├── pipeline/       ← PDF→Markdown 轉換腳本
-│   └── ...guides/, *.mp4
+│   ├── day1-deep-guide/      ← 學習頻道導讀（deep-guide）
+│   └── podcast-deep-guide/   ← Podcast 深度導讀網頁
 ├── Day2/
-│   ├── README.md       ← Day2 完整 pipeline 紀錄
+│   ├── README.md       ← Day2 完整 pipeline 紀錄 (含異動紀錄)
 │   ├── index.html      ← Day2 白皮書中文長文網頁（最終產出）
-│   ├── source/         ← 原始 PDF + 中間產物
-│   ├── pipeline/       ← PDF→Markdown 轉換腳本
+│   ├── desktop.png     ← 桌面版網頁預覽圖 (補齊)
 │   ├── images_cht/     ← 8 張中文化圖表
-│   ├── antigravity-cli-guide/   ← 學習頻道導讀（deep-guide）
-│   ├── mcp-knowledge-guide/     ← 學習頻道導讀（deep-guide）
-│   └── *.mp4
+│   ├── source/         ← 原始 PDF + 中間產物
+│   │   ├── Agent Tools & Interoperability_Day_2_images/      ← 原始英文圖片
+│   │   ├── Agent Tools & Interoperability_Day_2_images_cht/  ← 中文翻譯圖片
+│   │   ├── Agent Tools Interoperability Day 2-中文版.pdf     ← 中文版 PDF 教材 (歸位)
+│   │   ├── livestream/ ← 直播原始素材
+│   │   └── podcast/    ← Podcast 原始字幕與音視訊 (.srt, .mp4) (歸位)
+│   ├── pipeline/       ← PDF→Markdown 轉換腳本
+│   ├── day2-deep-guide/      ← 學習頻道導讀（deep-guide）
+│   ├── mcp-knowledge-guide/  ← 學習頻道導讀（deep-guide）
+│   └── podcast-deep-guide/   ← Podcast 深度導讀網頁
 ├── Day3/
-│   ├── README.md       ← Day3 完整 pipeline 紀錄
+│   ├── README.md       ← Day3 完整 pipeline 紀錄 (含異動紀錄)
 │   ├── index.html      ← Day3 白皮書中文長文網頁（最終產出）
+│   ├── desktop.png     ← 桌面版網頁預覽圖
+│   ├── mobile.png      ← 手機版網頁預覽圖
+│   ├── images_cht/     ← 11 張中文化圖表
 │   ├── source/         ← 原始 PDF + 中英文 Markdown + 圖片中間產物
 │   │   ├── codelabs/   ← 兩個官方 Codelab HTML snapshot
-│   │   └── podcast/    ← Podcast 原始英文 SRT
-│   ├── pipeline/       ← PDF 解析、圖表擷取、圖表中文化、Podcast 導讀腳本
-│   ├── images_cht/     ← 11 張中文化圖表
-│   ├── antigravity-skills-guide/ ← Antigravity Skills Codelab 深度導讀
-│   ├── agents-cli-adk-guide/     ← Agents CLI + ADK Codelab 深度導讀
+│   │   ├── livestream/ ← 直播原始中英字幕與逐字稿
+│   │   └── podcast/    ← Podcast 原始英文 SRT 字幕 (歸位)
+│   ├── pipeline/       ← PDF 解析、圖表擷取、圖表中文化、直播與 Podcast 導讀腳本
+│   ├── day3-deep-guide/          ← Day 3 直播深度導讀網頁（最終產出）
 │   └── podcast-deep-guide/       ← Podcast 深度導讀與英文 SRT 副本
 └── Day4/
     ├── README.md       ← Day4 完整 pipeline 紀錄
