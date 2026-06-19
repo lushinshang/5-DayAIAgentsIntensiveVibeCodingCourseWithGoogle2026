@@ -1,1 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>規格驅動生產級開發 — Day 5 | 5-Day AI Agents Intensive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:#f8f7f3;color:#202124;font-size:16px;line-height:1.72}
+    a{color:#176b75}
+    /* ── sticky nav ── */
+    .toc{position:sticky;top:0;z-index:100;background:rgba(248,247,243,.96);backdrop-filter:blur(10px);border-bottom:1px solid #ddd8cf;height:56px}
+    .toc-inner{max-width:1160px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none}
+    .toc-inner::-webkit-scrollbar{display:none}
+    .toc a{color:#4a4a4a;text-decoration:none;font-size:13.5px;font-weight:600;padding:6px 11px;border-radius:6px;white-space:nowrap}
+    .toc a:hover{background:#e3efed;color:#0f5961}
+    /* ── hero ── */
+    .hero{background:linear-gradient(135deg,#1a2e31 0%,#176b75 54%,#c2a84b 100%);color:#fff;padding:70px 24px 58px}
+    .hero-inner{max-width:820px;margin:0 auto}
+    .hero-tag{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:16px}
+    h1{font-size:clamp(2.0rem,5vw,3.2rem);line-height:1.18;margin-bottom:18px;text-wrap:balance}
+    .hero-subtitle{font-size:17px;color:rgba(255,255,255,.88);max-width:760px;margin-bottom:16px;line-height:1.65}
+    .hero-authors{font-size:13.5px;color:rgba(255,255,255,.65)}
+    /* ── learning channels ── */
+    .channels-section{padding:32px 24px 8px;background:#f8f7f3;border-bottom:1px solid #ddd8cf}
+    .channels-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+    .channels-inner h3{margin:0 0 16px;font-size:1.15rem;font-weight:800;color:#202124;border-left:3px solid #176b75;padding-left:10px}
+    .channel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:640px){.channel-grid{grid-template-columns:1fr}}
+    .channel-card{display:flex;align-items:flex-start;gap:14px;text-decoration:none;color:#202124;background:#fff;border:1px solid #ded9cf;border-radius:8px;padding:16px;transition:transform .18s,box-shadow .18s,border-color .18s}
+    .channel-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08);border-color:#176b75}
+    .channel-card.soon{opacity:.65;cursor:default}
+    .channel-card.soon:hover{transform:none;box-shadow:none;border-color:#ded9cf}
+    .channel-icon{flex:0 0 34px;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:#e3efed;color:#0f5961;font-size:.78rem;font-weight:800}
+    .channel-info h4{margin:0 0 6px;font-size:1rem;color:#163f44}
+    .channel-info p{margin:0;font-size:.88rem;color:#666;line-height:1.45}
+    .badge-soon{display:inline-block;font-size:11px;font-weight:700;background:#eee;color:#888;border-radius:4px;padding:1px 7px;margin-left:6px;vertical-align:middle}
+    /* ── main layout ── */
+    main{max-width:1160px;margin:0 auto;padding:0 24px 80px}
+    article{max-width:760px;margin:0 auto}
+    section{padding-top:62px}
+    /* ── headings ── */
+    h2{font-size:clamp(1.45rem,3vw,2rem);line-height:1.28;color:#163f44;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #dfe9e7;text-wrap:balance}
+    h3{font-size:1.18rem;color:#176b75;margin:34px 0 12px}
+    h4{font-size:1rem;color:#163f44;margin:24px 0 8px}
+    p{margin-bottom:18px}
+    ul,ol{padding-left:24px;margin:0 0 18px}
+    li{margin-bottom:8px}
+    strong{color:#153f44}
+    /* ── code ── */
+    code{font-family:"SF Mono","Consolas","Monaco",monospace;background:#edf1ee;padding:2px 6px;border-radius:4px;font-size:.88em}
+    pre{background:#1d292a;color:#dbe7e3;border-radius:8px;padding:18px 20px;overflow-x:auto;font-size:13px;line-height:1.55;margin:20px 0}
+    pre code{background:none;padding:0;color:inherit;font-size:inherit}
+    .snippet-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8ab8b0;margin-bottom:8px}
+    .snippet-caption{font-size:13px;color:#666;font-style:italic;margin-top:8px;margin-bottom:18px}
+    /* ── callout (Tip) ── */
+    .callout{margin:24px 0;padding:16px 20px;border-left:4px solid #c2a84b;background:#fff9e7;border-radius:0 8px 8px 0}
+    .callout-title{font-weight:800;color:#866f17;margin-bottom:8px}
+    /* ── tier cards ── */
+    .tier-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:14px;margin:20px 0}
+    .tier-item{background:#fff;border:1px solid #e2ddd3;border-radius:8px;padding:16px 18px;border-left:4px solid #176b75}
+    .tier-label{font-weight:800;color:#163f44;margin-bottom:6px;font-size:.97rem}
+    .tier-body{font-size:15px;color:#333}
+    /* ── figures ── */
+    figure.section-figure{margin:30px 0;text-align:center}
+    figure.section-figure img{width:100%;max-width:900px;height:auto;border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.12);cursor:zoom-in;background:#fff}
+    figcaption{font-size:13.5px;color:#666;margin-top:10px;line-height:1.52}
+    /* ── policy / architecture boxes ── */
+    .arch-box{background:#fff;border:1px solid #e2ddd3;border-radius:8px;padding:18px 20px;margin:20px 0}
+    .arch-box h4{margin-top:0;color:#163f44}
+    /* ── footnotes ── */
+    .footnotes{font-size:13.5px;color:#555;border-top:1px solid #ddd8cf;margin-top:48px;padding-top:22px}
+    .footnotes ol{padding-left:20px}
+    .footnotes li{margin-bottom:10px}
+    .footnotes a{word-break:break-all;overflow-wrap:anywhere}
+    /* ── lightbox ── */
+    .lightbox{display:none;position:fixed;inset:0;z-index:200;background:rgba(20,24,25,.9);align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+    .lightbox.is-open{display:flex}
+    .lightbox img{max-width:96vw;max-height:92vh;width:auto;height:auto;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,.45);background:#fff}
+    .lightbox-hint{position:absolute;top:18px;right:24px;color:rgba(255,255,255,.76);font-size:14px}
+    /* ── mobile ── */
+    @media(max-width:640px){
+      .hero{padding:48px 18px 40px}
+      .hero-subtitle{font-size:15px}
+      main{padding:0 16px 64px}
+      section{padding-top:48px}
+      .toc-inner{padding:0 14px}
+      pre{font-size:12px;padding:14px}
+    }
+  </style>
+</head>
+<body>
 
+  <nav class="toc">
+    <div class="toc-inner">
+      <a href="../index.html">← 課程首頁</a>
+      <a href="#intro">引言</a>
+      <a href="#sdd">SDD</a>
+      <a href="#mcp">MCP</a>
+      <a href="#team-culture">團隊文化</a>
+      <a href="#spectrum">三層架構</a>
+      <a href="#zero-trust">零信任</a>
+      <a href="#policy">政策伺服器</a>
+      <a href="#context-hygiene">脈絡衛生</a>
+      <a href="#summary">摘要</a>
+      <a href="#endnotes">附注</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">5-Day AI Agents Intensive Course with Google · Day 5</div>
+      <h1>在 Vibe Coding 時代進行規格驅動生產級開發</h1>
+      <p class="hero-subtitle">可擴展工作流程與團隊演進的藍圖：從 Vibe 原型到生產現實。本白皮書涵蓋規格驅動開發（SDD）、MCP 整合、三層程式碼審查架構、零信任護欄與脈絡衛生的完整實踐框架。</p>
+      <p class="hero-authors">作者：Lee Boonstra　貢獻者：Elia Secchi・Antonio Gulli　設計：Michael Lanning</p>
+    </div>
+  </header>
+
+  <section id="channels" class="channels-section">
+    <div class="channels-inner">
+      <div class="channel-group">
+        <h3>學習頻道</h3>
+        <div class="channel-grid">
+          <a class="channel-card" href="podcast-deep-guide/podcast-deep-guide.html">
+            <div class="channel-icon">PC</div>
+            <div class="channel-info">
+              <h4>Podcast 深度導讀</h4>
+              <p>從速度幻覺到生產級 SDD 藍圖——21 分鐘 Podcast 完整深度解析，含繁中逐字稿與影片播放器。</p>
+            </div>
+          </a>
+          <a class="channel-card" href="agent-runtime-deploy-guide/agent-runtime-deploy-guide.html">
+            <div class="channel-icon">CL</div>
+            <div class="channel-info">
+              <h4>Codelab 1：Agent Runtime 部署</h4>
+              <p>用 Agents CLI 把 ADK 代理從本機部署到 Agent Runtime 的完整 12 步驟導讀。</p>
+            </div>
+          </a>
+          <a class="channel-card" href="vibecode-frontend-guide/vibecode-frontend-guide.html">
+            <div class="channel-icon">CL</div>
+            <div class="channel-info">
+              <h4>Codelab 2：Vibecode 前端</h4>
+              <p>Vibe Code 費用審批 Dashboard + Pub/Sub 事件驅動架構，含提示詞注入防禦實戰。</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <article>
+
+      <!-- ── 致謝 ── -->
+      <section id="ack" style="padding-top:48px">
+        <h2>致謝</h2>
+        <p>內容貢獻者與審閱者：Elia Secchi、Antonio Gulli。設計：Michael Lanning。</p>
+      </section>
+
+      <!-- ── 引言 ── -->
+      <section id="intro">
+        <h2>引言</h2>
+        <p>過去一年，Google 軟體工程師的日常例行工作有了完整的 180 度翻轉。在 2024 年初及之前，大量時間花費在深入研究開發者 API 與文件、手動逐行嘗試程式碼，以及判斷 Python 中應使用 <code>substring in string</code>、<code>string.includes</code> 或 <code>string.contains</code> 哪一種。程式碼完成後，需要投入相當力氣除錯，並解決功能程式碼與原始意圖之間的落差。如今，開發速度已達到超光速。</p>
+        <p>團隊現在使用 Antigravity <sup><a href="#fn1">[1]</a></sup> 或 Gemini CLI <sup><a href="#fn2">[2]</a></sup> 這類編碼代理程式，不僅能建議文字，還能實際使用工具並執行任務。AI 編碼編輯器能迅速輸出數千行文件完整的程式碼。彷彿僱用了一支永不休眠、永不抱怨的實習生大軍。但有個陷阱：雖然速度加快了，「速度的幻覺」也是真實存在的。雖然 bug 與程式碼的比率仍是挑戰——因為 AI 寫程式碼更快，也能以前所未有的速率產生潛在的錯誤。</p>
+        <p>由於實現不再是主要瓶頸，AI 可以被用來撰寫比任何人在相同時間範圍內更全面的測試覆蓋。這是提升程式碼信心的強大、程式化方式。AI 的潛能遠遠超越實現：它在系統設計、規格撰寫、路線圖規劃與結果分析上均表現出色。</p>
+        <p>「Vibe coding」指的是基於「感覺」或高層次意圖、而非嚴格手動編碼，使用 AI 快速生成程式碼。然而，至關重要的是澄清：<strong>「vibe coding」並非「生產環境中的 vibe」</strong>。雖然我們充分發揮 AI 代理程式的潛力，一切仍是完全有意圖且受控的，以確保生產級可靠性，而非仰賴未驗證的 AI 輸出。</p>
+        <p>在企業環境中，這個「感覺」被稱為 Agentic AI 開發。不同於標準生成式 AI（如同聰明的自動完成），Agentic AI 是混合型團隊成員；它使用語言模型來生成（大腦），並使用工具整合到工作流程中（雙手）。</p>
+      </section>
+
+      <!-- ── SDD ── -->
+      <section id="sdd">
+        <h2>規格驅動開發（SDD）</h2>
+        <p>在傳統軟體工程世界中，開發者被教導要「程式碼優先」。一個模糊的想法會讓人開啟編輯器，不斷輸入直到有東西能運作。但在 Agentic AI 時代，日常工作發生了戲劇性的轉變。大部分時間現在花在撰寫高品質規格上——向 AI 確切說明應構建什麼的詳細技術指示。</p>
+        <p>在這個新工作流程中，開發者的角色更像技術架構師，而非傳統編碼者。關鍵在於：程式碼現在是<strong>可拋棄的</strong>。如果寫出了堅實的規格，整個程式碼庫可以反覆重新產生。代理程式甚至可以被指示在一個下午將整個專案從 Python 翻轉到 JavaScript。</p>
+
+        <h3>優秀規格的特徵</h3>
+        <p>優秀規格是<strong>建築北極星</strong>。它預防「脈絡碎片化」——數位版本的「傳話遊戲」，AI 因為查看檔案的過時快照而開始失去主線。AI 可以被用來精化優秀規格，本質上充當共同作者或規格編輯器/審閱者。通常，規格儲存在程式碼庫內，例如作為 <code>specs/</code> 資料夾中的 Markdown 或 YAML 檔案。</p>
+        <p>一個用於產生新專案的優秀規格包含：</p>
+        <ul>
+          <li><strong>完整技術設計</strong>：解決需求、資料庫模式和 API 規格。</li>
+          <li><strong>視覺輔助</strong>：包含圖表與具體工具及版本號碼的清單。</li>
+          <li><strong>背景資訊</strong>：給代理程式「為什麼」的背景於「什麼」。</li>
+          <li><strong>情境</strong>：好的樣子是什麼、什麼是錯的，並包含邊界案例。</li>
+        </ul>
+
+        <h3>應使用哪種格式？</h3>
+        <p>2026 年由 Ouyang 等人進行的研究「SkCC：跨框架 LLM 代理程式的可移植安全技能編譯」<sup><a href="#fn3">[3]</a></sup>，揭示 LLM 代理程式對指示的格式化方式極度敏感，使用通用、未最佳化的 Markdown 檔案時性能最多下降 40%。對於使用 Gemini 的團隊，最佳格式化策略是<strong>混合 Markdown + 條件式 YAML 方法</strong>。資料顯示，對於深層嵌套的配置，YAML 達到 51.9% 的解析準確度，相較之下 JSON 只有 43.1%，XML 只有 33.8%。</p>
+
+        <h3>行為驅動開發（BDD）</h3>
+        <p>行為驅動開發（BDD）規格是將模糊、不明確的人類想法轉變為 AI 代理程式能夠不猜測而構建的精確架構設計的終極工具。BDD 規格使用一種稱為 Gherkin <sup><a href="#fn4">[4]</a></sup> 的標準化語法。Gherkin 依賴一個簡單的陳述式模板：<code>Scenario / Given / When / Then</code>。它強制 LLM 以「狀態 &gt; 動作 &gt; 結果」的方式思考。</p>
+
+        <div class="callout">
+          <div class="callout-title">提示</div>
+          <p>我經常在 Google Docs 中撰寫技術設計，讓架構計畫被許多人讀取與審查。審查完成後，使用「檔案 &gt; 下載 &gt; Markdown」並將該檔案加入工作區的 <code>specs/</code> 資料夾。大型語言模型處理 token 化文字——每個字元消耗預算、時間和脈絡容量。透過將 <code>/specs</code> 資料夾視為精實、編譯指示集，消除推理「格式稅」。</p>
+        </div>
+
+        <h3>指示應儲存在哪裡？</h3>
+        <p>為實踐 SDD，需要理解編碼工具如何消耗指示。指示可以存在於不同的位置：</p>
+        <ul>
+          <li><strong>1. 聊天介面（短暫、會話特定）</strong>：純粹用於高層次協調和即時反饋迴圈。</li>
+          <li><strong>specs 資料夾（任務特定、簽入版本控制）</strong>：儲存技術設計、BDD 情境、API 契約與結構性 YAML 模式。<code>./my-app/specs/my_spec.md</code></li>
+          <li><strong>2. 代理程式技能（可重用、功能/行為焦點）</strong>：結構化 Markdown 檔案，必須儲存在指定的 <code>.agent</code> 目錄中才能被 Antigravity 工作區管理器識別。</li>
+          <li><strong>3. 系統提示（全域、身份焦點）</strong>：Gemini CLI 和 Google Antigravity 掃描並按層次連接脈絡檔案，從全域覆蓋層層向下到本地專案配置。</li>
+        </ul>
+
+        <h3>不同使用案例的不同提示詞</h3>
+        <p>將規格轉變為程式碼的方式不止一種，可分解成幾種<strong>執行模式</strong>：</p>
+        <ul>
+          <li><strong>1. 專案產生（架構師）</strong>：從頭鷹架搭建，禁止 YOLO 模式。代理程式應先提議資料夾結構與技術堆疊以供確認，包含版本號碼。</li>
+          <li><strong>2. 功能產生（建築工人）</strong>：在現有程式碼庫之上實現功能，配合現有風格，多檔案編輯時手動確認差異。</li>
+          <li><strong>除錯（法醫專家）</strong>：從症狀提示轉換到證據提示，使用 <code>gcloud logging read</code> 等命令拉取記錄，先產生失敗的單元測試再修復。</li>
+          <li><strong>3. 文件撰寫（作者）</strong>：在 SDD 中文件是信實之源，使用 Google 風格 Docstrings（Python）或 JSDoc（TypeScript）。</li>
+          <li><strong>4. 資料工程（圖書館員）</strong>：使用 Google Cloud 資料擴充功能 <sup><a href="#fn5">[5]</a></sup>，提示詞代理程式始終顯示用於產生輸出的特定 SQL 查詢。</li>
+        </ul>
+      </section>
+
+      <!-- ── MCP ── -->
+      <section id="mcp">
+        <h2>MCP：一次整合，普遍適用</h2>
+        <p>MCP（模型情境協定）由 Anthropic 創建，現已成為開放標準。人們喜歡稱之為「AI 工具的 USB-C」。你為你的資料庫（或 API、檔案系統）建置一個 MCP 伺服器，任何相容 MCP 的代理程式都能使用它，不必撰寫客製化整合。</p>
+
+        <h3>建置 MCP 伺服器</h3>
+        <p>這是一個可運作的伺服器，約 40 行程式碼，公開一個 SQLite 資料庫：</p>
+        <div class="snippet-label">Snippet 1 · Python</div>
+        <pre><code class="language-python"># mcp_server.py - Exposes a SQLite database via MCP
+import sqlite3
+from mcp.server import Server
+from mcp.server.stdio import stdio_server
+from mcp.types import Tool, TextContent
+
+server = Server("knowledge-base")
+db = sqlite3.connect("knowledge.db")
+
+@server.list_tools()
+async def list_tools() -&gt; list[Tool]:
+    return [
+        Tool(name="query_knowledge", description="Query the knowledge base with SQL",
+             inputSchema={"type":"object","properties":{"sql":{"type":"string","description":"SQL query to execute (SELECT only)"}},"required":["sql"]}),
+        Tool(name="add_knowledge", description="Add a new knowledge entry",
+             inputSchema={"type":"object","properties":{"title":{"type":"string"},"content":{"type":"string"},"tags":{"type":"string","description":"Comma-separated tags"}},"required":["title","content"]}),
+    ]
+
+@server.call_tool()
+async def call_tool(name: str, arguments: dict) -&gt; list[TextContent]:
+    if name == "query_knowledge":
+        sql = arguments["sql"]
+        if not sql.strip().upper().startswith("SELECT"):
+            return [TextContent(type="text", text="Error: Only SELECT queries allowed")]
+        cursor = db.execute(sql)
+        rows = cursor.fetchall()
+        columns = [desc[0] for desc in cursor.description]
+        result = [dict(zip(columns, row)) for row in rows]
+        return [TextContent(type="text", text=str(result))]
+    elif name == "add_knowledge":
+        db.execute("INSERT INTO knowledge (title, content, tags) VALUES (?, ?, ?)",
+                   (arguments["title"], arguments["content"], arguments.get("tags", "")))
+        db.commit()
+        return [TextContent(type="text", text="Knowledge entry added.")]
+
+async def main():
+    async with stdio_server() as (read, write):
+        init_options = server.create_initialization_options()
+        await server.run(read, write, init_options)
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())</code></pre>
+        <p class="snippet-caption">Snippet 1: mcp_server.py：此程式碼片段使用 Python SDK 實現 MCP 伺服器，將 SQLite 資料庫公開為一組工具。</p>
+
+        <h3>連結 MCP 用戶端</h3>
+        <div class="snippet-label">Snippet 2 · Python</div>
+        <pre><code class="language-python">from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+server_params = StdioServerParameters(command="python", args=["mcp_server.py"])
+
+async with stdio_client(server_params) as (read, write):
+    async with ClientSession(read, write) as session:
+        await session.initialize()
+        tools = await session.list_tools()
+        print(f"Available: {[t.name for t in tools.tools]}")
+        result = await session.call_tool(
+            "query_knowledge",
+            {"sql": "SELECT * FROM knowledge WHERE tags LIKE '%agent%'"}
+        )
+        print(result.content[0].text)</code></pre>
+        <p class="snippet-caption">Snippet 2: mcp_client.py：此範例展示 MCP 用戶端透過 stdio 連線到本地伺服器以探索並呼叫工具。</p>
+      </section>
+
+      <!-- ── 團隊文化 ── -->
+      <section id="team-culture">
+        <h2>團隊文化與流程演進</h2>
+        <p>使用現代編碼代理程式需要在思維和團隊文化上做出改變。在使用現代工具的同時堅守舊流程，就像在馬車上裝噴射引擎——這項技術無法直接套用於 20 年前的工作流程並期待它起飛。常見痛點：</p>
+        <ul>
+          <li><strong>合併衝突</strong>：多個開發人員在一小時內在同一個檔案著陸。</li>
+          <li><strong>審查僵局</strong>：一個龐大的 PR 變成了俄羅斯套娃式的子 PR。</li>
+          <li><strong>脈絡碎片化</strong>：代理程式引用過時的快照，鑄造出呼叫不再存在的函式的程式碼。</li>
+        </ul>
+
+        <h3>程式碼審查</h3>
+        <p>高速度整合的策略：</p>
+        <ul>
+          <li><strong>捆綁摘要與風險評估</strong>：每個 PR 包含 AI 生成的變更快照、潛在破損點和風險評估。</li>
+          <li><strong>重新想像所有權</strong>：人工審查聚焦架構藍圖完整性，風格問題交由自動化工具（如 SKILLS.md）處理。</li>
+          <li><strong>「條件式 LGTM」</strong>：審查者批准 PR，條件是通過所有自動化測試；測試轉綠後自動合併。</li>
+          <li><strong>定義無責怪文化</strong>：將問題歸因於破裂的整合流程，而非個別開發人員。</li>
+          <li><strong>代理程式程式碼審查</strong>：建置技能自動執行程式碼審查，可與 Github Actions <sup><a href="#fn6">[6]</a></sup> 或 Gemini Code Assist <sup><a href="#fn7">[7]</a></sup> 整合。</li>
+        </ul>
+
+        <p>以下是一個實用的程式碼審查技能範本（code-check.md）：</p>
+        <div class="snippet-label">Snippet 3 · Markdown（Skill 範本）</div>
+        <pre><code class="language-markdown">Act as a Senior Software Engineer and Security Researcher.
+Review the provided code for this Github PR or Diff using these strict criteria:
+Use the command line to fetch the Github PR: `gh pr view &lt;PR NUMBER&gt;`
+
+1. **Critical Vulnerabilities:** Check for hardcoded secrets (API keys), SQL injection, XSS, or broken authentication.
+2. **Logic &amp; Efficiency:** Identify "off-by-one" errors, infinite loops, or redundant API calls.
+3. **Readability:** Suggest better naming conventions or breaking down "megafunctions" into smaller pieces.
+4. **Edge Cases:** What happens if the input is null? What if the network fails?
+
+Output Format:
+- **Description:** What is this PR doing? Explain in details.
+ISSUES:
+- ⚠ **Critical:** (Stop-ship issues)
+- ⚠️ **Warnings:** (Code smells or style issues)
+- ✅ **Best Practices:** (Specific lines to refactor)
+- 💡 **Quick Win:** (One sentence summary of the biggest improvement)
+When there are no issues return: LGTM</code></pre>
+        <p class="snippet-caption">Snippet 3: code-check.md：此技能定義了針對安全和邏輯準則的自動化程式碼審查結構化工作流程。</p>
+      </section>
+
+      <!-- ── 三層架構 ── -->
+      <section id="spectrum">
+        <h2>持續程式碼分析的三層光譜</h2>
+        <p>部署監視儲存庫的代理程式時，三個層級在誰擁有執行時和誰撰寫審查準則上有所不同：</p>
+        <ul class="tier-list">
+          <li class="tier-item">
+            <div class="tier-label">Tier 1 — 受管（Managed）</div>
+            <div class="tier-body">例如 GitHub 上的 Gemini Code Assist <sup><a href="#fn8">[8]</a></sup> 或任何 SaaS PR 審查者。現成的路徑。無需撰寫提示詞，無需管理基礎設施；按座位付費。<strong>權衡：</strong>使用廠商的審查意見，通用審查者會錯過特定領域風險概況（HIPAA、PCI、內部 SDK）。</div>
+          </li>
+          <li class="tier-item">
+            <div class="tier-label">Tier 2 — 混合式（Hybrid）</div>
+            <div class="tier-body">例如 GitHub Action <sup><a href="#fn6">[6]</a></sup> 觸發 Antigravity CLI <sup><a href="#fn9">[9]</a></sup>。撰寫自己的審查技能，提交到儲存庫，從 CI 動作觸發以非互動模式執行並將結果作為 PR 評論發佈。<strong>提示詞、模型選擇、沙箱化和審查準則屬於你。</strong></div>
+          </li>
+          <li class="tier-item">
+            <div class="tier-label">Tier 3 — 自訂（Custom）</div>
+            <div class="tier-body">例如 Gemini Enterprise Agent Engine <sup><a href="#fn10">[10]</a></sup> 上的 ADK <sup><a href="#fn13">[13]</a></sup> 代理程式。完全擁有的路徑，部署到 Agent Runtime 獲得耐久 Sessions 和 Memory Bank，並透過 A2A <sup><a href="#fn11">[11]</a></sup> 協調其他代理程式。此類架構的範例可在 Siemens 案例研究 <sup><a href="#fn17">[17]</a></sup> 中找到。<strong>權衡：</strong>你擁有評估、可觀測性、成本，以及待命輪換。</div>
+          </li>
+        </ul>
+
+        <p>三個問題告訴你需要哪個層級：</p>
+        <ol>
+          <li>你的審查準則有多具體？通用 → Tier 1；特定於團隊或儲存庫 → Tier 2 或 3。</li>
+          <li>代理程式需要在執行之間記住事情嗎？不 → Tier 1 或 2；是（程式碼庫記憶、跨 PR 脈絡）→ Tier 3。</li>
+          <li>如果出現問題，最壞的情況是什麼？一個嘈雜的評論 → 任何層級；一個合併的退化或洩露的祕密 → Tier 3。</li>
+        </ol>
+
+        <h3>Tier 3 大規模運作：圖形原生程式碼理解</h3>
+        <p>自訂程式碼審查執行時（Tier 3）支援更繁重的元件——圖形資料庫保存程式碼結構、向量存儲用於語意檢索、子代理程式管道用於分解。在最大遺留系統現代化中浮現的模式是在知識圖形上建置代理程式，將程式碼、文件、票券和設計 PDF 攝入 Spanner Graph <sup><a href="#fn12">[12]</a></sup>，讓代理程式結合三種檢索模式：圖形走訪（GQL）、向量搜尋（ANN）與全文搜尋。將工作分解到 ADK <sup><a href="#fn13">[13]</a></sup> 子代理程式管道中——搜尋代理程式、影響代理程式、任務分解代理程式，最後才是編碼代理程式。</p>
+
+        <figure class="section-figure">
+          <img src="images_cht/Figure 1 Custom Code Review Runtime Architecture.png"
+               alt="圖 1：自訂程式碼審查執行時架構的範例"
+               onclick="openLightbox(this.src)"
+               onerror="this.closest('figure').style.display='none'">
+          <figcaption><strong>Figure 1：自訂程式碼審查執行時架構的範例。</strong>左側知識圖形（程式碼・文件・票券）與程式碼脈絡（PR 差異・評論・main）透過 GQL・ANN・文字三種檢索模式，送入右側子代理程式管道（搜尋 → 影響分析 → 任務分解 → 編碼）。</figcaption>
+        </figure>
+
+        <p>在百萬行程式碼庫上的生產試點已將等效的重構工作從兩週縮短到幾個小時。</p>
+
+        <h3>永續性</h3>
+        <p>我們正在看到一個新現象：<strong>批准疲勞</strong>。根據 Quantum Workplace 研究（由 CNBC 報告），頻繁 AI 使用者比非使用者更有可能經歷高度倦怠的機率高出 45% <sup><a href="#fn14">[14]</a></sup>。為了保護團隊，可以從持續監督轉移到結構化邊界：</p>
+        <ul>
+          <li><strong>數位靜音時段</strong>：設定邊界，以便批准請求不會滲透到夜間和週末。</li>
+          <li><strong>代理程式洞察會議</strong>：舉辦每週會議，開發人員分享 AI 對應物確定的模式，將孤立的發現轉化為共用的組織知識。</li>
+        </ul>
+      </section>
+
+      <!-- ── 零信任 ── -->
+      <section id="zero-trust">
+        <h2>零信任開發：建立安全防護網</h2>
+        <p>當代理程式在沒有足夠護欄的情況下行動時，意外後果可能立即發生。在一次例行性的程式碼更新中，一個簡單的提示要求建立一個按鈕，觸發了出乎意料的連鎖反應。瀏覽器代理程式自主點擊了新按鈕，連接到一個沒有電子郵件保護措施的已棄用舊版代理程式，導致五十位同事收到充滿幻覺內容的虛假電子郵件。</p>
+        <p>這個事件凸顯了<strong>脈絡幻覺風險</strong>：當 AI 缺乏充分的資料時，它有時會填補空白，使用其脈絡中存在的任何字串，包括硬編碼電子郵件地址或 URL 等敏感資訊。<strong>護欄不是可選的；它們是讓有用的工具不變成不可預測工具的關鍵。</strong></p>
+
+        <h3>實施護欄</h3>
+        <p>自主代理程式由 LLM 驅動，是概率性而非決定性的。將約束硬編碼到系統提示中是脆弱的，脈絡會溢出，代理程式可以透過提示詞注入被「說服」繞過規則。為了建立生產級平台，需要外部的、防篡改的治理機制。</p>
+
+        <h3>沙箱化</h3>
+        <p>除了淨化字串，真正的安全需要一個受限的執行環境，或「沙箱」，以約束代理程式的行動。透過在與主要網路和敏感檔案系統隔離的臨時、低權限容器內執行代理程式驅動的任務，建立一個「爆炸半徑」來保護核心基礎設施。</p>
+        <p>在 Antigravity 中，此安全防護網可以透過單個切換強制執行（終端沙箱化 <sup><a href="#fn15">[15]</a></sup>）。或者，透過撰寫自訂 Dockerfile（在 <code>.gemini/sandbox.Dockerfile</code> 中），從官方 Gemini CLI 沙箱 <sup><a href="#fn16">[16]</a></sup> 映像開始，並設定 <code>export GEMINI_SANDBOX=docker</code> 強制 CLI 工具完全在 Docker 中執行。</p>
+
+        <h3>Human-in-the-Loop</h3>
+        <p>高風險操作需要 Human-in-the-Loop（人工介入迴圈，HITL）協議作為最終故障保護。這涉及為符合特定風險概況的操作實施「檢查點」閘門，例如將程式碼部署到生產環境、修改資料庫結構描述或啟動金融交易。透過向人工主管提供代理程式淨化後的意圖以供手動簽核，AI 的速度與開發人員的細微判斷達到了平衡。</p>
+
+        <h3>AI 生成測試覆蓋</h3>
+        <p>AI 生成程式碼的激增帶來了從手動測試到 AI 生成測試覆蓋的轉變。在高速度環境中，「測試驅動開發」透過讓機器撰寫驗證其自身輸出的測試變成了現實。此過程涉及強制代理程式在嘗試任何修復之前產生失敗的單元測試或重現命令（如 curl 請求）。</p>
+
+        <h3>評估</h3>
+        <p>為什麼我們需要對使用 ML 模型的程式碼進行特殊品質檢查？傳統軟體測試對於輸出是<strong>生成</strong>而非<strong>計算</strong>的系統是不充分的。代理程式可以在其工具上通過 100 個單元測試，但仍然可能透過選擇錯誤的工具、改述關鍵答案或幻覺事實而慘敗。</p>
+        <p>評估透過用<strong>評分判斷和容許帶</strong>取代二進制斷言來彌補這一差距。評估詢問「代理程式的行為至少與基線一樣好嗎？」——來自 LLM-as-judge 的 0-5 分數、容許工具呼叫中排序變化的軌跡檢查。<strong>測試捕捉確定性退化；評估捕捉行為漂移。</strong></p>
+      </section>
+
+      <!-- ── 政策伺服器 ── -->
+      <section id="policy">
+        <h2>政策伺服器</h2>
+        <p>混合政策伺服器在操作觸及外部系統之前攔截它們。它在兩個層級上運作：</p>
+        <ul>
+          <li><strong>結構性閘門（交通燈）</strong>：基於角色和環境的確定性規則。快速、二進制的檢查（例如，檢視者角色無法使用 <code>send_email</code> 工具）。此層防止架構違規，而無需詢問 LLM。</li>
+          <li><strong>語意閘門（智能裁判）</strong>：使用次要的、專門的 LLM（如 Gemini）來檢查建議操作的意圖和內容是否違反自然語言隱私指南。例如，管理員可以使用 <code>send_email</code>，但不應發送未遮罩的 PII（如純文字電子郵件地址或 API 金鑰）。</li>
+        </ul>
+
+        <p>這些規則在標準的 <code>policies.yaml</code> 中定義：</p>
+        <div class="snippet-label">Snippet 4 · YAML</div>
+        <pre><code class="language-yaml">environments:
+  localhost:
+    blocked_tools:
+      - send_email
+roles:
+  viewer:
+    allowed_tools:
+      - list_files
+      - read_file</code></pre>
+        <p class="snippet-caption">Snippet 4: policies.yaml：此配置根據角色和環境建立了工具級權限的確定性閘門規則。</p>
+
+        <p>以下是政策伺服器的輕量級實作：</p>
+        <div class="snippet-label">Snippet 5 · Python</div>
+        <pre><code class="language-python">import os, yaml
+from google.genai import Client
+
+class PolicyService:
+    def is_tool_allowed(self, tool_name: str) -> bool:
+        # Check Environment Blocks
+        env_config = self.config.get("environments", {}).get(self.env, {})
+        if tool_name in env_config.get("blocked_tools", []):
+            return False
+        # Check Role Permissions
+        role_allows = self.config.get("roles", {}).get(self.role, {}).get("allowed_tools", [])
+        return "*" in role_allows or tool_name in role_allows
+
+    async def check_action_semantic(self, action_description: str) -> bool:
+        client = Client(vertexai=True, project=self.project_id, location=self.location)
+        prompt = f"Evaluate if this action violates PII policies: {action_description}"
+        response = client.models.generate_content(model="gemini-3.1-pro", contents=prompt)
+        return not response.text.strip().upper().startswith("VIOLATION")</code></pre>
+        <p class="snippet-caption">Snippet 5: policy_server.py：此服務實作混合政策引擎以攔截操作並執行結構性和語意評估。</p>
+
+        <p>執行流程：當代理程式決定使用工具時：</p>
+        <ol>
+          <li><strong>結構性檢查</strong>：此角色/環境允許使用該工具嗎？（檢查 YAML）。</li>
+          <li><strong>語意檢查</strong>：參數是否安全？（詢問 Gemini）。未遮罩的電子郵件地址被視為違規。</li>
+          <li><strong>執行</strong>：如果兩者都通過，工具執行。否則，「政策違規」訊息返回給代理程式，允許其自我更正或優雅地失敗。</li>
+        </ol>
+      </section>
+
+      <!-- ── 脈絡衛生 ── -->
+      <section id="context-hygiene">
+        <h2>脈絡衛生 &amp; 提示詞淨化</h2>
+        <p>自主開發中的一個顯著危險是「脈絡幻覺」風險。當代理程式缺乏特定資料時，它可能會填補空白，使用其當前脈絡中的任何可用字串，可能洩露像硬編碼電子郵件地址或私人 URL 等敏感資訊。</p>
+        <p>為了降低此風險，透過執行 PII 遮罩和預留位置注入的中介軟體來實施嚴格的<strong>脈絡衛生</strong>。</p>
+
+        <h3>實施動態脈絡解析器</h3>
+        <p>此腳本充當核心轉換引擎，用執行時覆蓋或環境配置取代以雙方括號語法 <code>[[VARIABLE_NAME]]</code> 結構的預留位置字串：</p>
+        <div class="snippet-label">Snippet 6 · Python</div>
+        <pre><code class="language-python">import os
+import re
+from typing import Optional, Dict, Any
+
+def resolve_context(template_str: str, override_state: Optional[Dict[str, Any]] = None) -> str:
+    """Scans a template string for [[VARIABLE_NAME]] and replaces it with values
+    from override_state or os.environ."""
+    if template_str is None:
+        return ""
+    state_to_check = override_state or {}
+
+    def replacement(match):
+        var_name = match.group(1).strip()
+        # 1. Prioritize runtime state overrides
+        if var_name in state_to_check and state_to_check[var_name] is not None:
+            return str(state_to_check[var_name])
+        # 2. Fallback to validated environment variables
+        elif var_name in os.environ and os.environ[var_name] is not None:
+            return os.environ[var_name]
+        # 3. Leave unresolved to prevent silent failures
+        else:
+            return match.group(0)
+
+    # Resolve all bracketed variables dynamically, e.g., [[COMMENTER_EMAIL]]
+    return re.sub(r'\[\[([^\]]+)\]\]', replacement, template_str)</code></pre>
+        <p class="snippet-caption">Snippet 6: context_resolver.py：此工具透過環境變數解析括號預留位置以維持脈絡衛生。</p>
+
+        <p>為了全域強制脈絡衛生，淨化工具必須直接接入代理程式的執行管道作為驗證步驟：</p>
+        <div class="snippet-label">Snippet 7 · Python</div>
+        <pre><code class="language-python"># ... inside the validate_tool_call framework execution ...
+resolved_args = {}
+for k, v in args.items():
+    if isinstance(v, str):
+        resolved_args[k] = resolve_context(v)
+    elif isinstance(v, list):
+        resolved_args[k] = [resolve_context(i) if isinstance(i, str) else i for i in v]
+    else:
+        resolved_args[k] = v
+args.clear()
+args.update(resolved_args)</code></pre>
+        <p class="snippet-caption">Snippet 7: tool_policy_engine.py：此中介軟體將脈絡解析器整合到代理程式管道中，以在執行前淨化工具參數。</p>
+
+        <p>透過強制此邊界，引擎將像 <code>[[COMMENTER_EMAIL]]</code> 或 <code>[[DEFAULT_PRESENTATION_ID]]</code> 這樣的通用預留位置安全且靜默地轉譯為授權測試資產，消除了在測試套件或系統提示中硬編碼敏感 PII 的需求。</p>
+      </section>
+
+      <!-- ── 摘要 ── -->
+      <section id="summary">
+        <h2>摘要</h2>
+        <p>在不到一年的時間裡，軟體開發週期變得極為迅速。看著代理程式在午餐前產生一千行文件完善的程式碼，是一項重大進步。</p>
+        <p>但那速度揭示了一個重要的轉變。AI 已經消除了程式碼生產瓶頸，將約束下移至必須審查、測試和整合那些產出的人類。這是共享的認知負荷：<strong>人類充當架構師</strong>，撰寫測試規格、整合規格和 MLOps/DevOps 藍圖，而 AI 執行繁重工作——撰寫實際測試程式碼、執行整合和管理細粒度的運營細節。</p>
+        <p>更好的提示詞和更快的模型單獨無法修復整合瓶頸。成功依賴於演進團隊動態、精化與代理程式的協作，以及為永不休眠的工具設定嚴格的邊界。挑戰已從純粹的程式碼生產，轉變為協調驗證、整合和部署工作的系統。</p>
+
+        <h3>從何開始</h3>
+        <p>對於在代理程式程式碼庫上落實這些模式的團隊，<code>uv google-agents-cli setup</code> 將七項技能安裝到你的編碼代理程式中——涵蓋鷹架搭建、ADK 程式碼、評估、部署、發佈和可觀測性。本論文中描述的模式變成了你今天可以執行的命令：</p>
+        <ul>
+          <li><code>agents-cli scaffold</code>：規格驅動的專案生成</li>
+          <li><code>agents-cli eval run</code>：AI 生成測試覆蓋閘門</li>
+          <li><code>agents-cli deploy</code>：沙箱化部署到 Cloud Run 或 Vertex AI Agent Engine</li>
+        </ul>
+      </section>
+
+      <!-- ── Endnotes ── -->
+      <section id="endnotes">
+        <div class="footnotes">
+          <h2>Endnotes</h2>
+          <ol>
+            <li id="fn1">Google, 2026, Antigravity, agentic development platform, Available at: <a href="https://antigravity.google" target="_blank" rel="noopener">https://antigravity.google</a></li>
+            <li id="fn2">Google for Developers, 2025, Gemini CLI, Query and edit large codebases, generate apps from images or PDFs, and automate complex workflows—all from your terminal with Gemini 3. Available at: <a href="https://geminicli.com" target="_blank" rel="noopener">https://geminicli.com</a></li>
+            <li id="fn3">Ouyang Y., et al., 2026, SkCC: Portable and Secure Skill Compilation for Cross-Framework LLM Agents, Available at: <a href="https://arxiv.org/abs/2605.03353" target="_blank" rel="noopener">https://arxiv.org/abs/2605.03353</a></li>
+            <li id="fn4">Cucumber Open Source Project, 2026, Gherkin Syntax Reference, Available at: <a href="https://cucumber.io/docs/gherkin/reference" target="_blank" rel="noopener">https://cucumber.io/docs/gherkin/reference</a></li>
+            <li id="fn5">Google Cloud, 2026, Data Agent Kit extension for VS Code overview, Available at: <a href="https://docs.cloud.google.com/data-cloud-extension/vs-code/overview" target="_blank" rel="noopener">https://docs.cloud.google.com/data-cloud-extension/vs-code/overview</a></li>
+            <li id="fn6">Github, 2026, Quickstart for GitHub Actions, Available at: <a href="https://docs.github.com/en/actions/get-started/quickstart" target="_blank" rel="noopener">https://docs.github.com/en/actions/get-started/quickstart</a></li>
+            <li id="fn7">Google, 2026, Set up Gemini Code Assist on GitHub, Available at: <a href="https://developers.google.com/gemini-code-assist/docs/set-up-code-assist-github#consumer" target="_blank" rel="noopener">https://developers.google.com/gemini-code-assist/docs/set-up-code-assist-github#consumer</a></li>
+            <li id="fn8">Github, 2026, Gemini Code Assist on Github Marketplace, Available at: <a href="https://github.com/marketplace/gemini-code-assist" target="_blank" rel="noopener">https://github.com/marketplace/gemini-code-assist</a></li>
+            <li id="fn9">Google, 2026, Antigravity CLI Overview, Available at: <a href="https://antigravity.google/docs/cli-overview" target="_blank" rel="noopener">https://antigravity.google/docs/cli-overview</a></li>
+            <li id="fn10">Google Cloud, 2025, Agent Engine Overview, Available at: <a href="https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview" target="_blank" rel="noopener">https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview</a></li>
+            <li id="fn11">The Linux Foundation, 2025, Agent 2 Agent (A2A) Protocol, Available at: <a href="https://a2a-protocol.org/latest/" target="_blank" rel="noopener">https://a2a-protocol.org/latest/</a></li>
+            <li id="fn12">Google Cloud, 2025, Spanner Graph Documentation, Available at: <a href="https://cloud.google.com/spanner/docs/graph" target="_blank" rel="noopener">https://cloud.google.com/spanner/docs/graph</a></li>
+            <li id="fn13">Google ADK, Build powerful multi-agent systems with the Agent Development Kit Documentation, Available at: <a href="https://google.github.io/adk-docs/" target="_blank" rel="noopener">https://google.github.io/adk-docs/</a></li>
+            <li id="fn14">CNBC, 2025, Working smarter, not harder: AI could help fight burnout — but is it?, Available at: <a href="https://www.cnbc.com/2025/09/20/working-smarter-not-harder-how-ai-could-help-fight-burnout-.html" target="_blank" rel="noopener">https://www.cnbc.com/2025/09/20/working-smarter-not-harder-how-ai-could-help-fight-burnout-.html</a></li>
+            <li id="fn15">Google, 2026, Sandboxing Terminal Commands, Available at: <a href="https://antigravity.google/docs/sandbox-mode" target="_blank" rel="noopener">https://antigravity.google/docs/sandbox-mode</a></li>
+            <li id="fn16">Google, 2026, Sandboxing in Gemini CLI, Available at: <a href="https://geminicli.com/docs/cli/sandbox" target="_blank" rel="noopener">https://geminicli.com/docs/cli/sandbox</a></li>
+            <li id="fn17">Google Cloud, 2026, How Siemens "slices the elephant," advancing agentic workflows for industrial software development, Available at: <a href="https://cloud.google.com/blog/products/ai-machine-learning/how-siemens-sliced-the-elephantmodernizing-legacy-code-with-agentic-workflows/?e=48754805" target="_blank" rel="noopener">https://cloud.google.com/blog/products/ai-machine-learning/how-siemens-sliced-the-elephant...</a></li>
+          </ol>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- ── lightbox ── -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-hint">點擊任意處關閉</span>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
+  <script>
+    function openLightbox(src){
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('is-open');
+      document.body.style.overflow='hidden';
+    }
+    function closeLightbox(){
+      document.getElementById('lightbox').classList.remove('is-open');
+      document.body.style.overflow='';
+    }
+    document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+  </script>
+
+</body>
+</html>
