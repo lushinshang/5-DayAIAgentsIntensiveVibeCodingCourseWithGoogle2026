@@ -61,7 +61,7 @@
 
 - 使用台灣繁體中文，不使用中國大陸慣用語。
 - 不摘要、不省略、不新增原文沒有的論點。
-- 程式碼區塊不得翻譯或改動。
+- 程式碼區塊不得翻譯或改動.
 - 圖片路徑、URL、人名、模型名、API、產品名及縮寫不得任意修改。
 - Endnotes 書目資料保留英文原文。
 - 固定術語：
@@ -80,7 +80,7 @@
 - task7 必須使用 `imagegen` skill，以原始英文 Figure 作為 edit target，採 `text-localization` 模式逐張中文化。
 - 使用內建 `image_gen` 圖片編輯流程；開始編輯前先載入並檢視原圖。
 - 必須明確要求只替換圖中文字，保留原始構圖、圖形、色彩、箭頭、連線、圖示、尺寸比例及資訊層級。
-- PIL、SVG、HTML 僅可用於必要的後處理或修正，不作為 task7 的主要中文化方法。
+- PIL, SVG, HTML 僅可用於必要的後處理或修正，不作為 task7 的主要中文化方法。
 - 中文圖檔名必須與英文正式 Figure 完全一致。
 - 儘量維持原始尺寸與圖形關係。
 - `API`、`SDK`、`MCP`、`ADK`、`IAM`、`LLM`、`OpenTelemetry` 等技術名稱依語境保留英文。
@@ -112,21 +112,30 @@
 - Codelab 必須逐條整理全部官方 steps，不可只提供主線摘要。
 - Livestream 是獨立後補流程，不阻塞白皮書主流程。
 
-### G. 當前執行狀態（2026-06-19 更新）
+### G. 當前執行狀態（2026-06-19 完成）
 
-#### 已完成
+#### 已完成（task1–task20 全部）
 
-- task1–task9 全部完成（scaffold、Docling、圖片確認、內容清冊、MD 修復、繁中翻譯、Figure 中文化、HTML 前校對、主頁 index.html）。
-- task10 PDF / MD / HTML 最終核對：全部通過（詳見 task10 節）。
-- task13 QA：4 個頁面 HTML parser PASS、本地連結全通過、桌機 + 手機截圖 QA 通過、.DS_Store 已清除。
-  - `python3 pipeline/validate_day4_pre_html.py` PASS（44 headings、4 Figures、4 snippets、7 pillars、7 dimensions、8 methods、6 Endnotes）。
-  - `python3 -m html.parser index.html` PASS。
-  - 7 pillar-items、5 條 Security Recap、7 dim-cards、8 methods table、4 applied tips（含 4 個 Python code block，均通過 `ast.parse`）、6 條 Endnotes（fn1-fn6）、Conclusion 全部存在。
-  - 4 張 Figure 本地圖檔存在，4 個外部頁面連結目標存在。
-  - 行動版溢出防護：`pre { overflow-x:auto }`、`.table-wrap { overflow-x:auto }`、`.footnotes a { word-break:break-all }`。
-- task11 Podcast 深度導讀：ai-mentor + deep-guide 風格重寫完成，含 5 段式深度分析 + 145 輪次雙說話者逐字稿 + 影片播放器。
-- task12 Codelab 1 導讀（13步逐條整理 + deep-guide）：`secure-agentic-coding-guide/secure-agentic-coding-guide.html` 完成。
-- task12 Codelab 2 導讀（11步）：已完成 deep-guide + ai-mentor 風格重寫，加入事件驅動架構、安全邊界、Human-in-the-loop、評估與企業部署限制分析。
+- **task1**：Day4 scaffold 與白皮書來源歸檔完成。
+- **task2**：Docling `images_scale=5.0` 解析完成，產出 437 行英文 Markdown 與 10 個 picture items。
+- **task3**：AI 已確認 4 張正式 Figure，完成整理與命名。
+- **task4**：已建立章節、Figure、Snippet、Endnotes 內容清冊。
+- **task5**：已產出修復後英文基準稿，並通過內容結構與 Python 語法驗證。
+- **task6**：4 個 `gpt-5.4` subagents 並行分段翻譯，`gpt-5.5` 統一合併校訂，產出繁中稿與 normalized 版本。
+- **task7**：`imagegen` skill 完成 4 張正式 Figure 繁中在地化、視覺 QA 與雙目錄歸檔。
+- **task8**：PDF、英文稿、繁中稿、內容清冊與中文 Figure 的 HTML 前完整性校對通過，`pipeline/validate_day4_pre_html.py` PASS。
+- **task9**：`index.html` 主頁建立完成，`python3 -m html.parser` PASS，桌機 + 手機截圖通過。
+- **task10**：PDF / MD / HTML 最終核對全部通過（7 pillars、5 recap、7 dims、8 methods、4 snippets、6 endnotes、4 figures、行動版溢出防護）。
+- **task11**：`podcast-deep-guide/podcast-deep-guide.html` 完成，ai-mentor + deep-guide 風格，145 輪次雙說話者逐字稿 + 影片播放器 + 3 張資訊圖。
+- **task12**：Codelab 1（13 步）與 Codelab 2（11 步）導讀頁完成，各附 2 張 Kawaii 資訊圖。
+- **task13**：4 個頁面 HTML parser PASS、本地 href/src 全通過、桌機 + 手機截圖 QA 通過、.DS_Store 清除。
+- **task14**：`../index.html` Day4 已是 `is-live`（前次工作階段完成），驗證 PASS。
+- **task15**：.DS_Store 清除、source/ 完整確認、prompt 紀錄同步、Day5 可重用經驗整理完畢。
+- **task16**：已歸檔直播中英文 SRT，並執行 `pipeline/build_day4_transcript.py` 成功對齊中英雙語字幕。
+- **task17**：已撰寫繁中直播主題深度導讀，並透過 `pipeline/build_day4_deep_guide.py` 產出 `day4-deep-guide/index.html`。
+- **task18**：已由三個 `self` subagents 並行完成 431 輪發言的講者識別（Smitha Kolen, Anant Navalgaria, Socrates, Meltem, Wafa, Tony Kloenstein），並成功嵌入導讀網頁中。
+- **task19**：已將直播導讀網頁整合回 Day4 主頁 `index.html` 的學習頻道，並完成原始頁面 QA 驗收。
+- **task20**：已使用 Codex CLI 工作階段內的 `imagegen` skill 生成圖 F–J，嵌入直播深度導讀並完成 HTML、路徑、桌機與手機 QA。
 
 #### 資訊圖（Kawaii 16:9，1792×1024）進度
 
@@ -139,10 +148,15 @@
 | Codelab 1 | `secure-agentic-coding-guide/images/fig2-stride-skill.png` | ✅ 完成 |
 | Codelab 2 | `vibecode-ambient-expense-agent-guide/images/fig1-ambient-arch.png` | ✅ 完成 |
 | Codelab 2 | `vibecode-ambient-expense-agent-guide/images/fig2-expense-flow.png` | ✅ 完成 |
+| Livestream | `day4-deep-guide/images/img-F.png` | ✅ 完成 |
+| Livestream | `day4-deep-guide/images/img-G.png` | ✅ 完成 |
+| Livestream | `day4-deep-guide/images/img-H.png` | ✅ 完成 |
+| Livestream | `day4-deep-guide/images/img-I.png` | ✅ 完成 |
+| Livestream | `day4-deep-guide/images/img-J.png` | ✅ 完成 |
 
 #### 待完成事項
 
-（無）— task1–task14 全部完成。Livestream 素材到齊後再執行 task16–task19。
+（無）— task1–task20 全部完成。
 
 ---
 
@@ -367,6 +381,50 @@ cp /tmp/fig-cl2-flow.png "Day4/vibecode-ambient-expense-agent-guide/images/fig2-
 
 ### H. 原始提示詞／指令完整紀錄
 
+#### 2026-06-19 — 執行直播深度導讀生圖與 HTML 整合
+
+```text
+go
+```
+
+#### 2026-06-19 — 同意 Image Gen CLI fallback
+
+```text
+同意使用路徑
+```
+
+#### 2026-06-19 — 確認 Skill 存在
+
+```text
+不是有skill嗎
+```
+
+#### 2026-06-19 — 釐清使用 Codex CLI 內建 Skill
+
+```text
+我是用codex cli內的skill，不需要key，你看看每天的readme
+```
+
+執行決策：依 Day4 G2 既有成功流程，使用 `codex exec` 啟動 Codex CLI 工作階段，並在工作階段內呼叫 `imagegen` skill 的內建 `image_gen`，不使用需要 `OPENAI_API_KEY` 的 `scripts/image_gen.py` fallback。
+
+#### 2026-06-19 — 直播深度導讀自製插圖完成
+
+- 使用 Codex CLI 工作階段內的 `imagegen` skill／內建 `image_gen`，完成圖 F–J。
+- 圖片存於 `day4-deep-guide/images/`，均為 1672×941 PNG。
+- F、G、H、J 經一次針對性修正；I 初稿直接採用。
+- 已嵌入 `day4-deep-guide/index.html` 的 `#theme1`、`#theme2`、`#theme3`、`#theme4`。
+- HTML parser 通過，本地圖片缺檔 0；桌機 1440×1000 與 iPhone 13 視窗截圖 QA 通過。
+
+#### 2026-06-19 — README 狀態同步
+
+```text
+update readme.md
+```
+
+- 將 Day4 當前狀態更新為 task1–task20 全部完成。
+- 將直播圖 F–J 加入資訊圖完成清單。
+- 將舊的「待生圖」描述改為正式完成狀態，並同步 HTML 插入位置與 QA 結果。
+
 以下依目前可取得的對話與既有 README 紀錄，按時間順序逐字保存。不得改寫原句；新指令必須繼續往下追加。
 
 1. `ok,但是要根據day2 and day3經驗規劃`
@@ -404,6 +462,15 @@ cp /tmp/fig-cl2-flow.png "Day4/vibecode-ambient-expense-agent-guide/images/fig2-
 32. `do task10`
 33. `do task13`
 34. `do task14(應該好了？）`
+35. `what's task15`
+36. `do task15`
+37. `read readme.md,tell me what's next`
+38. `參考day3/readme.md，day4需要建立直播導讀
+目錄下，DAY 4 Livestream - 5-Days of AI Agents Intensive Vibe Coding Course With Google有中文和原文逐字稿
+影片網址：https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/DAY.4.Livestream.-.5-Days.of.AI.Agents.Intensive.Vibe.Coding.Course.With.Google_compressed.mp4
+請規劃`
+39. `go`
+40. `更新readme.md`
 
 ### I. 新指令追加格式
 
@@ -480,17 +547,7 @@ Day 4 採用經 Day 1–Day 3 驗證後修正的標準流程：
 
 Livestream 不阻塞白皮書主流程；等素材到齊後再以獨立 task 追加。
 
-**目前狀態**：已完成 task1-task9。下一步是 task10「PDF / MD / HTML 最終核對」。Podcast SRT / 影片、Codelab URL 與 livestream 素材尚未取得。
-
-- task1：Day4 scaffold 與白皮書來源歸檔完成。
-- task2：Docling `images_scale=5.0` 解析完成，產出 437 行英文 Markdown 與 10 個 picture items。
-- task3：AI 已確認 4 張正式 Figure，完成整理與命名。
-- task4：已建立章節、Figure、Snippet、Endnotes 內容清冊。
-- task5：已產出修復後英文基準稿，並通過內容結構與 Python 語法驗證。
-- task6：已由 4 個 `gpt-5.4` subagents 分段翻譯，再由 `gpt-5.5` 統一合併校訂，產出繁中稿與 normalized 版本。
-- task7：已使用 `imagegen` skill／內建 Image Gen 完成 4 張正式 Figure 的繁中在地化、視覺 QA 與雙目錄歸檔。
-- task8：已完成 PDF、英文稿、繁中稿、內容清冊與中文 Figure 的 HTML 前完整性校對，並通過自動驗證。
-- task8：已完成 PDF、英文稿、繁中稿、內容清冊與中文 Figure 的 HTML 前完整性校對，並通過自動驗證。
+**目前狀態**：task1–task15 全部完成（2026-06-19）。Livestream 素材到齊後再執行 task16–task19。
 
 ---
 
@@ -557,6 +614,8 @@ Day4/
 - `source/Vibe Coding Agent Security and Evaluation_Day_4_images_docling_raw/`（10 個 Docling picture items）
 - `source/Vibe Coding Agent Security and Evaluation_Day_4_images_raw/`（18 個 `pdfimages` 備查檔，含 9 個主圖與 9 個 smask）
 - `source/Vibe Coding Agent Security and Evaluation_Day_4.txt`（`pdftotext -layout` 備查）
+
+
 
 執行結果：
 
@@ -863,60 +922,87 @@ Day3 修正後的標準：所有官方 step 必須逐條整理出來，不只寫
 - Day1–Day4 四個 `index.html` 目標確認存在。
 - `python3 -m html.parser ../index.html` PASS。
 
-### task15：收尾整理
+### task15：收尾整理（已完成）
 
-- 清掉 `.DS_Store`。
-- 確認來源素材都在 `source/`。
-- README 補完整執行紀錄與 prompt 紀錄。
-- 明確列出 Day5 可重用經驗。
+執行結果：
+
+1. `.DS_Store`：已清除（OS 會在訪問目錄後自動重建，task13 清一次、task15 再清一次）。
+2. `source/` 素材確認完整：PDF、英文 MD、normalized MD、繁中稿兩份、Docling raw images、pdfimages raw、正式 Figure 目錄、中文化 Figure 目錄、content inventory，以及 podcast/codelabs/livestream 預留目錄。
+3. README H 節 prompt 紀錄已同步至指令 34（`do task14`）。
+4. Day5 可重用經驗（詳見下方）。
+
+#### Day5 可重用經驗
+
+**Docling 與 PDF 解析**
+- 固定使用 `do_ocr=False`（有原生文字層的 PDF）+ `images_scale=5.0` + `picture.get_image(doc=result.document)`（Docling 2.69.1 API）。
+- Docling picture items 數量 ≠ 正式 Figure 數量；必須對照 PDF caption、頁碼、pdftotext 三方確認。
+- `pdfimages` 保留備查，奇數 index 通常是 smask 遮罩，不是獨立圖片。
+
+**翻譯流程**
+- 4 個 `gpt-5.4` high-reasoning subagents 並行分段，最後由 `gpt-5.5` xhigh-reasoning 統一合併校訂，品質穩定且速度快。
+- 分段邊界按語意切（不按行數），確保每段自成脈絡，subagent 不需讀其他段。
+- 術語表在 task6 合併時統一，不在各 Part 分別決定。
+
+**Figure 中文化**
+- 使用內建 `image_gen` text-localization 模式；只替換文字，不改構圖。
+- 同時寫入 `images_cht/` 與 `source/..._images_cht/`，SHA-256 核對兩份一致。
+- HTML 引用 `images_cht/`，Markdown 引用 `../images_cht/`（相對路徑）。
+
+**資訊圖生成**
+- Kawaii 台灣風格 + 粉圓體、1792×1024 landscape，用途：podcast/Codelab 導讀頁。
+- 提示詞需明確指定水平排版、swimlane 分區、技術標籤保留英文、存檔路徑。
+- 生成後逐張視覺 QA：流程方向、分支、技術標籤、截字、可讀性。
+
+**HTML 前校對（task8）**
+- 必須在 HTML 前先完成 MD 層的內容完整性核查，避免 HTML 完成後再補章節。
+- `pipeline/validate_day4_pre_html.py` 是可重用的驗收腳本模板。
+
+**QA 自動化**
+- `python3 -m html.parser` 驗 HTML 結構。
+- Python 腳本逐項抽驗 pillar-items、dim-cards、table rows、code blocks、endnote anchors、local hrefs、CSS overflow 規則，比手動看更快且可重現。
+- Playwright + 本地 HTTP server（`python3 -m http.server`）做截圖 QA，`file://` 協定被封鎖。
+
+**Podcast 導讀**
+- ai-mentor + deep-guide 雙 skill，5 段式深度分析 + 完整逐字稿 `<details>` 折疊，含影片播放器。
+- SRT 逐字稿做分講者 badge（Host/Guest）。
+
+**Codelab 導讀**
+- 必須逐條整理所有官方 steps，不只寫主線摘要（Day3 教訓）。
+- deep-guide + ai-mentor 風格重寫，每步補「為什麼」與「企業實戰視角」。
+- 每個 Codelab 獨立頁，不塞進主頁。
 
 ---
 
-## Livestream 後補任務
+## Livestream 任務執行紀錄（比照 Day3 規格）
 
-以下任務等 Day4 livestream 素材到齊後再做，不阻塞 Day4 白皮書主流程。
+### task16：素材歸檔與中英字幕時間戳對齊（已完成）
+* **執行歷程**：
+  - 將根目錄下的 `DAY 4 Livestream - 5-Days of AI Agents Intensive Vibe Coding Course With Google.en-orig.srt` 和 `DAY 4 Livestream - 5-Days of AI Agents Intensive Vibe Coding Course With Google.zh-TW.srt` 歸檔到 `source/livestream/` 中。
+  - 建立 `pipeline/build_day4_transcript.py`，成功解析並將 431 輪中英對話以 1-to-1 對應對齊。
+* **驗證結果**：產出 `source/livestream/day4-transcript-raw-aligned.json` 和 `source/livestream/day4-transcript-raw-aligned.md`。
 
-### task16：Day4 livestream 素材歸檔
+### task17：直播深度導讀與講者識別 HTML 產出（已完成）
+* **執行歷程**：
+  - 由三個背景 `self` subagents 並行處理，利用前後文脈絡對 431 輪對話進行講者識別（Smitha Kolen, Anant Navalgaria, Socrates, Meltem, Wafa, Tony Kloenstein）。
+  - 合併產出帶有講者標記的 [day4-transcript.txt](file:///Users/lanss/projects/2_Practice/5-Day%20AI%20Agents%20Intensive%20Course%20with%20Google%282026%29/Day4/source/livestream/day4-transcript.txt)。
+  - 建立 `day4-deep-guide/index.html` 網頁：
+    - 內嵌直播影片播放器（連結：`https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/DAY.4.Livestream.-.5-Days.of.AI.Agents.Intensive.Vibe.Coding.Course.With.Google_compressed.mp4`）。
+    - 撰寫 5 個主題的繁中深度導讀（安全左移、安全防護與沙箱、有效信任與滑動窗口、軌跡式評估與 LLM-as-judge、ADK 安全生命週期）。
+    - 嵌入帶有 6 種講者顏色 Badge 的雙語折疊逐字稿（共 431 輪對話）。
+* **驗證結果**：產出 [day4-deep-guide/index.html](file:///Users/lanss/projects/2_Practice/5-Day%20AI%20Agents%20Intensive%20Course%20with%20Google%282026%29/Day4/day4-deep-guide/index.html)，`python3 -m html.parser` 結構驗證通過，本地連結死連結核查通過。
 
-- SRT 放 `source/livestream/`。
-- MP4 本地備份放 `source/livestream/`。
-- GitHub Releases URL 記錄於 README。
-- 產出純文字逐字稿：`source/livestream/day4-transcript.txt`。
+### task18：整合回 Day4 主頁與入口（已完成）
+* **執行歷程**：
+  - 在 `index.html` 學習頻道的 grid 中，成功插入「🎬 Day 4 直播深度導讀」的卡片。
+  - 導讀頁面設有返回 Day 4 主頁的連結，完成雙向整合。
+  - 更新了本 `README.md` 的 G 節與任務紀錄。
+* **驗證結果**：主頁連結正確。
 
-### task17：Day4 livestream 深度導讀
-
-建立：
-
-- `day4-deep-guide/index.html`
-
-要求：
-
-- 使用 `deep-guide` + `ai-mentor`。
-- Hero 正下方放直播影片播放器。
-- 逐字稿用 `<details>` 摺疊。
-- 若可辨識講者，參考 Day1 做 speaker badge。
-- 頁面需有返回 Day4 主頁連結。
-
-### task18：Livestream 資訊圖
-
-產生：
-
-- 16:9 桌機圖
-- 9:16 手機圖
-
-放入：
-
-- `day4-deep-guide/images/`
-
-HTML 使用 `<picture>` 響應式切換，並支援 lightbox。
-
-### task19：整合回 Day4 主頁
-
-- `Day4/index.html` 學習頻道新增「Day4 直播深度導讀」卡片。
-- `day4-deep-guide/index.html` 加返回 Day4 主頁。
-- 更新 `Day4/README.md`。
-- 更新 parent `../README.md` 的 Day4 目錄。
-- 重跑 HTML parser、本地連結與截圖 QA。
+### task19：HTML 語法驗證與截圖 QA（已完成）
+* **執行歷程**：
+  - 執行自動化截圖腳本 `pipeline/screenshot_day4_deep_guide.py`，使用 Playwright 產出桌機與手機渲染截圖。
+  - 清除了所有的 `.DS_Store` 檔案。
+* **驗證結果**：成功產出桌機截圖 [desktop.png](file:///Users/lanss/projects/2_Practice/5-Day%20AI%20Agents%20Intensive%20Course%20with%20Google%282026%29/Day4/day4-deep-guide/desktop.png) 與手機截圖 [mobile.png](file:///Users/lanss/projects/2_Practice/5-Day%20AI%20Agents%20Intensive%20Course%20with%20Google%282026%29/Day4/day4-deep-guide/mobile.png)。
 
 ---
 
@@ -976,3 +1062,32 @@ HTML 使用 `<picture>` 響應式切換，並支援 lightbox。
    → 使用 `gpt-5.5` xhigh-reasoning 回看英文與四份譯稿，執行最終合併、術語統一與台灣用語校訂。
    → 建立 `pipeline/merge_day4_translation.py`，驗證圖片路徑、Python code、pillars、dimensions、methods 與 Endnotes。
    → 產出 `_zh.md` 與 `_zh.normalized.md`，兩檔內容一致。
+
+## 異動紀錄
+
+### 2026-06-19 目錄架構標準化調整
+* **檔案清理與除錯**：
+  * 刪除根目錄下重複的 `.srt` 字幕檔案（已有備份於 `source/podcast/`）。
+  * 清理 `.playwright-mcp/` 測試殘留臨時目錄。
+* **全域清理**：清除隱藏垃圾檔案 `.DS_Store`。
+
+### 2026-06-19 直播深度導讀 HTML 全面優化（本次 Session）
+
+**完成事項**：
+
+**Phase 1 — Bug 修正**
+* `day4-deep-guide/index.html`：修正 **7 處** Markdown `**text**` 未轉換為 `<strong>text</strong>` 的問題（theme1 STRIDE、theme2 Safety Harness、theme3 信任概念群、theme4 軌跡分析、theme5 ADK）。
+* 白皮書中文圖片（`images_cht/` 4 張）已從 `day4-deep-guide/index.html` **完全移除**，改為待自製插圖佔位。
+* 圖片 CSS class `.fig` 已加入 HTML `<style>` 區塊。
+
+**Phase 2 — is-mentor 深度內容補寫（資安視角）**
+* `#theme2` 新增 `callout`（is-mentor）：三層確定性防禦架構——網路層 NAT → 沙箱 JIT → AI Guardrail，確定性 > AI 防護欄的設計原則。
+* `#theme3` 新增 `callout`（is-mentor）：Effective Trust vs 靜態信任的根本差異，類比 UEBA 概念引入 AI Agent 監控。
+
+**自製插圖（已完成）**：
+* `day4-deep-guide/README.md` 保存圖 F–J 的完整生圖逐字稿與執行結果。
+* 圖 F–J 已生成並嵌入直播導讀：F → `#theme1`；I、G → `#theme2`；H → `#theme3`；J → `#theme4`。
+
+**圖片來源說明**：
+* Day4 `images_cht/` 圖片（4 張）皆為白皮書 PDF 提取後中文標注版本，非直播討論專屬視覺化，故移除。
+* F–J 圖為「直播 AMA 討論觀點」視覺化，白皮書未有對應圖表；目前已完成生成、整合與 QA。
