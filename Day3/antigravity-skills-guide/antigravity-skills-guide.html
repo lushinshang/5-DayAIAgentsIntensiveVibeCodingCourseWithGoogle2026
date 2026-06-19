@@ -98,6 +98,10 @@
     </div>
   </div>
   <p>這就是 Day 3 反覆強調的重點：讓 context 保持瘦身，不是為了省 token 而已，而是為了讓代理人保持判斷清晰。</p>
+  <figure class="section-figure">
+    <img src="https://codelabs.developers.google.com/static/getting-started-with-antigravity-skills/img/d3f4bcb065a19fea.png" alt="Progressive Disclosure 架構圖：metadata 到 body 的按需載入示範">
+    <figcaption>官方 Codelab 截圖：Progressive Disclosure 實際運作示意——左側只暴露技能目錄，右側依任務需求展開完整 body。</figcaption>
+  </figure>
 </section>
 
 <section id="folder">
@@ -138,6 +142,10 @@
     </div>
   </div>
   <p>這四種 pattern 串起來，就是從「提示詞」走向「可維護 skill library」的路線圖。越是重要、越容易出錯、越需要一致性的任務，就越應該從純文字指令升級成 references、examples 或 scripts。</p>
+  <figure class="section-figure">
+    <img src="https://codelabs.developers.google.com/static/getting-started-with-antigravity-skills/img/191842a2a0d69597.png" alt="Antigravity 回應 'What skills are available?' 的截圖">
+    <figcaption>官方 Codelab 截圖：在 Antigravity 詢問「哪些 Skills 可用？」時，代理人只列出已安裝技能的 metadata 摘要，完整 body 不進入 context——這正是 progressive disclosure 的實際效果。</figcaption>
+  </figure>
 </section>
 
 <section id="cli">
@@ -154,6 +162,10 @@ agents-cli playground</code></pre>
   <h3>npx skills：open skill ecosystem 的安裝層</h3>
   <p>官方 Codelab 最後還介紹 <code>npx skills</code>：這是 Vercel Labs 開發的 skills 套件管理工具，可把技能安裝到 <code>~/.agents/skills</code>，供 Antigravity、Claude Code、GitHub Copilot、Cursor、Cline 等代理人工具使用。</p>
   <p>這一段補上了 Skills 的另一個重點：skill 不只是單一 IDE 的個人設定，而是逐漸形成可散布、可安裝、可審查的 open agent skills ecosystem。也因此第三方 skill 應像軟體依賴一樣審查來源、版本與 scripts。</p>
+  <figure class="section-figure">
+    <img src="https://codelabs.developers.google.com/static/getting-started-with-antigravity-skills/img/aade8c84acacf956.png" alt="Antigravity 確認 Skills 已載入的截圖">
+    <figcaption>官方 Codelab 截圖：執行 <code>uvx google-agents-cli setup</code> 後，Antigravity 確認已識別並載入可用 Skills 的清單——展示 Agents CLI Skills 的生命週期整合效果。</figcaption>
+  </figure>
 </section>
 
 <section id="source-map">
