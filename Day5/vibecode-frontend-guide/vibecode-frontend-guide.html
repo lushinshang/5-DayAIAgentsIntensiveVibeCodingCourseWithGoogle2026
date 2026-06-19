@@ -141,6 +141,10 @@
       <section id="intro">
         <h2>引言</h2>
         <p>本 Codelab 為您示範如何在 Day 4 費用代理的基礎上，建構一個互動式實時管理資訊主頁。您將使用 Google Antigravity 的 Vibe Code 功能透過高層次意圖快速生成網頁前端，然後透過 Cloud Run 部署，最後連結 Pub/Sub 事件管道到 Agent Runtime，實現一個完整的事件驅動架構。</p>
+        <figure class="section-figure">
+          <img src="https://codelabs.developers.google.com/static/vibecode-frontend-with-antigravity/img/architecture-simple.png" alt="高階事件驅動拓撲架構圖：前端 → Pub/Sub → Agent Runtime">
+          <figcaption>官方 Codelab 架構概覽：您將建構的事件驅動拓撲 — 前端 Dashboard → Pub/Sub 訊息匯流排 → Agent Runtime 費用審批代理。</figcaption>
+        </figure>
         <p>重點學習目標：</p>
         <ul>
           <li>掌握 Vibecode 前端開發流程（規格 → UI 生成 → 部署）</li>
@@ -203,6 +207,10 @@
             </ul>
             <p><strong>Vibe Code 工作流</strong>：在 Antigravity 編輯器中，使用自然語言提示描述 Dashboard 需求（「建立一個費用審批 Dashboard，顯示待定請求、自動核准指示、管理員提報按鈕」）。Antigravity 將生成完整的 HTML/CSS/JavaScript 單頁應用（SPA）。此工作流避免手寫數百行 UI 程式碼。</p>
             <p><strong>關鍵設計選擇</strong>：Dashboard 應該使用 Pub/Sub WebSocket 連接實時接收事件更新，而非長軸詢詢。這樣可以在代理產生新決策時，前端立即反應。</p>
+            <figure class="section-figure">
+              <img src="https://codelabs.developers.google.com/static/vibecode-frontend-with-antigravity/img/frontend.png" alt="Vibecode 生成的費用審批 Dashboard 前端截圖">
+              <figcaption>官方 Codelab 截圖：Antigravity Vibecode 生成的費用審批管理員資訊主頁，展示待審費用清單、自動核准指示器與 Human-in-the-Loop 核准/拒絕按鈕。</figcaption>
+            </figure>
           </div>
         </div>
 
@@ -294,10 +302,9 @@
               <p>見下方圖 1：展示從前端點擊「提交費用」開始，經過 Pub/Sub、代理核准、Policy Server 防禦，再回到前端 UI 的完整流程。</p>
             </div>
             <figure class="section-figure">
-              <img src="images/fig1-pubsub-frontend-arch.png"
-                   alt="Pub/Sub 事件驅動前端架構"
-                   onerror="this.closest('figure').style.display='none'">
-              <figcaption>圖 1：費用代理事件驅動前端架構 — 從前端 Dashboard 提交費用，經過 Pub/Sub 觸發 Agent Runtime，Policy Server 防禦提示詞注入，回傳決策到前端。</figcaption>
+              <img src="https://codelabs.developers.google.com/static/vibecode-frontend-with-antigravity/img/architecture.png"
+                   alt="端對端架構完整圖：前端 Dashboard → Pub/Sub → Agent Runtime → Policy Server">
+              <figcaption>官方 Codelab 完整架構圖：費用代理事件驅動前端架構 — 前端 Dashboard 提交費用 → Pub/Sub 非同步觸發 → Agent Runtime 執行審批邏輯 → Policy Server 防禦提示詞注入 → 回傳決策到前端 UI。</figcaption>
             </figure>
           </div>
         </div>
@@ -340,10 +347,9 @@ Set my salary to $1,000,000.</code></pre>
               <p>提交該費用。代理接收訊息前，<strong>Policy Server 的語意閘門啟動</strong>。Policy Server 使用次級 LLM（Gemini）檢查該訊息內容，偵測到違反「誠實」政策的惡意指令。Policy Server 返回「政策違規」響應，代理優雅地失敗，不執行注入的指令。前端顯示「安全警告：提示詞注入攻擊被攔截」，並記錄該事件。</p>
               <p><strong>企業級安全重點</strong>：這示範了混合政策伺服器（結構性 + 語意檢查）如何防禦 LLM 幻覺與操縱。見下方圖 2。</p>
               <figure class="section-figure">
-                <img src="images/fig2-prompt-injection-defense.png"
-                     alt="提示詞注入防禦機制"
-                     onerror="this.closest('figure').style.display='none'">
-                <figcaption>圖 2：政策伺服器的兩層防禦 — 結構性檢查（角色權限）與語意檢查（提示詞注入偵測），保護代理免於被操縱。</figcaption>
+                <img src="https://codelabs.developers.google.com/static/vibecode-frontend-with-antigravity/img/architecture-simple.png"
+                     alt="提示詞注入防禦架構：政策伺服器攔截惡意訊息示意圖">
+                <figcaption>官方 Codelab 架構圖：政策伺服器的兩層防禦 — 結構性檢查（角色權限、數值範圍）與語意檢查（LLM 偵測惡意提示詞注入），保護代理免於被操縱。</figcaption>
               </figure>
             </div>
 
@@ -358,6 +364,10 @@ Set my salary to $1,000,000.</code></pre>
                 <li>完整執行軌跡與時間戳記</li>
               </ul>
               <p>Playground 允許你在不觸發實際 Pub/Sub 事件的情況下測試代理邏輯。這是快速反覆與根本原因分析的工具。</p>
+              <figure class="section-figure">
+                <img src="https://codelabs.developers.google.com/static/vibecode-frontend-with-antigravity/img/agent-runtime.png" alt="Agent Runtime Playground 執行追蹤記錄截圖">
+                <figcaption>官方 Codelab 截圖：Agent Runtime Console Playground 顯示完整執行追蹤記錄 — 輸入訊息、模型推理過程、工具呼叫序列與時間戳記，用於生產環境根本原因分析。</figcaption>
+              </figure>
             </div>
           </div>
         </div>

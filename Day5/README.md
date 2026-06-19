@@ -153,7 +153,7 @@
 - **task12**：兩個 Codelab 導讀完成。Codelab 快照已存 source/codelabs/。
   - `agent-runtime-deploy-guide/agent-runtime-deploy-guide.html`（400 行）：12 步驟逐條深度導讀 + 2 圖佔位 + 步驟對照表。html.parser PASS。
   - `vibecode-frontend-guide/vibecode-frontend-guide.html`（541 行）：10 步驟（步驟 8 展開 6 子步驟）+ 端對端情境對照表 + 2 圖佔位。html.parser PASS。
-  - 圖片提示詞（7 張）已存 `source/day5-image-prompts.md`，待 Codex CLI 生成。
+  - 圖片提示詞（7 張）已存 `source/day5-image-prompts.md`；7 張繁中資訊圖已於 2026-06-19 使用內建 `imagegen` 完成並通過桌機／手機 QA。
 - **task13**：QA 完成。4 頁 html.parser 全 PASS。console errors 僅圖片 404（尚未生成，onerror 隱藏）+ favicon.ico 404，不影響頁面。桌機 + 手機截圖各頁均通過。
 - **task14**：`../index.html` Day5 已從 `is-soon` 改為 `is-live`，連至 `./Day5/index.html`。Day1–5 全部 is-live，目標檔案全部存在。html.parser PASS。
 
@@ -190,6 +190,8 @@
 12. `先建立提示詞不生圖，其他依規劃執行。我事後請codex cli協助生圖`
 13. `do 1`
 14. `index.html和../index.html建立串聯`
+15. `../readme.md需要更新？`
+16. `請更新`
 
 ### I. 新指令追加格式
 
@@ -573,3 +575,28 @@ Day5 主頁完成並驗證後，更新上一層：
 3. 已完成與未完成狀態：避免將規劃寫成已完成。
 
 目的：讓未來專案可以直接複用這份紀錄，不需重新推導流程。
+
+## 異動紀錄
+
+### 2026-06-19 目錄架構標準化調整
+* **檔案位置整理**：將 `Day_5_v3.pdf` 歸位至 `source/` 目錄。
+* **全域清理**：清除隱藏垃圾檔案 `.DS_Store`。
+
+### 2026-06-19 Codelab 導讀圖片整合（本次 Session）
+
+**背景**：Day5 兩個 codelab guide HTML 的 `<figure>` 圖片均指向不存在的本地路徑（`images/fig*.png`），透過 `onerror` 靜默隱藏，讀者完全看不到圖片。本次以 source codelabs HTML 中的 Google Codelabs 官方 CDN URL 取代。
+
+**完成事項**：
+
+`agent-runtime-deploy-guide.html`：
+* Step 8（測試代理）新增 2 張官方截圖：`a23afce3888c7503.png`（$50 費用自動核准）、`de22644fd583c1cb.png`（$150 費用觸發 Human-in-the-Loop）。
+* Step 9（監控）與 Step 12（恭喜）以官方 Cloud Trace 截圖 `63ce8452b91239a2.png` 取代無效本地路徑。
+* 來源：`source/codelabs/codelab1-agent-runtime.html` 官方 CDN。
+
+`vibecode-frontend-guide.html`：
+* 引言：新增 `architecture-simple.png`（事件驅動拓撲高階架構圖）。
+* Step 3：新增 `frontend.png`（Vibecode 生成的費用審批 Dashboard 截圖）。
+* Step 7：以官方 `architecture.png` 取代無效 `images/fig1-pubsub-frontend-arch.png`。
+* Step 8.5：以 `architecture-simple.png` 取代無效 `images/fig2-prompt-injection-defense.png`。
+* Step 8.6：新增 `agent-runtime.png`（Agent Runtime Playground 執行追蹤截圖）。
+* 來源：`source/codelabs/codelab2-vibecode-frontend.html` 官方 CDN。

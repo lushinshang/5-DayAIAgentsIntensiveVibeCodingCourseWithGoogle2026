@@ -234,6 +234,14 @@
           <div class="step-guide">
             <strong>深度導讀</strong>：測試生產環境中的代理與本機測試有本質不同——你在測試網路延遲、多用戶場景、真實的 API 調用。此時發現的問題往往涉及平行性、資源爭搶或權限問題，這些在本機難以重現。
           </div>
+          <figure class="section-figure">
+            <img src="https://codelabs.developers.google.com/static/enterprise-cloud-scale-deploying-the-expense-agent-to-agent-runtime-on-google-cloud/img/a23afce3888c7503.png" alt="auto_approve 節點輸出 JSON：$50 費用自動核准回應">
+            <figcaption>官方 Codelab 截圖：透過 REST API 測試費用代理，auto_approve 節點輸出 JSON 回應，顯示 $50 費用已自動核准（低於閾值自動通過）。</figcaption>
+          </figure>
+          <figure class="section-figure">
+            <img src="https://codelabs.developers.google.com/static/enterprise-cloud-scale-deploying-the-expense-agent-to-agent-runtime-on-google-cloud/img/de22644fd583c1cb.png" alt="Human-in-the-loop RequestInput 觸發：$150 費用需人工審核">
+            <figcaption>官方 Codelab 截圖：$150 費用超過自動核准閾值，review_agent 觸發 RequestInput（Human-in-the-loop）暫停執行，等待人工介入核准——展示費用代理的雙通道決策邏輯。</figcaption>
+          </figure>
         </div>
       </section>
 
@@ -249,8 +257,8 @@
           </div>
 
           <figure class="section-figure">
-            <img src="images/fig1-agents-cli-deploy-flow.png" alt="agents-cli 部署流程" onerror="this.closest('figure').style.display='none'">
-            <figcaption>圖 1：agents-cli 生產部署六階段流程（本機開發 → 打包 → 驗證 → 推送 → 部署 → 監控）</figcaption>
+            <img src="https://codelabs.developers.google.com/static/enterprise-cloud-scale-deploying-the-expense-agent-to-agent-runtime-on-google-cloud/img/63ce8452b91239a2.png" alt="Cloud Trace 遙測串流截圖：Agent Runtime 自動連線可觀測性資料">
+            <figcaption>官方 Codelab 截圖：Agent Runtime 自動串流遙測資料至 Cloud Trace，每次互動、模型呼叫與工具執行都即時記錄——展示零配置可觀測性的實際效果。</figcaption>
           </figure>
         </div>
       </section>
@@ -293,8 +301,8 @@
           </div>
 
           <figure class="section-figure">
-            <img src="images/fig2-observability-dashboard.png" alt="可觀測性儀表板" onerror="this.closest('figure').style.display='none'">
-            <figcaption>圖 2：Cloud Trace 和 Logging 的可觀測性儀表板示例</figcaption>
+            <img src="https://codelabs.developers.google.com/static/enterprise-cloud-scale-deploying-the-expense-agent-to-agent-runtime-on-google-cloud/img/63ce8452b91239a2.png" alt="Cloud Trace 遙測串流截圖：Agent Runtime 自動連線可觀測性">
+            <figcaption>官方 Codelab 截圖：Cloud Trace 遙測串流實際截圖 — Agent Runtime 自動記錄每次互動、模型呼叫與工具執行的完整追蹤資料，零配置即可使用。</figcaption>
           </figure>
         </div>
       </section>
