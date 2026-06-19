@@ -164,6 +164,8 @@
   - 問題修正：`podcast-deep-guide.html` 原 CSS 將 `.section-figure img` 設為 `display:none`，已改為顯示並置中。
   - 驗證：7 張圖皆為有效 PNG、三頁 `html.parser` PASS、桌機 1440×1000 與手機 390×844 截圖 QA PASS，所有資訊圖均正常顯示。
 
+- **Day5 與課程首頁雙向串聯**（2026-06-19，指令 14）：`../index.html#day5` 的 Day5 卡片連至 `./Day5/index.html`；Day5 sticky nav 回程連至 `../index.html#day5`。上層課程狀態同步改為 Day 1–Day 5 全部完成。兩頁 `html.parser` 與連結目標檢查 PASS。
+
 #### 後補待辦（不阻塞主流程）
 
 - **Livestream 後補**（task16–19）：素材到齊後執行，流程同 Day4 task16–19。
@@ -187,6 +189,7 @@
 11. `會生哪些圖？`
 12. `先建立提示詞不生圖，其他依規劃執行。我事後請codex cli協助生圖`
 13. `do 1`
+14. `index.html和../index.html建立串聯`
 
 ### I. 新指令追加格式
 
