@@ -660,3 +660,11 @@ lbImg.src = img.currentSrc || img.src;
 - `href="Agent Tools Interoperability Day 2-中文版.pdf"` + `target="_blank"`，瀏覽器內建 PDF 閱讀器開啟
 - 目錄結構補入 PDF 檔案說明
 
+## 異動紀錄
+
+### 2026-06-19 目錄架構標準化調整
+* **檔案位置整理**：
+  * 將 `Agent Tools Interoperability Day 2-中文版.pdf` 歸位至 `source/` 目錄。
+  * 將 Podcast 字幕 `.srt` 與音視訊 `.mp4` 檔案歸位至 `source/podcast/` 目錄。
+* **預覽圖補齊**：從 `day2-deep-guide` 複製 `desktop.png` 預覽圖至 Day 2 根目錄。
+* **全域清理**：清除隱藏垃圾檔案 `.DS_Store`。
