@@ -68,10 +68,9 @@
 
     /* ── figure / image ── */
     figure.section-figure{margin:28px 0 24px;background:#fff;border:1px solid #ddd8cf;border-radius:10px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.06)}
-    figure.section-figure img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;cursor:zoom-in}
+    figure.section-figure img{width:100%;height:auto;display:block;aspect-ratio:16/9;object-fit:contain;cursor:zoom-in;background:#f7f9fa}
     figure.section-figure img[src=""]{display:none}
     figure.section-figure figcaption{padding:9px 16px 11px;font-size:12.5px;color:#666;border-top:1px solid #ddd8cf;line-height:1.5}
-    @media(max-width:640px){figure.section-figure img{aspect-ratio:4/3}}
 
     /* ── transcript ── */
     .transcript-section{margin-top:52px;border:1px solid #ded9cf;border-radius:8px;background:#fff;overflow:hidden}
@@ -202,9 +201,8 @@
     <p>直播開場，Smitha 就把這個核心矛盾攤開來講：<strong>讓 Vibe Coding 如此快速的特性，恰恰也是它在生產環境中變得脆弱的原因。</strong>可拋棄的程式碼讓你跑得快，但沒有任何人知道「下一個需要修改的人，拿什麼來理解這段程式碼」——更別說六個月後換了新的合規要求、新的模型版本，整個系統要重建時，真理來源在哪裡？</p>
     <p>這就是 Day 5 所有討論的起點，也是五天課程最終回答的那個問題。</p>
 
-    <!-- 圖 A 佔位 -->
     <figure class="section-figure" id="fig-a">
-      <img src="images/day5-fig-a-vibe-vs-sdd.png" alt="Vibe Coding vs SDD 速度與永續性對比圖" onerror="this.closest('figure').style.display='none'">
+      <img src="images/day5-fig-a-vibe-vs-sdd.png" alt="Vibe Coding vs SDD 速度與永續性對比圖" width="1672" height="941" loading="lazy" decoding="async">
       <figcaption><strong>圖 A</strong>：Vibe Coding 速度衝刺 vs SDD 規格驅動的根本差異——程式碼可拋棄，規格不能</figcaption>
     </figure>
   </section>
@@ -257,9 +255,8 @@
     </ul>
     <p>這套架構還有一個關鍵好處：每個微 Agent 的任務邊界清晰，<strong>人在迴圈（Human-in-the-Loop）的介入點自然出現</strong>，不需要讓人去審查數千行 AI 生成的程式碼。</p>
 
-    <!-- 圖 B 佔位 -->
     <figure class="section-figure" id="fig-b">
-      <img src="images/day5-fig-b-elephant-slicing.png" alt="切分大象微 Agent 架構圖" onerror="this.closest('figure').style.display='none'">
+      <img src="images/day5-fig-b-elephant-slicing.png" alt="切分大象微 Agent 架構圖" width="1672" height="941" loading="lazy" decoding="async">
       <figcaption><strong>圖 B</strong>：單體超級 Agent vs 微 Agent 網路——Spanner Graph + ANN + ADK 四步驟管線</figcaption>
     </figure>
 
@@ -284,9 +281,8 @@
     <p>Anant 在這個基礎上補充了<strong>遞迴對抗性審核層</strong>的概念：讓 Agent 先質疑提交 PR 的 Agent 或人類——「這個程式碼變更真的合理嗎？如果發生 Bug，我能重現嗎？」——把人工介入的時間點盡量往後延，且頻率降至最低。</p>
     <p>但 Antonio 加了一個重要的警告：<strong>對抗性層不能無限疊加</strong>。每一層都消耗 Token 和時間，加太多層可能讓你在一天結束時拿到一個混亂的建置結果，反而比沒有審核層更糟。</p>
 
-    <!-- 圖 C 佔位 -->
     <figure class="section-figure" id="fig-c">
-      <img src="images/day5-fig-c-three-tier-review.png" alt="PR 審核三層防線金字塔" onerror="this.closest('figure').style.display='none'">
+      <img src="images/day5-fig-c-three-tier-review.png" alt="PR 審核三層防線金字塔" width="1672" height="941" loading="lazy" decoding="async">
       <figcaption><strong>圖 C</strong>：PR 審核三層防線——從全自動到強制人工的風險分層策略</figcaption>
     </figure>
 
@@ -307,9 +303,8 @@
     <p>Ankur 的視角更底層：<strong>理解「為什麼」（WHY）而不只是「如何做」（HOW）永遠是必要的</strong>。不管你是在考量資安、可靠性、還是擴充性，你都必須對自己開發的系統保有底層直覺——哪怕你的手再也不碰語法細節。</p>
     <p>Omar 給初階工程師的建議則直截了當：<strong>動手建，做開源，持續協作。</strong>你在「Agent 原生」的環境中成長，但同時必須理解 Agent 局限性在哪裡、它擅長什麼。因為這個產業發展得太快，你今天學到的方法六個月後就可能過時——唯有不斷實作、不斷接觸真實系統，才能建立起不被某一套工具或框架所綁定的系統直覺。</p>
 
-    <!-- 圖 D 佔位 -->
     <figure class="section-figure" id="fig-d">
-      <img src="images/day5-fig-d-cognitive-evolution.png" alt="工程師認知進化技能樹" onerror="this.closest('figure').style.display='none'">
+      <img src="images/day5-fig-d-cognitive-evolution.png" alt="工程師認知進化技能樹" width="1672" height="941" loading="lazy" decoding="async">
       <figcaption><strong>圖 D</strong>：從程式碼編寫者到系統架構師——會退化的舊技能、不變的核心與需要培養的新技能</figcaption>
     </figure>
 
@@ -340,9 +335,8 @@
     <p>在這個閉環的每個關鍵過渡點，都有人類介入的檢查點：初始規格設計、測試驗證、整體日誌審查、自我改進循環。</p>
     <p>而 Omar 從架構師 Agent 的角度補充了另一個關鍵設計：<strong>用沙箱化（Sandboxing）限制編碼 Agent 的存取範圍</strong>——讓它只能在架構師 Agent 已預審並搭好骨架的結構中填補空白，從根本上杜絕「Agent 自己決定在哪裡寫檔案、怎麼寫」所帶來的架構漂移風險。</p>
 
-    <!-- 圖 E 佔位 -->
     <figure class="section-figure" id="fig-e">
-      <img src="images/day5-fig-e-agent-squad-loop.png" alt="Agent 隊伍自我進化閉環圖" onerror="this.closest('figure').style.display='none'">
+      <img src="images/day5-fig-e-agent-squad-loop.png" alt="Agent 隊伍自我進化閉環圖" width="1672" height="941" loading="lazy" decoding="async">
       <figcaption><strong>圖 E</strong>：Agent 隊伍自我進化閉環——從規格到部署到回饋的六站飛輪</figcaption>
     </figure>
   </section>
