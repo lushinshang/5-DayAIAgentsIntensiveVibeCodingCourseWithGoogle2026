@@ -168,7 +168,14 @@
 
 #### 後補待辦（不阻塞主流程）
 
-- **Livestream 後補**（task16–19）：素材到齊後執行，流程同 Day4 task16–19。
+- **Livestream 深度導讀**（task16–19）：**部分完成（2026-06-20）**
+  - ✅ 中英文 SRT 逐字稿已放入 `Day5/` 根目錄（各 1769/1768 行）
+  - ✅ `day5-deep-guide/day5-deep-guide.md`：六段式深度導讀 + 3 個 ai-mentor callout（deep-guide skill + ai-mentor-agents skill 執行）
+  - ✅ `day5-deep-guide/index.html`：含 `<video>` 播放器（影片連結已填入）、雙語摺疊逐字稿、返回 Day5 主頁連結；html.parser PASS；桌機 1280×800 + 手機 390×844 截圖 QA PASS
+  - ✅ `day5-deep-guide/README.md`：5 張生圖提示詞（圖 A–E，Kawaii 台灣風格 16:9）+ 指令 1–5 完整紀錄
+  - ✅ 影片連結已填入：`https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/DAY.5.Livestream.-.5-Days.of.AI.Agents.Intensive.Vibe.Coding.Course.With.Google.mp4`
+  - ✅ **雙向連結**：`Day5/index.html` 學習頻道新增直播導讀卡片 → `day5-deep-guide/index.html`；導讀頁 nav + footer 均有回程連結 → `../index.html`；兩頁 html.parser PASS
+  - ⏳ 5 張資訊圖待生成（`images/day5-fig-a` 至 `images/day5-fig-e`，提示詞在 `day5-deep-guide/README.md`）
 
 ---
 
@@ -192,6 +199,11 @@
 14. `index.html和../index.html建立串聯`
 15. `../readme.md需要更新？`
 16. `請更新`
+17. `read每一天的readme.md，然後我要說第五天直播的中文及原文逐字稿都放此，影片產製中。工作如下：1.以AI-mentor and deepguide skill 針對逐字稿內容做深度導讀，存為md。2.接著以md_to_html將上一點的md轉換為html(前四天的直播導讀html可參考），有適合生圖之處，規劃提示詞先存在readme.md，我事後呼叫codex cli處理。`
+18. `放 <video> 佔位，請執行`
+19. `1.補充影片連結：https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/DAY.5.Livestream.-.5-Days.of.AI.Agents.Intensive.Vibe.Coding.Course.With.Google.mp4 2.所有過程，狀態及提示詞更新到readme.md`
+20. `html和day5/html要互相連結`
+21. `update readme.md`
 
 ### I. 新指令追加格式
 

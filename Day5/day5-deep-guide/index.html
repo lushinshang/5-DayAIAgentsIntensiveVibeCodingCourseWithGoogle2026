@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Day 5 直播深度導讀 — Vibe Coding 時代的規格驅動生產級開發 | 5-Day AI Agents Intensive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:#f9f7f4;color:#1a1a1a;font-size:16px;line-height:1.72;letter-spacing:0}
+    a{color:#0f5961;text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* ── navigation ── */
+    .toc{position:sticky;top:0;z-index:100;background:rgba(249,247,244,.96);backdrop-filter:blur(10px);border-bottom:1px solid #ddd8cf;height:56px}
+    .toc-inner{max-width:1120px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none}
+    .toc-inner::-webkit-scrollbar{display:none}
+    .toc-inner a{color:#4a4a4a;text-decoration:none;font-size:13px;font-weight:600;padding:5px 10px;border-radius:6px;white-space:nowrap}
+    .toc-inner a:hover{background:#e3efed;color:#0f5961}
+
+    /* ── hero ── */
+    .hero{background:linear-gradient(135deg,#0d1f22 0%,#176b75 55%,#8b5e3c 100%);color:#fff;padding:64px 24px 52px;text-align:center}
+    .hero-inner{max-width:860px;margin:0 auto}
+    .hero-tag{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:16px}
+    h1{font-size:clamp(1.8rem,4.5vw,2.9rem);line-height:1.2;margin-bottom:18px;text-wrap:balance}
+    .hero-subtitle{font-size:15.5px;color:rgba(255,255,255,.88);max-width:760px;margin:0 auto 16px;line-height:1.65}
+    .hero-meta{font-size:13px;color:rgba(255,255,255,.6);margin-top:12px}
+
+    /* ── main layout ── */
+    main{max-width:1120px;margin:0 auto;padding:40px 24px 80px}
+    article{max-width:720px;margin:0 auto}
+
+    /* ── video ── */
+    .video-wrap{margin:0 auto 44px;max-width:800px;background:#111516;border-radius:12px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,.18)}
+    .video-wrap video{width:100%;display:block}
+    .video-placeholder{padding:40px 24px;text-align:center;color:rgba(255,255,255,.55);font-size:14px}
+    .video-placeholder strong{color:rgba(255,255,255,.8)}
+
+    /* ── typography ── */
+    h2{font-size:1.6rem;color:#122224;margin:52px 0 20px;padding-bottom:8px;border-bottom:2px solid #dfe9e7;text-wrap:balance}
+    h3{font-size:1.15rem;color:#176b75;margin:28px 0 10px;font-weight:700}
+    p{margin-bottom:18px;text-align:justify}
+    ul,ol{padding-left:22px;margin:0 0 18px}
+    li{margin-bottom:7px}
+    strong{color:#122224}
+    blockquote{margin:24px 0;padding:14px 18px;border-left:4px solid #176b75;background:#eef6f4;border-radius:0 8px 8px 0;color:#2a3635;font-size:15.5px}
+    code{background:#f0ece6;padding:2px 5px;border-radius:4px;font-size:.88em;font-family:ui-monospace,"Cascadia Code","SF Mono",monospace}
+    pre{background:#1e2830;color:#e8dcc8;padding:18px 20px;border-radius:10px;overflow-x:auto;margin:20px 0;font-size:13.5px;line-height:1.6}
+    pre code{background:none;padding:0;color:inherit;font-size:inherit}
+    table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14.5px}
+    th{background:#163f44;color:#fff;padding:10px 14px;text-align:left;font-size:13.5px}
+    td{padding:9px 14px;border-bottom:1px solid #e8e4de;vertical-align:top}
+    tr:nth-child(even) td{background:#f5f2ee}
+
+    /* ── callout (ai-mentor) ── */
+    .callout{margin:28px 0;padding:18px 22px;border-left:4px solid #c2a84b;background:#fff9e7;border-radius:0 10px 10px 0}
+    .callout-title{font-size:13px;font-weight:800;color:#7d630f;margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em}
+    .callout p{margin-bottom:10px;font-size:15px;color:#3d2f05}
+    .callout p:last-child{margin-bottom:0}
+
+    /* ── takeaway grid ── */
+    .takeaway-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0 32px}
+    @media(max-width:640px){.takeaway-grid{grid-template-columns:1fr}}
+    .takeaway-card{background:#fff;border:1px solid #e1ddd4;border-radius:8px;padding:16px 18px}
+    .takeaway-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+    .takeaway-card h4{font-size:.95rem;color:#122224;margin-bottom:7px;display:flex;align-items:center;gap:8px}
+    .takeaway-card p{font-size:14px;color:#4a4a4a;margin-bottom:0}
+
+    /* ── figure / image ── */
+    figure.section-figure{margin:28px 0 24px;background:#fff;border:1px solid #ddd8cf;border-radius:10px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.06)}
+    figure.section-figure img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;cursor:zoom-in}
+    figure.section-figure img[src=""]{display:none}
+    figure.section-figure figcaption{padding:9px 16px 11px;font-size:12.5px;color:#666;border-top:1px solid #ddd8cf;line-height:1.5}
+    @media(max-width:640px){figure.section-figure img{aspect-ratio:4/3}}
+
+    /* ── transcript ── */
+    .transcript-section{margin-top:52px;border:1px solid #ded9cf;border-radius:8px;background:#fff;overflow:hidden}
+    .transcript-trigger{display:block;width:100%;padding:16px 22px;background:#eef3f2;color:#122224;font-size:1.05rem;font-weight:700;cursor:pointer;user-select:none;outline:none;border:none;text-align:left}
+    .transcript-trigger:hover{background:#e3efed}
+    .transcript-content{padding:10px 22px 22px;border-top:1px solid #ded9cf}
+    .transcript-timeline{display:flex;flex-direction:column;gap:16px;max-height:740px;overflow-y:auto;padding-right:8px}
+    .transcript-turn{padding-bottom:12px;border-bottom:1px solid #f1eeeb}
+    .transcript-turn:last-child{border-bottom:none;padding-bottom:0}
+    .turn-meta{display:flex;align-items:center;gap:10px;margin-bottom:5px}
+    .speaker-badge{font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:20px;display:inline-block;white-space:nowrap}
+    .timestamp{font-size:11px;color:#999;font-family:monospace}
+    .text-zh{font-size:14.5px;color:#1a1a1a;font-weight:500;margin-bottom:3px}
+    .text-en{font-size:13px;color:#666;font-style:italic}
+
+    /* speaker colors */
+    .s-smitha{background:#d4507e;color:#fff}
+    .s-anant{background:#176b75;color:#fff}
+    .s-ankur{background:#2e7d32;color:#fff}
+    .s-antonio{background:#e65100;color:#fff}
+    .s-lee{background:#6a1b9a;color:#fff}
+    .s-omar{background:#1565c0;color:#fff}
+    .s-brenda{background:#f57f17;color:#fff}
+    .s-host{background:#546e7a;color:#fff}
+
+    /* ── quiz ── */
+    .quiz-section{margin:40px 0}
+    .quiz-card{background:#fff;border:1px solid #e1ddd4;border-radius:8px;padding:16px 20px;margin-bottom:12px}
+    .quiz-q{font-size:14.5px;font-weight:700;color:#122224;margin-bottom:8px}
+    .quiz-a{font-size:14px;color:#176b75;font-weight:600;margin-bottom:4px}
+    .quiz-logic{font-size:13px;color:#666}
+
+    /* ── capstone track grid ── */
+    .track-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+    @media(max-width:640px){.track-grid{grid-template-columns:1fr}}
+    .track-card{background:#fff;border:1px solid #e1ddd4;border-radius:8px;padding:14px 16px}
+    .track-card .track-emoji{font-size:1.5rem;margin-bottom:6px}
+    .track-card h4{font-size:.9rem;font-weight:700;color:#122224;margin-bottom:5px}
+    .track-card p{font-size:13.5px;color:#555;margin-bottom:0}
+
+    /* ── footer ── */
+    footer{text-align:center;padding:40px 24px;font-size:13px;color:#888;border-top:1px solid #ddd8cf;margin-top:60px}
+    footer a{color:#176b75}
+
+    /* ── lightbox ── */
+    .lightbox{display:none;position:fixed;inset:0;z-index:200;background:rgba(26,26,26,.9);align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+    .lightbox.is-open{display:flex}
+    .lightbox img{max-width:96vw;max-height:92vh;width:auto;height:auto;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,.4)}
+    .lightbox-hint{position:absolute;top:20px;right:24px;color:rgba(255,255,255,.7);font-size:13px}
+
+    @media(max-width:640px){
+      h2{font-size:1.35rem}
+      main{padding:28px 16px 60px}
+      .transcript-timeline{max-height:560px}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="../index.html">← 返回 Day 5 主頁</a>
+    <a href="#video">直播影片</a>
+    <a href="#section-1">速度幻覺</a>
+    <a href="#section-2">真理來源</a>
+    <a href="#section-3">切分大象</a>
+    <a href="#section-4">三層防線</a>
+    <a href="#section-5">認知退化</a>
+    <a href="#section-6">Agent 閉環</a>
+    <a href="#quiz">隨堂測驗</a>
+    <a href="#capstone">Capstone</a>
+    <a href="#transcript">雙語逐字稿</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">5-Day AI Agents Intensive Course · Day 5 Livestream</div>
+    <h1>Day 5 直播深度導讀：Vibe Coding 時代的規格驅動生產級開發</h1>
+    <p class="hero-subtitle">五天課程的終章——當 AI 能在午餐前生出整個後端，<br>企業真正需要維護的，是什麼？</p>
+    <p class="hero-meta">直播日期：2026-06-19 · 61 分鐘 · 白皮書作者：Lee Boonstra</p>
+  </div>
+</header>
+
+<main>
+<article>
+
+  <!-- ── 直播影片 ── -->
+  <section id="video">
+    <div class="video-wrap">
+      <video controls preload="metadata">
+        <source src="https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/DAY.5.Livestream.-.5-Days.of.AI.Agents.Intensive.Vibe.Coding.Course.With.Google.mp4" type="video/mp4">
+        您的瀏覽器不支援 HTML5 影片播放。
+      </video>
+    </div>
+  </section>
+
+  <!-- ── 導讀大綱 ── -->
+  <section id="summary" style="padding-top:0">
+    <h2>直播核心亮點</h2>
+    <p>第五天直播匯聚了白皮書作者 Lee Boonstra、Google Cloud 技術專家 Ankur、Antonio、Omar 與課程主持人 Smitha、Anant，進行深度 AMA 問答。核心命題只有一個：<strong>Vibe Coding 讓你快速衝出了原型，但如何讓它不在第一次修改時崩潰？</strong></p>
+    <div class="takeaway-grid">
+      <div class="takeaway-card">
+        <h4>📐 SDD 核心轉換</h4>
+        <p>規格是持久產物，程式碼是可拋棄的輸出。真理來源是規格，不是程式碼。</p>
+      </div>
+      <div class="takeaway-card">
+        <h4>🐘 切分大象</h4>
+        <p>RAG 在億行程式碼庫必然失敗。Spanner Graph + ANN + 微 Agent 網路是正解。</p>
+      </div>
+      <div class="takeaway-card">
+        <h4>🛡️ 三層 PR 審核</h4>
+        <p>自動合併 → 批次摘要 → 強制人工，防止審核疲勞與燃盡。</p>
+      </div>
+      <div class="takeaway-card">
+        <h4>🔄 自我進化閉環</h4>
+        <p>規格 → 測試 → 程式碼 → 部署 → 日誌 → 超級架構師 Agent 回饋修改規格。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 第一節 ── -->
+  <section id="section-1">
+    <h2>一、速度幻覺：Vibe Coding 讓你以為衝到了終點，實際上才剛到起跑線</h2>
+    <p>Vibe Coding 可以在幾分鐘內生成一個可運作的原型。這件事本身不是問題。</p>
+    <p>問題是大多數人把「可以跑」誤認為「可以交付」。</p>
+    <p>當 AI 在一個下午就能生出三千行 Python、在午餐前長出整個後端，你很容易忘記：企業環境裡讓系統「沒有崩潰地持續運作」所需要的，從來不是程式碼本身，而是能夠解釋、審核、復現、修改程式碼的<strong>知識基礎設施</strong>。</p>
+    <p>直播開場，Smitha 就把這個核心矛盾攤開來講：<strong>讓 Vibe Coding 如此快速的特性，恰恰也是它在生產環境中變得脆弱的原因。</strong>可拋棄的程式碼讓你跑得快，但沒有任何人知道「下一個需要修改的人，拿什麼來理解這段程式碼」——更別說六個月後換了新的合規要求、新的模型版本，整個系統要重建時，真理來源在哪裡？</p>
+    <p>這就是 Day 5 所有討論的起點，也是五天課程最終回答的那個問題。</p>
+
+    <!-- 圖 A 佔位 -->
+    <figure class="section-figure" id="fig-a">
+      <img src="images/day5-fig-a-vibe-vs-sdd.png" alt="Vibe Coding vs SDD 速度與永續性對比圖" onerror="this.closest('figure').style.display='none'">
+      <figcaption><strong>圖 A</strong>：Vibe Coding 速度衝刺 vs SDD 規格驅動的根本差異——程式碼可拋棄，規格不能</figcaption>
+    </figure>
+  </section>
+
+  <!-- ── 第二節 ── -->
+  <section id="section-2">
+    <h2>二、當程式碼可以被拋棄，真理來源在哪裡？</h2>
+    <p>Lee Boonstra（白皮書作者）在問答環節說了一句話，精準刺穿了整個問題的核心：</p>
+    <blockquote>「如今已經不是這樣了。我們撰寫規格，接著它會生成程式碼。這基本上讓程式碼變成了可拋棄的。如今的真理來源就是規格。」</blockquote>
+    <p>過去，開發者花幾個小時調整架構、抓出 Bug，對自己寫的函式命名有強烈的情感依戀。這不是壞事——這份依戀本身就是「我完全理解我寫的東西」的外顯信號。</p>
+    <p>現在，AI 幾分鐘就能幫你寫好那個函式，而你從來沒有真正讀懂它的實作細節。這是一個結構性的斷裂。</p>
+    <ul>
+      <li><strong>舊模式</strong>：開發者 → 寫程式碼 → 程式碼是真理來源</li>
+      <li><strong>新模式</strong>：開發者 → 寫規格 → AI 生成程式碼 → 規格是真理來源 → 程式碼只是一種實作結果</li>
+    </ul>
+    <p>問題在於：如果你只是把 Vibe Coding 的習慣帶進企業，卻沒有建立「維護規格」的文化，你得到的就是兩頭落空——程式碼可拋棄，規格也沒有，任何人都無法在六個月後重現你的系統。</p>
+    <p>Anant 在白皮書回顧中補充了這套架構的完整機制：以 Gherkin BDD 格式撰寫的行為規範作為最持久的產物；<code>agents.md</code> 統一跨工具的 LLM 指令以防止碎片化；<code>specs/</code> 目錄存放任務級規格；而程式碼在這個體系裡只是「當下的一種輸出形式」。今天用 Python 生成，明天改成 Java，重跑一次就好。</p>
+
+    <div class="callout">
+      <div class="callout-title">★ AI-Mentor 深度評析：規格技術債比程式碼技術債更危險</div>
+      <p>Savio 在社群問答中提了一個關鍵問題：如果「正式規格」本身繼承了它原本要取代的技術債與臃腫結構，怎麼辦？</p>
+      <p>Lee 的回答揭示了一個反直覺的真相：<strong>規格技術債比程式碼技術債更危險，因為它不會透過執行時期錯誤來暴露自己。</strong>壞程式碼在 CI 跑失敗；壞規格卻可能產生「完美通過測試但邏輯錯誤」的程式碼，直到進了生產環境才爆。</p>
+      <p>正確的做法是：把規格像程式碼一樣版本控制、拆解模組，並讓 AI Agent 在修改程式碼的同時同步更新規格——測試越多、規格越完整，系統的可信度才能真正提升。</p>
+    </div>
+  </section>
+
+  <!-- ── 第三節 ── -->
+  <section id="section-3">
+    <h2>三、切分大象：為什麼 RAG 在百萬行程式碼庫上必然失敗</h2>
+    <p>這是整場直播中最具技術深度的一段討論，由 Ankur 帶出。</p>
+    <p>問題很具體：Siemens 現在正在現代化一個橫跨<strong>數億行程式碼</strong>的工業級遺留程式碼庫。你能把這個任務交給一個 AI Agent 嗎？</p>
+    <p>標準 RAG（檢索增強生成）在這裡的失敗是必然的，原因不是模型能力不夠，而是<strong>架構預設與問題結構不符</strong>：</p>
+    <ol>
+      <li>RAG 把程式碼當成扁平文件——但大型程式碼庫是<strong>深度互連的圖結構</strong>：模組之間有依賴關係、規則、版本限制</li>
+      <li>當你給出開放式指令，上下文視窗被填滿，模型開始幻覺</li>
+      <li>你不可能把億行程式碼塞進任何現有的上下文視窗</li>
+    </ol>
+    <h3>Google 的解法分兩層</h3>
+    <p><strong>資料層：Spanner Graph + ANN</strong></p>
+    <ul>
+      <li>用圖資料庫（Spanner Graph）對整個程式碼庫的模組、依賴關係建模</li>
+      <li>加入向量搜尋（ANN 近似最近鄰演算法），讓 Agent 不只是關鍵字匹配，而是獲得「三維藍圖」式的系統理解</li>
+    </ul>
+    <p><strong>執行層：微 Agent 網路（切分大象）</strong></p>
+    <ul>
+      <li>搜尋 Agent：用 Spanner Graph 繪製依賴關係圖</li>
+      <li>影響分析 Agent：在修改任何程式碼前，預測副作用</li>
+      <li>任務拆解 Agent：把剩餘工作切成「富含上下文、大小適中」的塊</li>
+      <li>編碼 Agent：只負責執行拼圖中那一個特定部分</li>
+    </ul>
+    <p>這套架構還有一個關鍵好處：每個微 Agent 的任務邊界清晰，<strong>人在迴圈（Human-in-the-Loop）的介入點自然出現</strong>，不需要讓人去審查數千行 AI 生成的程式碼。</p>
+
+    <!-- 圖 B 佔位 -->
+    <figure class="section-figure" id="fig-b">
+      <img src="images/day5-fig-b-elephant-slicing.png" alt="切分大象微 Agent 架構圖" onerror="this.closest('figure').style.display='none'">
+      <figcaption><strong>圖 B</strong>：單體超級 Agent vs 微 Agent 網路——Spanner Graph + ANN + ADK 四步驟管線</figcaption>
+    </figure>
+
+    <div class="callout">
+      <div class="callout-title">★ AI-Mentor 深度評析：上下文衛生是企業級 Agent 的核心護城河</div>
+      <p>「切分大象」這個比喻背後，是一個重要的工程原則：<strong>上下文視窗是有限資源，保護它就是保護推理品質。</strong></p>
+      <p>單體超級 Agent 的問題不只是記憶體不足，而是隨著上下文增長，模型的推理品質會<strong>非線性地下滑</strong>。每個任務邊界不清的 Agent，都在悄悄消耗「準確回答問題」所需的注意力空間。</p>
+      <p>Ankur 提到的架構，本質上是一個「上下文衛生（Context Hygiene）系統」——每個微 Agent 收到的上下文，只有它真正需要的部分，不多也不少。這是讓企業級 Agent 系統在六個月後還能穩定運作的基礎，而不只是一個週末 Hackathon 原型。</p>
+    </div>
+  </section>
+
+  <!-- ── 第四節 ── -->
+  <section id="section-4">
+    <h2>四、三層防線：讓 PR 審核不把工程師逼到燃盡</h2>
+    <p>當背景 Agent 開始每天自動產生數百個 PR，人工審核就變成了一個不可能的任務。Antonio 在問答中提出了應對這個問題的三層策略：</p>
+    <h3>第一層：完全自動化（低風險）</h3>
+    <p>拼字修正、次要依賴更新——AI 處理，CI 整合測試通過後自動合併，完全繞過人工。</p>
+    <h3>第二層：批次摘要（中度風險）</h3>
+    <p>不把每個 PR 立刻推到人類面前，而是定期（例如每天一次）提供批次摘要，讓人在「摘要視角」而不是「逐行審查視角」做判斷。</p>
+    <h3>第三層：強制人工（高風險）</h3>
+    <p>只有真正需要人類判斷的變更才進入這層。</p>
+    <p>Anant 在這個基礎上補充了<strong>遞迴對抗性審核層</strong>的概念：讓 Agent 先質疑提交 PR 的 Agent 或人類——「這個程式碼變更真的合理嗎？如果發生 Bug，我能重現嗎？」——把人工介入的時間點盡量往後延，且頻率降至最低。</p>
+    <p>但 Antonio 加了一個重要的警告：<strong>對抗性層不能無限疊加</strong>。每一層都消耗 Token 和時間，加太多層可能讓你在一天結束時拿到一個混亂的建置結果，反而比沒有審核層更糟。</p>
+
+    <!-- 圖 C 佔位 -->
+    <figure class="section-figure" id="fig-c">
+      <img src="images/day5-fig-c-three-tier-review.png" alt="PR 審核三層防線金字塔" onerror="this.closest('figure').style.display='none'">
+      <figcaption><strong>圖 C</strong>：PR 審核三層防線——從全自動到強制人工的風險分層策略</figcaption>
+    </figure>
+
+    <div class="callout">
+      <div class="callout-title">★ AI-Mentor 深度評析：動態分層，而非靜態規則</div>
+      <p>三層審核策略，本質上是把「風險評估」的概念帶進了 CI/CD 流程。這不是新概念——金融業的交易授權分層、醫療業的藥物審核分級，都是同樣的邏輯。</p>
+      <p>AI 時代的創新點在於：<strong>第一層的「什麼算低風險」，本身也可以由 AI 來判斷</strong>。也就是說，整個分層機制不是靜態規則，而是一個隨著程式碼庫學習、隨著審核歷史進化的動態系統——這才是 Antonio 所說的「正向飛輪效應」的真正含義。</p>
+    </div>
+  </section>
+
+  <!-- ── 第五節 ── -->
+  <section id="section-5">
+    <h2>五、認知退化的幽靈：當工程師成為架構師，他們還需要懂底層嗎？</h2>
+    <p>這是整場直播中最觸動人心的問題，來自社群成員 Savio：</p>
+    <blockquote>「如果工程師的角色已從程式碼編寫者轉變為 Agent 工作流的架構師，我們該如何防止人工審查瓶頸演變成認知退化的源頭？導致工程師失去驗證 Agent 生成藍圖所需的底層系統直覺？」</blockquote>
+    <p>Omar 和 Ankur 的回答各有側重。</p>
+    <p>Omar 的視角是：<strong>把審查的焦點從「逐行程式碼」轉移到「行為測試和斷言」</strong>。你不需要讀懂五千行 AI 生成的程式碼，但你必須能夠審查「這些測試是否正確驗證了系統行為」。未來的開發者工具會越來越多地提供<strong>語意差異（Semantic Diffs）</strong>，告訴你「這個修改調整了哪條資料保護政策」，而不是逐行程式碼對比。</p>
+    <p>Ankur 的視角更底層：<strong>理解「為什麼」（WHY）而不只是「如何做」（HOW）永遠是必要的</strong>。不管你是在考量資安、可靠性、還是擴充性，你都必須對自己開發的系統保有底層直覺——哪怕你的手再也不碰語法細節。</p>
+    <p>Omar 給初階工程師的建議則直截了當：<strong>動手建，做開源，持續協作。</strong>你在「Agent 原生」的環境中成長，但同時必須理解 Agent 局限性在哪裡、它擅長什麼。因為這個產業發展得太快，你今天學到的方法六個月後就可能過時——唯有不斷實作、不斷接觸真實系統，才能建立起不被某一套工具或框架所綁定的系統直覺。</p>
+
+    <!-- 圖 D 佔位 -->
+    <figure class="section-figure" id="fig-d">
+      <img src="images/day5-fig-d-cognitive-evolution.png" alt="工程師認知進化技能樹" onerror="this.closest('figure').style.display='none'">
+      <figcaption><strong>圖 D</strong>：從程式碼編寫者到系統架構師——會退化的舊技能、不變的核心與需要培養的新技能</figcaption>
+    </figure>
+
+    <div class="callout">
+      <div class="callout-title">★ AI-Mentor 深度評析：Token Maxing——衡量錯誤指標的致命陷阱</div>
+      <p>Savio 的問題背後，其實藏著一個更深的工程哲學議題：<strong>「Token Maxing」陷阱——只關注錯誤的指標，而不是真正的商業成果。</strong></p>
+      <p>當你把「寫了多少程式碼」或「生成了多少 PR」當作進度指標，你就已經在讓工具的輸出形狀倒過來塑造你的工作節奏。正確的方向是反過來：<strong>先定義可驗證的商業成果，再決定哪些部分讓 Agent 生成，哪些部分必須由人類判斷</strong>。</p>
+      <p>這才是「認知不退化」的真正保證——不是你親手寫了多少程式碼，而是你是否始終清楚「這個系統解決的是什麼問題，以及如何驗證它真的解決了」。</p>
+    </div>
+  </section>
+
+  <!-- ── 第六節 ── -->
+  <section id="section-6">
+    <h2>六、從規格到部署的自我進化閉環：Agent 隊伍的最終形態</h2>
+    <p>Antonio 在最後一輪問答中描述了一個完整的 Agent 隊伍架構，這也是整個五天課程所有技術的落地整合：</p>
+    <pre><code>規格書（人類撰寫）
+    ↓
+測試套件共同編輯（Agent + 人類）
+    ↓
+程式碼 + 文件生成（Agent）
+    ↓
+基礎設施部署（Agent, 無需人工 CLI）
+    ↓
+執行軌跡 + 日誌收集（Agent）
+    ↓
+超級架構師 Agent（閉環）
+    ↓ 回饋建議修改規格書 ↓</code></pre>
+    <p>在這個閉環的每個關鍵過渡點，都有人類介入的檢查點：初始規格設計、測試驗證、整體日誌審查、自我改進循環。</p>
+    <p>而 Omar 從架構師 Agent 的角度補充了另一個關鍵設計：<strong>用沙箱化（Sandboxing）限制編碼 Agent 的存取範圍</strong>——讓它只能在架構師 Agent 已預審並搭好骨架的結構中填補空白，從根本上杜絕「Agent 自己決定在哪裡寫檔案、怎麼寫」所帶來的架構漂移風險。</p>
+
+    <!-- 圖 E 佔位 -->
+    <figure class="section-figure" id="fig-e">
+      <img src="images/day5-fig-e-agent-squad-loop.png" alt="Agent 隊伍自我進化閉環圖" onerror="this.closest('figure').style.display='none'">
+      <figcaption><strong>圖 E</strong>：Agent 隊伍自我進化閉環——從規格到部署到回饋的六站飛輪</figcaption>
+    </figure>
+  </section>
+
+  <!-- ── Codelab 洞察 ── -->
+  <section id="codelab">
+    <h2>延伸：Codelab 核心洞察</h2>
+    <h3>Codelab 1 — Agent CLI 部署 ADK Agent</h3>
+    <ul>
+      <li><code>agents-cli deploy</code> 指令封裝了 gcloud 複雜性，讓部署骨架、Dry Run、非同步部署（<code>--no-wait</code>）變成自然語言指令</li>
+      <li>Agent Runtime Playground 提供 UI 測試界面，不需要每次用 CLI 驗證</li>
+      <li>Cloud Trace + Cloud Log 整合讓可觀測性不再是事後才想到的事</li>
+    </ul>
+    <h3>Codelab 2 — Vibecode 前端 + Pub/Sub 架構</h3>
+    <ul>
+      <li>Pub/Sub 作為事件攝取層的設計決策，是「為規模而生」的選擇：當數千名員工同時提交費用報告，需要有能處理串流的基礎架構，而不是點對點的 HTTP 請求</li>
+      <li>FastAPI 後端 + Cloud Run 部署 UI，與 Agent Runtime 完全解耦——這讓前端和 Agent 邏輯可以獨立更新、獨立擴展</li>
+    </ul>
+  </section>
+
+  <!-- ── 隨堂測驗 ── -->
+  <section id="quiz">
+    <h2>隨堂測驗五題精解</h2>
+    <div class="quiz-section">
+      <div class="quiz-card">
+        <div class="quiz-q">Q1：SDD 中程式碼為何被視為可拋棄的？</div>
+        <div class="quiz-a">✅ 答案 B：擁有穩固的版本控制規格，可讓整個程式碼庫被重新生成或轉換</div>
+        <div class="quiz-logic">規格是真理來源，程式碼只是一種可替換的輸出形式</div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q">Q2：行為驅動規格的推薦語法是？</div>
+        <div class="quiz-a">✅ 答案 C：Gherkin</div>
+        <div class="quiz-logic">狀態→動作→結果的結構化自然語言，讓 LLM 精確理解行為邊界</div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q">Q3：跨工具設定檔 <code>agents.md</code> 的主要用途是？</div>
+        <div class="quiz-a">✅ 答案 B：作為共享的跨工具基礎，以防止指令碎片化</div>
+        <div class="quiz-logic">多 Agent 協作時的統一提示詞根基，避免每個工具各自為政</div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q">Q4：自訂審查 Runtime 如何實現大程式碼庫的深度理解？</div>
+        <div class="quiz-a">✅ 答案 B：建立結合 GQL、向量搜尋和全文搜尋的知識圖譜</div>
+        <div class="quiz-logic">Graph DB 捕捉模組關係，ANN 向量化語意相近性，三者協同</div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q">Q5：混合策略伺服器如何評估工具呼叫動作？</div>
+        <div class="quiz-a">✅ 答案 C：透過設定檔與專門的語義 LLM 進行確定性結構閘控</div>
+        <div class="quiz-logic">硬規則過第一關（確定性），AI 語意判斷過第二關（動態），雙重防禦</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Capstone ── -->
+  <section id="capstone">
+    <h2>Capstone 專案：把五天所學化為真實 Agent</h2>
+    <p>Brenda（Kaggle 團隊）在直播結尾介紹了 Capstone 的四條提交軌道：</p>
+    <div class="track-grid">
+      <div class="track-card">
+        <div class="track-emoji">🌱</div>
+        <h4>為美好服務的 Agent</h4>
+        <p>農業、公共衛生、教育、藝術等社會問題解決方案</p>
+      </div>
+      <div class="track-card">
+        <div class="track-emoji">💼</div>
+        <h4>商業 Agent</h4>
+        <p>費用管理、管線動作、商業洞察，解決企業成本／收益問題</p>
+      </div>
+      <div class="track-card">
+        <div class="track-emoji">🏠</div>
+        <h4>管家 Agent</h4>
+        <p>個人生活助理，強調隱私保護與安全可靠性</p>
+      </div>
+      <div class="track-card">
+        <div class="track-emoji">✨</div>
+        <h4>開放式</h4>
+        <p>自由發揮創意，展現最具個人特色的 Agent 應用</p>
+      </div>
+    </div>
+    <p>截止日期：<strong>太平洋時間 7 月 6 日午夜</strong>（強烈建議提早提交）。<br>每個類別前三名獲得 Kaggle Swag 與社群曝光；所有 Capstone 參與者獲得<strong>徽章與證書</strong>。</p>
+  </section>
+
+  <!-- ── 雙語逐字稿 ── -->
+  <section id="transcript" class="transcript-section">
+    <button class="transcript-trigger" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+      📝 雙語對照逐字稿（點擊展開 / 收合）— 精選關鍵問答段落（共 442 條字幕）
+    </button>
+    <div class="transcript-content" style="display:none">
+      <div class="transcript-timeline">
+
+        <!-- 開場 -->
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-smitha">Smitha</span>
+            <span class="timestamp">00:00:00</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">歡迎大家回到第五天，這是 Kaggle 和 Google 的五天 AI Agent 密集課程的最後一天。我是 Smitha Kolen，資深開發者關係工程師，服務於 Google Cloud。</div>
+            <div class="text-en">Welcome back everyone to day five, the final day of the Kaggle and Google's 5-day AI agents intensive course. I'm Smitha Kolen, senior developer relations engineer here at Google Cloud.</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-smitha">Smitha</span>
+            <span class="timestamp">00:02:32</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">今天，我們要回答那個一直懸而未決的問題：你究竟要如何在進行任何變更時，都不會崩潰地將它推向企業級的正式環境？Vibe Coding 對於在幾分鐘內建立原型非常棒。但讓它如此快速的特性，恰恰也是導致它在正式環境中變得脆弱的原因。</div>
+            <div class="text-en">And today, we answer the question that's been hanging over all of it. How do you actually take this to production at enterprise scale without it falling apart the first time you do any type of changes? Vibe coding is incredible for getting to the prototype in minutes. But the same property that makes it really fast is also exactly the same thing which makes it fragile in production.</div>
+          </div>
+        </div>
+
+        <!-- Anant 白皮書回顧 -->
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-anant">Anant</span>
+            <span class="timestamp">00:04:31</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">現在當我們藉由這份白皮書來為本週收尾時，我們必須確立一個至關重要的規則。儘管課程名稱中有 Vibe Coding，但 Vibe Coding 並不是在正式環境中建構大規模軟體的方法。我們必須轉向規格驅動開發。</div>
+            <div class="text-en">Now as we close the week on this white paper, we must establish a vital rule. Even though the course has the name vibe coding in it, vibe coding is not for building software at scale in production. We must transition to spec-driven development.</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-anant">Anant</span>
+            <span class="timestamp">00:05:01</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">我們也研究了如何規劃檔案階層，從全域專案定義的 agents.md 或 markdown 檔案，到本地的工具特定設定，例如 gemini.md 檔案，一直到 specs 目錄中的任務特定規格。接著，我們涵蓋了程式碼審查的瓶頸，展示了圖資料庫如何分析數百萬行的程式碼庫以進行影響對映。</div>
+            <div class="text-en">We also looked at how we can map out the file hierarchy from global project definitions in agents.md to task-specific specifications in your specs directory. Next, we covered the code review bottleneck and mapped out the spectrum showing how a graph database like Spanner Graph can analyze multi-million line code bases for impact mapping.</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-anant">Anant</span>
+            <span class="timestamp">00:06:29</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">最後，我們總結了白皮書，談到了 Vibe Coding 時代的軟性層面，像是團隊文化、解決開發者倦怠，以及減輕審核疲勞的危險。以我的觀點來說，這能避免業界所謂的「Token Maxing」，也就是只關注錯誤的指標，而不是最終的商業成果。</div>
+            <div class="text-en">Finally, we concluded the white paper talking about the softer aspects of the vibe coding era about team culture, addressing developer burnout and mitigating the dangers of approval fatigue. And from my point of view, avoiding what in the industry is called "token maxing" — where we focus on the wrong metrics rather than the end business outcome.</div>
+          </div>
+        </div>
+
+        <!-- Q1 Ankur -->
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-anant">Anant</span>
+            <span class="timestamp">00:07:46</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">第一個問題要問 Ankur。對於擁有數百萬行程式碼的龐大程式碼庫，為什麼標準的 RAG 會失敗？而知識圖譜（Knowledge Graphs）又如何提供幫助？</div>
+            <div class="text-en">The first question is for Ankur. For very large codebases with millions of lines of code, why does standard RAG fail? And how do Knowledge Graphs help?</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-ankur">Ankur</span>
+            <span class="timestamp">00:08:06</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">當你看看我們最近與 Siemens 的合作，他們正在現代化一個跨越數億行程式碼的龐大工業級遺留程式碼庫。你不能指望單一個標準的單體 AI Agent 去處理長時間運作的複雜任務。所以如果你給出一個龐大且開放式的指令，上下文就會變得混亂，它可能會耗盡記憶體，開始產生幻覺。</div>
+            <div class="text-en">When you look at our recent work with Siemens, they are modernizing a massive industrial-grade legacy codebase spanning hundreds of millions of lines of code. You can't expect a single standard monolithic AI Agent to handle long-running complex tasks. So if you give it a huge open-ended instruction, the context gets muddled, it may run out of memory and start hallucinating.</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-ankur">Ankur</span>
+            <span class="timestamp">00:09:42</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">ADK 允許你將那個模糊的目標拆解成一組高度協調的專業微 Agent。我們部署一個搜尋 Agent，利用 Spanner Graph 來繪製依賴關係；一個架構影響 Agent，用來執行模擬，在修改任何一行程式碼之前預測副作用；一個任務拆解 Agent，將剩餘的工作切分成富含上下文、大小適中的任務；最後，則是編碼 Agent 本身，只負責執行拼圖中那一個特定的部分。</div>
+            <div class="text-en">ADK allows you to decompose that fuzzy goal into a highly coordinated set of specialized micro-agents. We deploy a search agent using Spanner Graph to map dependencies; an architectural impact agent to run simulations predicting side effects before changing any line of code; a task decomposition agent that breaks remaining work into context-rich, right-sized tasks; and finally the coding agent itself, only responsible for that one specific piece of the puzzle.</div>
+          </div>
+        </div>
+
+        <!-- Q2 Antonio -->
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-smitha">Smitha</span>
+            <span class="timestamp">00:11:48</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">當 PR 的數量因背景編碼 Agent 而呈指數級增長時，需要什麼樣的團隊工作流程結構來避免人工審核疲勞和盲目合併？</div>
+            <div class="text-en">When PR volume grows exponentially due to background coding agents, what team workflow structures are needed to avoid human review fatigue and blind merges?</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-antonio">Antonio</span>
+            <span class="timestamp">00:12:11</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">我會說審核疲勞的風險是真實存在的，你必須採取一些方法，來避免你的團隊陷入徹底燃盡的窘境。大家應該確立的一個原則是避免試圖去審核每一件事，而是要讓 AI 在整個過程中協助你。你應該將審核視為一種風險評估的方式。</div>
+            <div class="text-en">I would say the risk of review fatigue is real, and you must take steps to prevent your team from burning out completely. A principle everyone should establish is to avoid trying to review everything, and instead let AI assist you throughout the process. You should think of review as a form of risk assessment.</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-anant">Anant</span>
+            <span class="timestamp">00:15:10</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">我發現一個非常好用的方法是建立遞迴式的對抗性審核層。這樣一來，我們就能延後人工審核的時間點。我們盡可能晚地且最少次地與人類互動。你可以想像一個 Agent 在詢問提交 PR 的 Agent 或人類：「你能澄清這個部分嗎？這個程式碼變更真的合理嗎？如果發生 Bug，我能重現錯誤嗎？」</div>
+            <div class="text-en">I find a very useful method is building recursive adversarial review layers. This way we defer the timing of human review. We interact with humans as late and as infrequently as possible. You can imagine an agent asking the agent or human submitting the PR: "Can you clarify this part? Does this code change actually make sense? If there's a bug, can I reproduce it?"</div>
+          </div>
+        </div>
+
+        <!-- Q3 Lee -->
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-smitha">Smitha</span>
+            <span class="timestamp">00:16:54</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">如果一個穩健且符合 BDD 規範的規格能讓整個程式碼在幾分鐘內被乾淨地重新生成，這會如何重新定義企業團隊管理技術債與舊系統遷移的方式？</div>
+            <div class="text-en">If a robust BDD-compliant spec can have the entire code cleanly regenerated in minutes, how does this redefine how enterprise teams manage technical debt and legacy system migration?</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-lee">Lee</span>
+            <span class="timestamp">00:17:08</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">首先，開發者的生活在現今已經改變了。我們不再對自己的程式碼和檔案抱持那種情感上的依戀。如今已經不是這樣了。我們撰寫規格，接著它會生成程式碼。這基本上讓程式碼變成了可拋棄的。如今的真理來源就是規格。</div>
+            <div class="text-en">First, the developer's life has changed today. We no longer have that emotional attachment to our own code and files. It's no longer that way now. We write the spec, and then it generates the code. This basically makes code disposable. The source of truth today is the spec.</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-lee">Lee</span>
+            <span class="timestamp">00:18:51</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">對舊系統來說意義重大。我們不再需要手動逐行編寫，然後經歷這種翻譯噩夢。你只需要寫一次規格。如果我決定用 Python 生成它，我可以這麼做；如果明天我決定用 Java 生成，那也沒問題。這可以很快完成。</div>
+            <div class="text-en">This is significant for legacy systems. We no longer need to manually write line by line and go through this translation nightmare. You just write the spec once. If I decide to generate it in Python, I can do that; if tomorrow I decide to generate it in Java, that's fine too. This can be done quickly.</div>
+          </div>
+        </div>
+
+        <!-- Q4 Omar -->
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-smitha">Smitha</span>
+            <span class="timestamp">00:20:08</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">目前的開放權重模型是否能夠在本地端執行複雜的多 Agent 工作流程，還是我們仍需要使用專有模型來扮演中央協調器？</div>
+            <div class="text-en">Can current open-weight models handle complex multi-agent workflows locally, or do we still need proprietary models as central orchestrators?</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-omar">Omar</span>
+            <span class="timestamp">00:20:13</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">就在兩個月前，我們發布了 Gemma 4。目前來看，本機模型對於簡單的 Agent 任務表現得相當不錯，例如一些多輪函式呼叫。一個有趣的配置是混合推論（Hybrid Inference）——將 Gemini 作為協調者，有時呼叫較小的 Gemini 模型，或者當某些任務可以直接在裝置端完成時呼叫本機模型。</div>
+            <div class="text-en">Just two months ago, we released Gemma 4. Currently, local models perform quite well for simple agent tasks like some multi-turn function calling. An interesting configuration is Hybrid Inference — using Gemini as the orchestrator, sometimes calling smaller Gemini models, or when certain tasks can be handled on-device, calling local models.</div>
+          </div>
+        </div>
+
+        <!-- 社群問答：認知退化 -->
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-omar">Omar</span>
+            <span class="timestamp">00:27:53</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">防止認知退化的一個方法是將開發者的焦點，從逐行審查程式碼，轉移到稽核測試足跡，以及了解系統正在做什麼、如何進行系統的邏輯斷言。如果你需要閱讀在幾分鐘內生成的 2,000 行程式碼，並且需要找出所有的極端狀況，這通常很容易出錯。</div>
+            <div class="text-en">One way to prevent cognitive atrophy is to shift the developer's focus from reviewing code line by line to auditing the test footprint and understanding what the system is doing, how to make logical assertions about the system. If you need to read 2,000 lines of code generated in minutes and find all edge cases, this is usually error-prone.</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-ankur">Ankur</span>
+            <span class="timestamp">00:29:28</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">我認為理解你的 PR 對底層系統造成了什麼樣的改變、追蹤這些變更，並且回到基本的開發規範，以規格書作為設計的起點，這些是我們仍然需要堅持的做法。這樣一來，我們才能持續向自己，也能向 LLM 解釋底層系統的運作方式。</div>
+            <div class="text-en">I think understanding what your PR changes in the underlying system, tracking those changes, and returning to basic development practices with the spec as the design starting point — these are things we still need to maintain. This way we can continue to explain to ourselves, and to the LLM, how the underlying system works.</div>
+          </div>
+        </div>
+
+        <!-- 社群問答：多 Agent 架構一致性 -->
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-antonio">Antonio</span>
+            <span class="timestamp">00:38:31</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">目前我在做的是：有一個 Agent 負責與人類協作編輯規格書。也有一個 Agent 負責共同編輯測試套件，這能提高系統的信心。此外，在這個小隊中，除了負責編寫程式碼、測試和文件的 Agent 外，我還設有管理基礎設施的 Agent。一旦有了這些產出（程式碼、測試、文件），它們就會自動進行部署。現在我不需要親自操作 GCP 或透過 CLI 指令，全部都由這些 Agent 代勞。</div>
+            <div class="text-en">What I'm currently doing is: I have an agent that collaborates with humans to edit the spec. I also have an agent that co-edits the test suite, which builds confidence in the system. In this squad, beyond agents writing code, tests, and documentation, I also have agents managing infrastructure. Once we have these outputs, they're automatically deployed. I no longer need to operate GCP myself or use CLI commands — the agents handle all of that.</div>
+          </div>
+        </div>
+
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-antonio">Antonio</span>
+            <span class="timestamp">00:39:35</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">另外，我現在越來越常做的是，一旦部署完成，會有 Agent 自動去收集所有的執行軌跡（trajectories）與日誌（logs）。最後，也是現在大家熱烈討論的，我發現採用這個模式能帶來巨大的效益：一旦部署完成，日誌和軌跡都被收集，會有一個最頂層的 Agent，扮演類似超級架構師的角色，這個最終 Agent 會完成閉環，運行實驗、從中學習，然後回過頭來對原始規格書提出修改建議。</div>
+            <div class="text-en">Additionally, what I do more and more now is, once deployment is done, agents automatically collect all execution trajectories and logs. Finally — and this is what everyone's talking about now — I find that adopting this pattern brings huge benefits: once deployed and logs collected, there's a top-level agent acting as a super architect. This final agent closes the loop, runs experiments, learns from them, and then comes back to propose modifications to the original spec.</div>
+          </div>
+        </div>
+
+        <!-- Capstone -->
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-brenda">Brenda</span>
+            <span class="timestamp">00:57:42</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">大家好，很高興見到你們。我是來自 Kaggle 團隊的 Brenda。我今天來是要談談大家都非常興奮的事情，也就是 Capstone 專案。Capstone 專案是你們獲得徽章和證書的途徑。提交專案的截止日期是太平洋時間 7 月 6 日午夜，但我們非常強烈建議你提早提交，以防遇到任何問題或技術挑戰。</div>
+            <div class="text-en">Hi everyone, great to meet you. I'm Brenda from the Kaggle team. I'm here today to talk about something everyone is very excited about — the Capstone project. The Capstone project is your pathway to badges and certificates. The deadline to submit is midnight Pacific Time on July 6th, but we strongly recommend submitting early in case you encounter any issues or technical challenges.</div>
+          </div>
+        </div>
+
+        <!-- 結語 -->
+        <div class="transcript-turn">
+          <div class="turn-meta">
+            <span class="speaker-badge s-smitha">Smitha</span>
+            <span class="timestamp">01:00:50</span>
+          </div>
+          <div class="turn-content">
+            <div class="text-zh">以上就是為期五天的 AI Agent 直播活動的結尾。這一切都非常不可思議。感謝這五天來一直與我們相伴的每一位觀眾。本週在聊天室、Discord 以及所有問題中的互動都極為熱烈。Anant 和我真的非常享受和大家一起進行這場活動。</div>
+            <div class="text-en">This concludes the five-day AI Agent livestream. It's been absolutely incredible. Thank you to every viewer who has been with us through all five days. The engagement this week in the chat, Discord, and all the questions has been extraordinary. Anant and I truly enjoyed this event with everyone.</div>
+          </div>
+        </div>
+
+      </div><!-- .transcript-timeline -->
+    </div><!-- .transcript-content -->
+  </section>
+
+</article>
+</main>
+
+<footer>
+  <p>本導讀依據 Day 5 直播逐字稿（英文原稿 + 繁體中文翻譯，共 442 條字幕）整理，<br>
+  並整合白皮書《Spec-Driven Production Grade Development in the Age of Vibe Coding》核心觀點。</p>
+  <p style="margin-top:10px"><a href="../index.html">← 返回 Day 5 白皮書主頁</a></p>
+</footer>
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-hint">點擊或按 Esc 關閉</span>
+  <img src="" alt="">
+</div>
+
+<script>
+(function(){
+  var lb = document.getElementById("lightbox");
+  var lbImg = lb.querySelector("img");
+  function open(img){ lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lb.classList.add("is-open"); }
+  function close(){ lb.classList.remove("is-open"); lbImg.src = ""; }
+  document.querySelectorAll("figure.section-figure img").forEach(function(img){
+    img.addEventListener("click", function(){ open(img); });
+  });
+  lb.addEventListener("click", close);
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") close(); });
+})();
+</script>
+
+</body>
+</html>
