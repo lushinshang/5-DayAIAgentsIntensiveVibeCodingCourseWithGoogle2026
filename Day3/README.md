@@ -626,3 +626,19 @@ day3 and day4的直播導讀html
 - 圖 A、B 已嵌入 `#anatomy`；圖 C、E 已嵌入 `#evaluation`；圖 D 已嵌入 `#meta-skills`。
 - HTML parser 通過，本地圖片缺檔 0；桌機 1440×1000 與 iPhone 13 視窗截圖 QA 通過。
 - 目前 Day 3 直播深度導讀圖片工作無待辦事項。
+
+### 2026-06-20 阿魁 Day 3 白皮書導讀 URL 更新
+
+- **原始 Prompt**：「阿魁day3白皮書導讀：https://meta-ghost.notion.site/Agent-Skills-AI-SOP-3857b792315a81dc9c0aff376ac46c29 請更新day3/index.html」
+- **修正內容**：`index.html` 推薦頻道中阿魁卡片連結由舊測試 URL（`Agent-Skills-Agent-3837b792...`）更新為正式白皮書導讀 URL。
+  - 新 URL：`https://meta-ghost.notion.site/Agent-Skills-AI-SOP-3857b792315a81dc9c0aff376ac46c29`
+  - 標題改為：「阿魁｜白皮書導讀 × AI SOP」
+  - 描述改為：阿魁的 Day 3 白皮書導讀筆記，深入解析 Agent Skills anatomy、評估機制，並整合 AI SOP 實作應用。
+- **狀態**：推薦頻道卡片已正式指向公開 Day 3 白皮書導讀頁。
+
+### 2026-06-20 推薦頻道改為雙卡片（對齊 Day2）
+
+- **原始 Prompt**：「阿魁直播導讀也要保留，參考day2/index.html」
+- **修正內容**：推薦頻道從單張（白皮書導讀）改為雙張，對齊 Day2 規格。
+  - 卡片一：🎥 阿魁｜直播導讀（URL：`https://meta-ghost.notion.site/Agent-Skills-Agent-3837b792315a81109412dc844e6b5011`）
+  - 卡片二：📝 阿魁｜白皮書導讀 × AI SOP（URL：`https://meta-ghost.notion.site/Agent-Skills-AI-SOP-3857b792315a81dc9c0aff376ac46c29`）
