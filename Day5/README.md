@@ -166,16 +166,18 @@
 
 - **Day5 與課程首頁雙向串聯**（2026-06-19，指令 14）：`../index.html#day5` 的 Day5 卡片連至 `./Day5/index.html`；Day5 sticky nav 回程連至 `../index.html#day5`。上層課程狀態同步改為 Day 1–Day 5 全部完成。兩頁 `html.parser` 與連結目標檢查 PASS。
 
-#### 後補待辦（不阻塞主流程）
+#### 後補工作（已完成）
 
-- **Livestream 深度導讀**（task16–19）：**部分完成（2026-06-20）**
+- **Livestream 深度導讀**（task16–19）：**完成（2026-06-20）**
   - ✅ 中英文 SRT 逐字稿已放入 `Day5/` 根目錄（各 1769/1768 行）
   - ✅ `day5-deep-guide/day5-deep-guide.md`：六段式深度導讀 + 3 個 ai-mentor callout（deep-guide skill + ai-mentor-agents skill 執行）
   - ✅ `day5-deep-guide/index.html`：含 `<video>` 播放器（影片連結已填入）、雙語摺疊逐字稿、返回 Day5 主頁連結；html.parser PASS；桌機 1280×800 + 手機 390×844 截圖 QA PASS
-  - ✅ `day5-deep-guide/README.md`：5 張生圖提示詞（圖 A–E，Kawaii 台灣風格 16:9）+ 指令 1–5 完整紀錄
+  - ✅ `day5-deep-guide/README.md`：5 張生圖提示詞（圖 A–E，Kawaii 台灣風格 16:9）+ 指令 1–6 完整紀錄
   - ✅ 影片連結已填入：`https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/DAY.5.Livestream.-.5-Days.of.AI.Agents.Intensive.Vibe.Coding.Course.With.Google.mp4`
   - ✅ **雙向連結**：`Day5/index.html` 學習頻道新增直播導讀卡片 → `day5-deep-guide/index.html`；導讀頁 nav + footer 均有回程連結 → `../index.html`；兩頁 html.parser PASS
-  - ⏳ 5 張資訊圖待生成（`images/day5-fig-a` 至 `images/day5-fig-e`，提示詞在 `day5-deep-guide/README.md`）
+  - ✅ 5 張資訊圖已使用內建 `imagegen` 生成（1672×941 PNG），存放於 `day5-deep-guide/images/`
+  - ✅ `day5-deep-guide/index.html` 已正式啟用 5 張圖：加入固定尺寸、原生 lazy loading、非同步解碼，並修正手機版 4:3 裁切問題
+  - ✅ 驗證：html.parser PASS；桌機 1440×1000 與手機 390×844 均載入 5/5 圖片、維持 16:9、無水平溢位、無 console error
 
 ---
 
@@ -204,6 +206,8 @@
 19. `1.補充影片連結：https://github.com/lushinshang/5-DayAIAgentsIntensiveVibeCodingCourseWithGoogle2026/releases/download/DAY_1_Livestream/DAY.5.Livestream.-.5-Days.of.AI.Agents.Intensive.Vibe.Coding.Course.With.Google.mp4 2.所有過程，狀態及提示詞更新到readme.md`
 20. `html和day5/html要互相連結`
 21. `update readme.md`
+22. `使用imagegen skill，參考readme.md及其規範，生圖並更新index.html`
+23. `更新readme.md`
 
 ### I. 新指令追加格式
 
@@ -279,11 +283,11 @@ Day 5 採用經 Day 1–Day 4 驗證後修正的標準流程：
 → 手工建立 HTML → PDF / MD / HTML 最終核對 → Podcast / Codelab → QA
 → 根目錄入口更新**。
 
-參考 Day 1 / Day 4 經驗，Day 5 後續可能補 livestream，因此本目錄一開始就預留：
+參考 Day 1 / Day 4 經驗，Day 5 已完成 livestream 深度導讀與資訊圖整合：
 
-- `source/livestream/`
-- `day5-deep-guide/`
-- `day5-deep-guide/images/`
+- 中英文 SRT：`Day5/` 根目錄
+- 深度導讀：`day5-deep-guide/`
+- 5 張資訊圖：`day5-deep-guide/images/`
 
 **Day5 與 Day4 的主要差異**：
 
@@ -295,22 +299,22 @@ Day 5 採用經 Day 1–Day 4 驗證後修正的標準流程：
 | 作者 | 4 人 | 1 人（Lee Boonstra）|
 | 頁數 | 41 頁 | 38 頁 |
 
-**目前狀態**：scaffold 尚未建立。下一步是 task1。Podcast SRT / 影片、Codelab URL 與 livestream 素材尚未取得。
+**目前狀態（2026-06-20）**：task1–task19 全部完成。白皮書主頁、Podcast 導讀、兩個 Codelab 導讀、Livestream 深度導讀、雙語逐字稿、12 張延伸資訊圖與課程首頁雙向連結均已建立並通過驗證。
 
 ---
 
-## 目錄結構（預計）
+## 目錄結構
 
 ```
 Day5/
 ├── README.md                         ← 本檔案：Day5 規劃與執行紀錄
-├── index.html                        ← 預計：Day5 白皮書繁中主頁
-├── desktop.png                       ← 預計：主頁桌機截圖 QA
-├── mobile.png                        ← 預計：主頁手機截圖 QA
-├── images_cht/                       ← 預計：HTML 正式引用的中文化 Figure
-├── podcast-deep-guide/               ← 預計：Podcast 深度導讀頁
-├── day5-deep-guide/                  ← 預留：Day5 livestream 深度導讀
-│   └── images/                       ← 預留：livestream 導讀資訊圖
+├── index.html                        ← Day5 白皮書繁中主頁
+├── desktop.png                       ← 主頁桌機截圖 QA
+├── mobile.png                        ← 主頁手機截圖 QA
+├── images_cht/                       ← HTML 正式引用的中文化 Figure
+├── podcast-deep-guide/               ← Podcast 深度導讀頁
+├── day5-deep-guide/                  ← Day5 livestream 深度導讀
+│   └── images/                       ← 5 張 livestream 導讀資訊圖
 ├── pipeline/
 │   ├── convert_day5.py               ← Docling 解析
 │   ├── extract_day5_figures.py       ← 整理正式 Figure
@@ -543,38 +547,36 @@ Day5 主頁完成並驗證後，更新上一層：
 
 ---
 
-## Livestream 後補任務
+## Livestream 後補任務（已完成）
 
-以下任務等 Day5 livestream 素材到齊後再做，不阻塞 Day5 白皮書主流程。
+以下 task16–19 已於 2026-06-20 完成。
 
 ### task16：Day5 livestream 素材歸檔
 
-- SRT 放 `source/livestream/`。
-- MP4 本地備份放 `source/livestream/`。
-- 產出純文字逐字稿：`source/livestream/day5-transcript.txt`。
+- [x] 中英文 SRT 已放於 `Day5/` 根目錄。
+- [x] Livestream MP4 使用 GitHub Releases 遠端來源嵌入播放器。
+- [x] 雙語逐字稿已整理並嵌入 `day5-deep-guide/index.html`。
 
 ### task17：Day5 livestream 深度導讀
 
-建立：
-
-- `day5-deep-guide/index.html`
-
-要求：
-
-- 使用 `deep-guide` + `ai-mentor`。
-- Hero 正下方放直播影片播放器。
-- 逐字稿用 `<details>` 摺疊，若可辨識講者加 speaker badge。
-- 頁面需有返回 Day5 主頁連結。
+- [x] 使用 `deep-guide` + `ai-mentor` 完成深度導讀 Markdown。
+- [x] 建立 `day5-deep-guide/index.html`。
+- [x] Hero 正下方包含直播影片播放器。
+- [x] 雙語逐字稿使用 `<details>` 摺疊並標示講者。
+- [x] 頁面 nav 與 footer 均可返回 Day5 主頁。
 
 ### task18：Livestream 資訊圖
 
-產生 16:9 桌機圖，放入 `day5-deep-guide/images/`。
+- [x] 使用內建 `imagegen` 產生 5 張 1672×941 PNG。
+- [x] 圖片存入 `day5-deep-guide/images/` 並正式整合至 HTML。
+- [x] 桌機與手機均維持 16:9 完整顯示，不裁切圖中文字。
 
 ### task19：整合回 Day5 主頁
 
-- `Day5/index.html` 學習頻道新增「Day5 直播深度導讀」卡片。
-- 更新 `Day5/README.md` 與 parent `../README.md`。
-- 重跑 HTML parser、本地連結與截圖 QA。
+- [x] `Day5/index.html` 學習頻道新增「Day 5 直播深度導讀」卡片。
+- [x] Day5 主頁與 livestream 導讀頁建立雙向連結。
+- [x] 更新 `Day5/README.md`。
+- [x] HTML parser、圖片載入、本地連結及桌機／手機 QA 全部通過。
 
 ---
 
