@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capstone 專案 - 5 天 AI Agent 密集課程 with Google</title>
+<style>
+:root{
+  --bg:#f9f7f4;
+  --text:#1a1a1a;
+  --muted:#5a5a5a;
+  --accent:#a8554a;
+  --border:#e3ddd4;
+  --card:#ffffff;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:clamp(16px,1vw + 13px,17px);
+  line-height:1.68;
+  letter-spacing:0;
+}
+.page{max-width:1120px;margin:0 auto;padding:0 20px;}
+header.hero{padding:64px 0 40px;}
+.hero-inner{max-width:720px;margin:0 auto;}
+.eyebrow{font-size:0.92rem;color:var(--accent);font-weight:700;letter-spacing:0.04em;margin:0 0 10px;}
+h1{
+  font-size:clamp(2.1rem,5vw,3.4rem);
+  line-height:1.25;
+  text-wrap:balance;
+  margin:0 0 12px;
+}
+.subtitle{font-size:clamp(1.05rem,2vw,1.3rem);color:var(--muted);margin:0 0 20px;text-wrap:balance;}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;font-size:0.92rem;color:var(--muted);margin:0 0 28px;}
+.meta-row span{
+  background:var(--card);border:1px solid var(--border);border-radius:999px;
+  padding:5px 14px;
+}
+.lead{
+  font-size:1.15rem;
+  line-height:1.7;
+  border-left:3px solid var(--accent);
+  padding-left:18px;
+  color:#333;
+}
+nav.toc{
+  position:sticky;top:0;z-index:50;
+  background:rgba(249,247,244,0.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--border);
+}
+nav.toc .page{display:flex;gap:18px;overflow-x:auto;padding:12px 20px;scrollbar-width:thin;}
+nav.toc a{
+  white-space:nowrap;font-size:0.92rem;color:var(--muted);text-decoration:none;
+  padding:6px 2px;border-bottom:2px solid transparent;
+}
+nav.toc a:hover{color:var(--accent);border-bottom-color:var(--accent);}
+main{padding:8px 0 80px;}
+article{max-width:720px;margin:0 auto;}
+section{padding:36px 0;border-bottom:1px solid var(--border);}
+section:last-of-type{border-bottom:none;}
+h2{font-size:clamp(1.55rem,4vw,2.2rem);line-height:1.35;text-wrap:balance;margin:0 0 20px;}
+h3{font-size:clamp(1.2rem,3vw,1.5rem);margin:32px 0 14px;}
+h4{font-size:1.05rem;margin:24px 0 10px;color:#333;}
+p{margin:0 0 18px;}
+ul,ol{margin:0 0 18px;padding-left:1.4em;}
+li{margin-bottom:8px;}
+strong{font-weight:700;}
+
+.stat-box{
+  margin:28px 0;padding:24px;background:var(--card);
+  border:1px solid var(--border);border-radius:12px;
+}
+.stat-box h4{margin:0 0 16px;font-size:1.1rem;color:var(--muted);}
+
+/* Capstone 特化組件 */
+.step-counter{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:16px;margin:28px 0;
+}
+.step-item{
+  padding:20px 18px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;text-align:center;
+}
+.step-num{
+  font-size:2rem;font-weight:700;color:var(--accent);margin-bottom:8px;}
+.step-title{font-size:0.95rem;font-weight:700;margin-bottom:4px;}
+.step-desc{font-size:0.85rem;color:var(--muted);}
+
+.case-study-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;margin:28px 0;
+}
+.case-card{
+  padding:20px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;transition:transform .15s ease,box-shadow .15s ease;
+}
+.case-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+.case-thumb{
+  width:100%;height:120px;background:linear-gradient(135deg,#e8ddd4 0%,#d9ccc1 100%);
+  border-radius:8px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;
+  font-size:3rem;
+}
+.case-title{font-size:1rem;font-weight:700;margin-bottom:6px;}
+.case-desc{font-size:0.85rem;color:var(--muted);margin-bottom:8px;}
+.case-tag{
+  display:inline-block;font-size:0.75rem;background:#f3f0eb;border:1px solid var(--border);
+  border-radius:999px;padding:2px 8px;color:var(--muted);margin-right:4px;
+}
+
+.rubric-table{
+  width:100%;border-collapse:collapse;margin:20px 0;
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+}
+.rubric-table th,.rubric-table td{
+  padding:12px;border-bottom:1px solid var(--border);text-align:left;
+}
+.rubric-table th{
+  background:#f9f7f4;color:var(--muted);font-weight:700;font-size:0.9rem;
+}
+.rubric-table tr:last-child td{border-bottom:none;}
+.rubric-score{color:var(--accent);font-weight:700;}
+
+.resource-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:14px;margin:28px 0;
+}
+.resource-card{
+  padding:16px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;text-align:center;text-decoration:none;color:var(--text);
+  transition:transform .15s ease;
+}
+.resource-card:hover{transform:translateY(-2px);}
+.resource-icon{font-size:2.5rem;margin-bottom:8px;}
+.resource-name{font-size:0.9rem;font-weight:700;margin-bottom:4px;}
+.resource-desc{font-size:0.8rem;color:var(--muted);}
+
+.timeline{
+  margin:28px 0;padding:24px;background:var(--card);
+  border-left:4px solid var(--accent);border-radius:8px;
+}
+.timeline-item{
+  display:flex;gap:16px;margin-bottom:16px;
+}
+.timeline-item:last-child{margin-bottom:0;}
+.timeline-date{
+  min-width:120px;font-weight:700;color:var(--accent);font-size:0.95rem;
+}
+.timeline-content{flex:1;font-size:0.95rem;}
+
+.cta-button{
+  display:inline-block;background:var(--accent);color:#fff;padding:14px 28px;
+  border-radius:8px;text-decoration:none;font-weight:700;
+  transition:background .2s ease,transform .15s ease;
+  margin:16px 0;
+}
+.cta-button:hover{background:#926550;transform:translateY(-2px);}
+
+.checklist{
+  list-style:none;padding:0;margin:20px 0;
+}
+.checklist li{
+  padding:10px 14px;margin-bottom:8px;background:var(--card);
+  border-left:3px solid var(--border);border-radius:4px;
+}
+.checklist li:before{
+  content:"✓ ";color:var(--accent);font-weight:700;margin-right:8px;
+}
+
+footer.notes{padding:40px 0 80px;}
+footer.notes p{font-size:0.85rem;color:var(--muted);line-height:1.7;}
+footer.notes a{color:var(--accent);}
+.footer-links{
+  display:flex;gap:20px;margin-top:20px;flex-wrap:wrap;
+  font-size:0.92rem;
+}
+.footer-links a{text-decoration:none;color:var(--accent);}
+.footer-links a:hover{text-decoration:underline;}
+
+@media (max-width:640px){
+  header.hero{padding:40px 0 28px;}
+  section{padding:28px 0;}
+  .rubric-table{font-size:0.9rem;}
+  .rubric-table th,.rubric-table td{padding:8px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="page">
+    <a href="./">← 回首頁</a>
+    <a href="#quickstart">快速開始</a>
+    <a href="#rubric">評分標準</a>
+    <a href="#cases">案例研究</a>
+    <a href="#resources">工具箱</a>
+    <a href="#submit">提交流程</a>
+    <a href="#timeline">時程</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="page hero-inner">
+    <p class="eyebrow">5-Day AI Agents Intensive Course with Google</p>
+    <h1>Capstone 專案</h1>
+    <p class="subtitle">把所學化為實踐：打造你的第一個生產級 AI Agent</p>
+    <div class="meta-row">
+      <span>🎯 完成課程後的實踐環節</span>
+      <span>⏰ 截止：2026/07/06 23:59 PT</span>
+      <span>🏆 Kaggle 證書 + 徽章 + 周邊</span>
+    </div>
+    <p class="lead">經過 5 天的密集學習，你已經掌握了打造強大 AI agent 的核心技能。Capstone 專案邀請你透過實作真實世界的 agent 來鞏固所學，並有機會在 Kaggle 與 Google 的社群中獲得認可與曝光。</p>
+  </div>
+</header>
+
+<main>
+  <article>
+
+    <section id="quickstart">
+      <h2>快速開始</h2>
+      <p>Capstone 專案分為三個核心步驟：</p>
+      <div class="step-counter">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-title">定義想法</div>
+          <div class="step-desc">選擇一個你想解決的真實問題，設計 agent 的功能與行為</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-title">構建 Agent</div>
+          <div class="step-desc">使用課程中學到的 vibe coding、tools、skills 技巧實現它</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-title">提交文章</div>
+          <div class="step-desc">撰寫 Kaggle 文章，記錄你的想法、實作過程與成果</div>
+        </div>
+      </div>
+      <p><strong>預期投入時間：</strong>課程結束後 2–3 週（根據複雜度調整）</p>
+    </section>
+
+    <section id="rubric">
+      <h2>評分標準</h2>
+      <p>優秀的 Capstone 專案應該在以下四個維度表現突出：</p>
+      <table class="rubric-table">
+        <thead>
+          <tr>
+            <th>評分維度</th>
+            <th>說明</th>
+            <th style="text-align:right;">配分</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Agent 功能性</strong></td>
+            <td>Agent 是否有效解決了選定的問題？是否展現課程中的關鍵技能（工具、skills、安全防護）？</td>
+            <td style="text-align:right;"><span class="rubric-score">35%</span></td>
+          </tr>
+          <tr>
+            <td><strong>代碼質量</strong></td>
+            <td>代碼是否清晰、模組化、易維護？有測試與文檔嗎？</td>
+            <td style="text-align:right;"><span class="rubric-score">25%</span></td>
+          </tr>
+          <tr>
+            <td><strong>創新性</strong></td>
+            <td>你的方案是否展現了獨特的思維？是否超越了課程基礎內容？</td>
+            <td style="text-align:right;"><span class="rubric-score">20%</span></td>
+          </tr>
+          <tr>
+            <td><strong>文檔完整度</strong></td>
+            <td>說明影片、建構理念簡述、README、代碼註解是否清晰完整？</td>
+            <td style="text-align:right;"><span class="rubric-score">20%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="cases">
+      <h2>案例研究</h2>
+      <p>以下是過去優秀的 Capstone 案例。閱讀它們可以獲得靈感、了解評審的期望水準：</p>
+      <div class="case-study-grid">
+        <a href="https://kaggle.com/code" class="case-card">
+          <div class="case-thumb">🤖</div>
+          <div class="case-title">智能客服 Agent</div>
+          <div class="case-desc">整合多個 API 的客服系統，展現 tool 整合與多輪對話管理</div>
+          <span class="case-tag">工具整合</span>
+          <span class="case-tag">多輪對話</span>
+        </a>
+        <a href="https://kaggle.com/code" class="case-card">
+          <div class="case-thumb">📊</div>
+          <div class="case-title">數據分析 Agent</div>
+          <div class="case-desc">自動化分析與視覺化，展現 skill 版本控制與狀態管理</div>
+          <span class="case-tag">數據分析</span>
+          <span class="case-tag">Skills</span>
+        </a>
+        <div class="case-card">
+          <div class="case-thumb">🔒</div>
+          <div class="case-title">安全評估 Agent</div>
+          <div class="case-desc">展現課程中學到的安全防護與評估機制的實踐</div>
+          <span class="case-tag">安全性</span>
+          <span class="case-tag">測試</span>
+        </div>
+      </div>
+      <p style="margin-top:24px;color:var(--muted);font-size:0.95rem;">💡 <strong>提示：</strong>往年案例將在課程期間公開分享，屆時可在 Discord 頻道找到連結。</p>
+    </section>
+
+    <section id="resources">
+      <h2>工具箱</h2>
+      <p>以下是 Capstone 專案開發時會用到的核心資源：</p>
+      <div class="resource-grid">
+        <a href="https://claude.ai/code" class="resource-card">
+          <div class="resource-icon">💻</div>
+          <div class="resource-name">Claude Code</div>
+          <div class="resource-desc">AI 助手與代碼編輯器</div>
+        </a>
+        <a href="https://ai.google.dev/gemini" class="resource-card">
+          <div class="resource-icon">✨</div>
+          <div class="resource-name">Gemini API</div>
+          <div class="resource-desc">Google 的 LLM API</div>
+        </a>
+        <a href="https://kaggle.com/notebooks" class="resource-card">
+          <div class="resource-icon">📔</div>
+          <div class="resource-name">Kaggle Notebook</div>
+          <div class="resource-desc">雲端開發環境</div>
+        </a>
+        <a href="https://discord.gg/kaggle" class="resource-card">
+          <div class="resource-icon">💬</div>
+          <div class="resource-name">Kaggle Discord</div>
+          <div class="resource-desc">社群與提問</div>
+        </a>
+      </div>
+    </section>
+
+    <section id="submit">
+      <h2>提交流程</h2>
+      <p>提交 Capstone 專案需要準備以下內容，打包為一篇 <strong>Kaggle 文章</strong>：</p>
+      <ol>
+        <li><strong>標題與摘要</strong>（150 字以內）：簡述你的 agent 是什麼、解決什麼問題</li>
+        <li><strong>說明影片</strong>（3–5 分鐘）：展示 agent 運作、講解核心設計思路</li>
+        <li><strong>建構理念簡述</strong>（500–800 字）：為什麼選擇這個想法、遇到了什麼挑戰、如何克服</li>
+        <li><strong>代碼與文檔</strong>：
+          <ul>
+            <li>完整的可運行代碼（GitHub repo 或 Kaggle Notebook）</li>
+            <li>詳細的 README（安裝、運行、功能說明）</li>
+            <li>代碼註解（特別是複雜邏輯部分）</li>
+          </ul>
+        </li>
+        <li><strong>測試與評估</strong>：展示你如何測試 agent 的品質與安全性</li>
+      </ol>
+
+      <div class="stat-box">
+        <h4>提交檢查清單</h4>
+        <ul class="checklist">
+          <li>Agent 功能完整且經過測試</li>
+          <li>代碼清晰易讀，有適當註解</li>
+          <li>README 包含安裝、使用說明與依賴列表</li>
+          <li>說明影片清晰、背景音樂適當</li>
+          <li>文章內容誠懇、邏輯清楚</li>
+          <li>包含課程中學到的至少 3 個技能點（工具、skills、安全等）</li>
+          <li>Kaggle 文章已發布，連結可訪問</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="timeline">
+      <h2>時程</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">2026/06/15–19</div>
+          <div class="timeline-content"><strong>課程期間</strong>：完成 Day 1–5，吸收知識、構思想法</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026/06/19</div>
+          <div class="timeline-content"><strong>Capstone 開放</strong>：專案頁面正式上線，可開始提交</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026/06/19–07/06</div>
+          <div class="timeline-content"><strong>開發期間</strong>：構建 agent、撰寫文章、迭代改進</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026/07/06 23:59 PT</div>
+          <div class="timeline-content"><strong>截止時間</strong>：所有提交必須完成。逾期提交將不被評審</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026/07/06–07/31</div>
+          <div class="timeline-content"><strong>評審期</strong>：Kaggle 專家與社群進行評審</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026/08/01</div>
+          <div class="timeline-content"><strong>獲獎公布</strong>：正式公開獲獎者，發放證書、徽章、周邊</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>常見問題</h2>
+      <dl class="faq">
+        <dt>我可以單獨開發，還是只能組隊？</dt>
+        <dd>兩者皆可。個人開發與團隊開發都被接受。如果是團隊，請在文章中清楚標示各成員的貢獻。</dd>
+
+        <dt>能用付費的 API / 服務嗎？</dt>
+        <dd>可以，但請在文章中透明說明成本與使用的服務。評審時會考慮成本效益。</dd>
+
+        <dt>能改進或重用課程中的 codelab 代碼嗎？</dt>
+        <dd>完全可以。Capstone 的目的是鞏固學習、實踐知識，而非從零開始。建議在文章中說明你如何擴展或改進了課程內容。</dd>
+
+        <dt>超過截止時間提交會怎樣？</dt>
+        <dd>超期提交的文章將不被納入評審。建議留足夠的緩衝時間，避免最後一刻倉促提交。</dd>
+
+        <dt>可以參考或學習他人的代碼嗎？</dt>
+        <dd>可以，但必須在文章中清楚標明參考來源與引用。直接複製他人代碼而不標明出處將被視為剽竊，可能被取消資格。</dd>
+
+        <dt>Capstone 專案是否影響課程證書？</dt>
+        <dd>不會。課程證書只要求完成 Day 1–5 的內容。Capstone 專案是額外的實踐環節，完成者才能獲得額外的徽章與獎勵。</dd>
+
+        <dt>我不想參與評選，只是想做個人專案，可以嗎？</dt>
+        <dd>完全可以。Capstone 是選填的。即使你不參與評選，也歡迎在 Discord 中分享你的成果，與其他學員交流。</dd>
+      </dl>
+    </section>
+
+  </article>
+
+  <footer class="notes">
+    <div class="page">
+      <h3>準備好了嗎？</h3>
+      <p>如果你還在進行課程，請先完成 Day 1–5，然後回來構思你的 Capstone 想法。</p>
+      <p>有疑問？加入 Kaggle Discord，與 Google 專家與其他學員交流。</p>
+      <div class="footer-links">
+        <a href="./">← 回到首頁</a>
+        <a href="./Day1/index.html">Day 1 課程</a>
+        <a href="./Day5/index.html">Day 5 課程</a>
+        <a href="https://www.kaggle.com/competitions/vibecoding-agents-capstone-project" target="_blank">Kaggle 官方頁面</a>
+      </div>
+    </div>
+  </footer>
+</main>
+
+</body>
+</html>
