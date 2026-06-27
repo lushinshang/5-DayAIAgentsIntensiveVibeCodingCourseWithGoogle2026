@@ -14,7 +14,7 @@
 本檔案先作為 Day 3 的執行規劃與交接紀錄。尚未完成的產物會明確標示為「預計」，
 避免把規劃誤認為已完成。
 
-**目前狀態**：已完成 task1-task21。
+**目前狀態**：已完成 task1-task22。
 
 - task1：已建立 `source/`、`pipeline/`，並將 PDF 移入 `source/`。
 - task2：已用 docling 以 `images_scale=5.0` 產出英文 Markdown。
@@ -37,6 +37,7 @@
 - task19：已排除資訊圖繪製，僅以逐字稿與深度導讀本文作為直播導讀主體。
 - task20：已建立 `day3-deep-guide/index.html` 網頁，整合直播影片播放器、導讀本文與 7 位講者識別之雙語摺疊逐字稿（402 輪發言），並通過 HTML 語法驗證。
 - task21：已在 `index.html` 學習頻道中插入「🎬 Day 3 直播深度導讀」卡片進行雙向串聯，並清理臨時測試腳本。
+- task22：在推薦頻道中補齊快半拍AI實驗室的 Day 3 學習筆記卡片。（2026-06-28）
 - task17：已建立 `source/livestream/` 目錄並將當前目錄的 Day 3 英文與繁中字幕歸檔。
 - task18：已撰寫直播深度導讀腳本 `pipeline/build_day3_transcript.py`，完成中英字幕時間戳對齊，並產生純文字逐字稿 `day3-transcript.txt` 與逐字稿 HTML 片段 `transcript_fragment.html`。
 - task19：已排除資訊圖繪製，僅以逐字稿與深度導讀本文作為直播導讀主體。
