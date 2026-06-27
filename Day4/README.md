@@ -136,6 +136,7 @@
 - **task18**：已由三個 `self` subagents 並行完成 431 輪發言的講者識別（Smitha Kolen, Anant Navalgaria, Socrates, Meltem, Wafa, Tony Kloenstein），並成功嵌入導讀網頁中。
 - **task19**：已將直播導讀網頁整合回 Day4 主頁 `index.html` 的學習頻道，並完成原始頁面 QA 驗收。
 - **task20**：已使用 Codex CLI 工作階段內的 `imagegen` skill 生成圖 F–J，嵌入直播深度導讀並完成 HTML、路徑、桌機與手機 QA。
+- **task21**：已在推薦頻道中補齊快半拍AI實驗室的 Day 4 學習筆記卡片。（2026-06-28）
 
 #### 資訊圖（Kawaii 16:9，1792×1024）進度
 
@@ -471,6 +472,8 @@ update readme.md
 請規劃`
 39. `go`
 40. `更新readme.md`
+41. `快半拍新增學習筆記：Day3=>https://vocus.cc/article/6a3d330efd8978000170bc7d Day4=>https://vocus.cc/article/6a3fb021fd8978000121d167 --- 理解我的意圖，先規劃`
+42. `Day3,Day4的readme.md也要記錄 請執行`
 
 ### I. 新指令追加格式
 
@@ -547,7 +550,7 @@ Day 4 採用經 Day 1–Day 3 驗證後修正的標準流程：
 
 Livestream 不阻塞白皮書主流程；等素材到齊後再以獨立 task 追加。
 
-**目前狀態**：task1–task15 全部完成（2026-06-19）。Livestream 素材到齊後再執行 task16–task19。
+**目前狀態**：task1–task21 全部完成（2026-06-28）。
 
 ---
 
@@ -1064,6 +1067,9 @@ Day3 修正後的標準：所有官方 step 必須逐條整理出來，不只寫
    → 產出 `_zh.md` 與 `_zh.normalized.md`，兩檔內容一致。
 
 ## 異動紀錄
+
+### 2026-06-28 補齊快半拍學習筆記
+* **推薦資源新增**：於 `index.html` 的推薦頻道群組中，補入快半拍AI實驗室的「Day 4 學習筆記」卡片。
 
 ### 2026-06-19 目錄架構標準化調整
 * **推薦資源新增**：於 `index.html` 新增推薦頻道群組，並補入阿魁的「白皮書導讀」與「直播導讀」Notion 卡片。
